@@ -326,11 +326,11 @@ main.container {
 /* Список фильмов */
 .schedule-list { display: flex; flex-direction: column; gap: 24px; }
 
-/* ФИКС: Карточка фильма имеет фиксированную высоту */
+/* ФИКС ВЫСОТЫ КАРТОЧКИ */
 .movie-row {
     display: flex; background-color: var(--card-bg); border: 1px solid var(--border-color);
     border-radius: 16px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 280px; /* <--- ФИКС ВЫСОТЫ */
+    height: 280px; /* <--- Фиксированная высота на ПК */
 }
 
 .movie-row:hover { transform: translateY(-5px); border-color: #334155; box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5); }
@@ -343,22 +343,45 @@ main.container {
 .age-green { background: rgba(34, 197, 94, 0.9); }
 .age-orange { background: rgba(249, 115, 22, 0.9); }
 .age-red { background: rgba(239, 68, 68, 0.9); }
-.row-info { flex: 1; padding: 32px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--border-color); }
-.row-title { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 12px; text-transform: uppercase; line-height: 1.1; }
+
+/* ФИКС ШИРИНЫ (добавлен min-width: 0) */
+.row-info { 
+    flex: 1; 
+    padding: 32px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    border-right: 1px solid var(--border-color);
+    min-width: 0; /* <--- МАГИЧЕСКОЕ СВОЙСТВО, не дает тексту распирать блок */
+    overflow: hidden; /* Дополнительная защита */
+}
+
+.row-title { 
+    font-size: 2rem; 
+    font-weight: 800; 
+    color: #fff; 
+    margin-bottom: 12px; 
+    text-transform: uppercase; 
+    line-height: 1.1; 
+    white-space: nowrap; /* Длинные заголовки в одну строку */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Троеточие если не влезло */
+}
+
 .row-meta { display: flex; gap: 12px; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; align-items: center; font-weight: 600; }
 .meta-tag { background: rgba(255, 255, 255, 0.1); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
 
-/* ФИКС: Обрезаем длинный текст описания */
+/* ФИКС ОПИСАНИЯ */
 .row-desc { 
     font-size: 1rem; 
     color: var(--text-muted); 
     line-height: 1.6; 
     max-width: 650px; 
     display: -webkit-box;
-    -webkit-line-clamp: 3;      /* Оставляем 3 строки */
+    -webkit-line-clamp: 3;      /* Ограничиваем 3 строками */
     -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;    /* Добавляем ... */
+    text-overflow: ellipsis;    /* Троеточие */
 }
 
 .row-sessions { width: 320px; min-width: 320px; padding: 32px; background: rgba(15, 23, 42, 0.5); display: flex; flex-direction: column; justify-content: center; }
