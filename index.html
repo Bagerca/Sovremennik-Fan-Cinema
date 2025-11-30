@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кинотеатр Современник | Афиша</title>
+    <title>Расписание | Современник</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Иконка сайта -->
     <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
 </head>
 <body>
@@ -24,173 +23,149 @@
     <main class="container">
         <h1 class="section-title">Сегодня в кино</h1>
         
-        <div class="movies-grid">
+        <div class="schedule-list">
 
-            <!-- Фильм 1: Дикий робот -->
-            <div class="movie-card">
-                <div class="poster-wrapper">
+            <!-- ФИЛЬМ 1: Дикий робот -->
+            <div class="movie-row">
+                <div class="row-poster">
                     <span class="age-badge age-green">6+</span>
-                    <!-- Обрати внимание на путь к картинке -->
-                    <img src="assets/images/Дикий робот (2024).jpg" alt="Дикий робот">
+                    <img src="assets/images/Дикий робот (2024).jpg" alt="Poster">
                 </div>
-                <div class="movie-info">
-                    <div class="movie-title">Дикий робот</div>
-                    <div class="movie-genre">Анимация, Фантастика</div>
-                    
-                    <div class="schedule-container">
-                        <div class="time-slot">10:00</div>
-                        <div class="time-slot">12:30</div>
-                        <div class="time-slot">16:15</div>
+                <div class="row-info">
+                    <h2 class="row-title">Дикий робот</h2>
+                    <div class="row-meta">
+                        <span class="meta-tag">Анимация</span>
+                        <span>1ч 42мин</span>
+                        <span>IMDb 8.5</span>
                     </div>
-
-                    <button class="buy-btn buy-ticket-btn" data-film="Дикий робот">Купить билет</button>
+                    <p class="row-desc">Эпическое приключение робота ROZZUM 7134, который терпит кораблекрушение на необитаемом острове и должен научиться выживать.</p>
+                </div>
+                <div class="row-sessions">
+                    <div class="sessions-title">Выберите сеанс:</div>
+                    <div class="sessions-grid">
+                        <!-- Кнопки времени с классом buy-ticket-btn -->
+                        <button class="session-btn buy-ticket-btn" data-film="Дикий робот (10:00)">
+                            <span class="session-time">10:00</span>
+                            <span class="session-format">2D</span>
+                            <span class="session-price">250₽</span>
+                        </button>
+                        <button class="session-btn buy-ticket-btn" data-film="Дикий робот (12:30)">
+                            <span class="session-time">12:30</span>
+                            <span class="session-format">3D</span>
+                            <span class="session-price">350₽</span>
+                        </button>
+                        <button class="session-btn buy-ticket-btn" data-film="Дикий робот (16:15)">
+                            <span class="session-time">16:15</span>
+                            <span class="session-format">2D</span>
+                            <span class="session-price">300₽</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Фильм 2: ВАЛЛ-И -->
-            <div class="movie-card">
-                <div class="poster-wrapper">
-                    <span class="age-badge age-green">0+</span>
-                    <img src="assets/images/ВАЛЛ-И (2008).jpg" alt="ВАЛЛ-И">
-                </div>
-                <div class="movie-info">
-                    <div class="movie-title">ВАЛЛ-И</div>
-                    <div class="movie-genre">Классика анимации</div>
-                    
-                    <div class="schedule-container">
-                        <div class="time-slot">11:00</div>
-                        <div class="time-slot">14:00</div>
-                    </div>
-
-                    <button class="buy-btn buy-ticket-btn" data-film="ВАЛЛ-И">Купить билет</button>
-                </div>
-            </div>
-
-            <!-- Фильм 3: Kingsman -->
-            <div class="movie-card">
-                <div class="poster-wrapper">
-                    <span class="age-badge age-red">18+</span>
-                    <img src="assets/images/Kingsman Секретная служба (2015).jpg" alt="Kingsman">
-                </div>
-                <div class="movie-info">
-                    <div class="movie-title">Kingsman: Секретная служба</div>
-                    <div class="movie-genre">Боевик, Комедия</div>
-                    
-                    <div class="schedule-container">
-                        <div class="time-slot">19:30</div>
-                        <div class="time-slot">22:00</div>
-                    </div>
-
-                    <button class="buy-btn buy-ticket-btn" data-film="Kingsman">Купить билет</button>
-                </div>
-            </div>
-
-            <!-- Фильм 4: Пять ночей с Фредди -->
-            <div class="movie-card">
-                <div class="poster-wrapper">
+            <!-- ФИЛЬМ 2: Иллюзия обмана 3 -->
+            <div class="movie-row">
+                <div class="row-poster">
                     <span class="age-badge age-orange">16+</span>
-                    <img src="assets/images/Пять ночей с Фредди (2023).jpg" alt="ФНАФ">
+                    <img src="assets/images/Иллюзия обмана 3 (2025).jpg" alt="Poster">
                 </div>
-                <div class="movie-info">
-                    <div class="movie-title">Пять ночей с Фредди</div>
-                    <div class="movie-genre">Ужасы, Триллер</div>
-                    
-                    <div class="schedule-container">
-                        <div class="time-slot">20:45</div>
-                        <div class="time-slot">23:50</div>
+                <div class="row-info">
+                    <h2 class="row-title">Иллюзия обмана 3</h2>
+                    <div class="row-meta">
+                        <span class="meta-tag">Триллер</span>
+                        <span>2ч 10мин</span>
                     </div>
-
-                    <button class="buy-btn buy-ticket-btn" data-film="Пять ночей с Фредди">Купить билет</button>
+                    <p class="row-desc">Четыре Всадника возвращаются для своего самого опасного ограбления. На этот раз ставки выше, чем когда-либо.</p>
+                </div>
+                <div class="row-sessions">
+                    <div class="sessions-title">Выберите сеанс:</div>
+                    <div class="sessions-grid">
+                        <button class="session-btn buy-ticket-btn" data-film="Иллюзия обмана (18:00)">
+                            <span class="session-time">18:00</span>
+                            <span class="session-format">2D</span>
+                            <span class="session-price">400₽</span>
+                        </button>
+                        <button class="session-btn buy-ticket-btn" data-film="Иллюзия обмана (20:30)">
+                            <span class="session-time">20:30</span>
+                            <span class="session-format">Atmos</span>
+                            <span class="session-price">550₽</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-             <!-- Фильм 5: Иллюзия обмана 3 -->
-             <div class="movie-card">
-                <div class="poster-wrapper">
+            <!-- ФИЛЬМ 3: Пять ночей с Фредди -->
+            <div class="movie-row">
+                <div class="row-poster">
                     <span class="age-badge age-orange">16+</span>
-                    <img src="assets/images/Иллюзия обмана 3 (2025).jpg" alt="Иллюзия обмана 3">
+                    <img src="assets/images/Пять ночей с Фредди (2023).jpg" alt="Poster">
                 </div>
-                <div class="movie-info">
-                    <div class="movie-title">Иллюзия обмана 3</div>
-                    <div class="movie-genre">Триллер, Криминал</div>
-                    
-                    <div class="schedule-container">
-                        <div class="time-slot">18:00</div>
-                        <div class="time-slot">20:30</div>
+                <div class="row-info">
+                    <h2 class="row-title">Пять ночей с Фредди</h2>
+                    <div class="row-meta">
+                        <span class="meta-tag">Ужасы</span>
+                        <span>1ч 50мин</span>
                     </div>
-
-                    <button class="buy-btn buy-ticket-btn" data-film="Иллюзия обмана 3">Купить билет</button>
+                    <p class="row-desc">Охранник пиццерии Freddy Fazbear's Pizza сталкивается с ожившими аниматрониками, жаждущими крови.</p>
+                </div>
+                <div class="row-sessions">
+                    <div class="sessions-title">Выберите сеанс:</div>
+                    <div class="sessions-grid">
+                        <button class="session-btn buy-ticket-btn" data-film="ФНАФ (22:00)">
+                            <span class="session-time">22:00</span>
+                            <span class="session-format">2D</span>
+                            <span class="session-price">450₽</span>
+                        </button>
+                        <button class="session-btn buy-ticket-btn" data-film="ФНАФ (00:30)">
+                            <span class="session-time">00:30</span>
+                            <span class="session-format">2D</span>
+                            <span class="session-price">350₽</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-             <!-- Фильм 6: Есть только МиГ -->
-             <div class="movie-card">
-                <div class="poster-wrapper">
-                    <span class="age-badge age-orange">12+</span>
-                    <img src="assets/images/Есть только МиГ (2025).jpg" alt="Есть только МиГ">
-                </div>
-                <div class="movie-info">
-                    <div class="movie-title">Есть только МиГ</div>
-                    <div class="movie-genre">Драма, Биография</div>
-                    
-                    <div class="schedule-container">
-                        <div class="time-slot">15:00</div>
-                        <div class="time-slot">17:40</div>
-                    </div>
-
-                    <button class="buy-btn buy-ticket-btn" data-film="Есть только МиГ">Купить билет</button>
-                </div>
-            </div>
-
-            <!-- Фильм 7: Человек-бензопила -->
-            <div class="movie-card">
-                <div class="poster-wrapper">
+            <!-- ФИЛЬМ 4: Kingsman -->
+            <div class="movie-row">
+                <div class="row-poster">
                     <span class="age-badge age-red">18+</span>
-                    <img src="assets/images/Человек-бензопила. Фильм: История Резе (2025).png" alt="Человек-бензопила">
+                    <img src="assets/images/Kingsman Секретная служба (2015).jpg" alt="Poster">
                 </div>
-                <div class="movie-info">
-                    <div class="movie-title">Человек-бензопила</div>
-                    <div class="movie-genre">Аниме, Экшен</div>
-                    
-                    <div class="schedule-container">
-                        <div class="time-slot">21:15</div>
-                        <div class="time-slot">00:10</div>
+                <div class="row-info">
+                    <h2 class="row-title">Kingsman: Секретная служба</h2>
+                    <div class="row-meta">
+                        <span class="meta-tag">Боевик</span>
+                        <span>2ч 09мин</span>
                     </div>
-
-                    <button class="buy-btn buy-ticket-btn" data-film="Человек-бензопила">Купить билет</button>
+                    <p class="row-desc">Элитная секретная служба набирает новичков. Стильный экшн, черный юмор и джентльменские манеры.</p>
                 </div>
-            </div>
-
-            <!-- Фильм 8: Кошмар перед Рождеством -->
-            <div class="movie-card">
-                <div class="poster-wrapper">
-                    <span class="age-badge age-green">12+</span>
-                    <img src="assets/images/Кошмар перед Рождеством (1993).jpg" alt="Кошмар перед Рождеством">
-                </div>
-                <div class="movie-info">
-                    <div class="movie-title">Кошмар перед Рождеством</div>
-                    <div class="movie-genre">Фэнтези, Мюзикл</div>
-                    
-                    <div class="schedule-container">
-                        <div class="time-slot">13:30</div>
+                <div class="row-sessions">
+                    <div class="sessions-title">Выберите сеанс:</div>
+                    <div class="sessions-grid">
+                        <button class="session-btn buy-ticket-btn" data-film="Kingsman (19:30)">
+                            <span class="session-time">19:30</span>
+                            <span class="session-format">2D</span>
+                            <span class="session-price">400₽</span>
+                        </button>
                     </div>
-
-                    <button class="buy-btn buy-ticket-btn" data-film="Кошмар перед Рождеством">Купить билет</button>
                 </div>
             </div>
 
         </div>
     </main>
 
-    <!-- Модальное окно (остается без изменений, оно хорошее) -->
+    <!-- Модальное окно -->
     <div id="ticketModal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
-            <h2 style="color:var(--accent-blue)">Бронирование</h2>
-            <p style="margin: 20px 0; color: #bbb;">Фильм: <strong id="filmName" style="color: #fff; font-size: 1.2em;"></strong></p>
-            <p>Функция оплаты пока в разработке.</p>
+            <h2 style="color:var(--accent-blue)">Бронирование билета</h2>
+            <div style="margin: 30px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 20px 0;">
+                <p style="color: #bbb; font-size: 14px;">Вы выбрали:</p>
+                <p id="filmName" style="color: #fff; font-size: 1.4em; font-weight: bold; margin-top: 10px;"></p>
+            </div>
+            <p style="font-size: 14px; color: #888;">Система оплаты подключается...</p>
             <br>
-            <button class="buy-btn" onclick="document.getElementById('ticketModal').style.display='none'">Закрыть</button>
+            <button class="buy-btn" onclick="document.getElementById('ticketModal').style.display='none'">Отлично</button>
         </div>
     </div>
 
