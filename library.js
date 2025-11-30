@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoTags = document.getElementById('infoTags');
     const infoTrailer = document.getElementById('infoTrailer');
     
-    // Элементы таблицы информации в модальном окне
+    // Элементы таблицы информации
+    const infoRating = document.getElementById('infoRating'); // <-- НОВОЕ
     const infoYear = document.getElementById('infoYear');
     const infoCountry = document.getElementById('infoCountry');
     const infoGenre = document.getElementById('infoGenre');
@@ -22,8 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoMpaa = document.getElementById('infoMpaa');
 
     let allMoviesLibrary = []; 
-    
-    // Используем Set для хранения множества выбранных жанров
     let selectedGenres = new Set(); 
 
     // 1. ЗАГРУЗКА ДАННЫХ
@@ -36,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => console.error('Ошибка:', error));
 
-    // 2. ГЕНЕРАЦИЯ КНОПОК ЖАНРОВ
+    // 2. ГЕНЕРАЦИЯ КНОПОК
     function generateGenreButtons(movies) {
         const allTags = new Set();
         movies.forEach(movie => {
@@ -48,56 +47,46 @@ document.addEventListener('DOMContentLoaded', () => {
         const sortedTags = Array.from(allTags).sort();
         genresContainer.innerHTML = '';
 
-        // Кнопка "Все"
         const allBtn = document.createElement('button');
-        allBtn.className = 'genre-btn active'; // По умолчанию активна
+        allBtn.className = 'genre-btn active'; 
         allBtn.textContent = 'Все';
         allBtn.dataset.genre = 'all';
         
         allBtn.addEventListener('click', () => {
-            selectedGenres.clear(); // Очищаем выбор
-            updateButtonsState();   // Обновляем вид кнопок
-            applyFiltersAndSort();  // Фильтруем
+            selectedGenres.clear(); 
+            updateButtonsState();   
+            applyFiltersAndSort();  
         });
-        
         genresContainer.appendChild(allBtn);
 
-        // Остальные кнопки жанров
         sortedTags.forEach(tag => {
             const btn = document.createElement('button');
             btn.className = 'genre-btn';
             btn.textContent = tag;
             btn.dataset.genre = tag;
-            
             btn.addEventListener('click', () => {
-                // Логика мультивыбора:
                 if (selectedGenres.has(tag)) {
-                    selectedGenres.delete(tag); // Если уже выбран — убираем
+                    selectedGenres.delete(tag);
                 } else {
-                    selectedGenres.add(tag);    // Если не выбран — добавляем
+                    selectedGenres.add(tag);
                 }
-                
                 updateButtonsState();
                 applyFiltersAndSort();
             });
-            
             genresContainer.appendChild(btn);
         });
     }
 
-    // Функция обновления внешнего вида кнопок (подсветка активных)
     function updateButtonsState() {
         const allBtn = genresContainer.querySelector('[data-genre="all"]');
         const genreBtns = genresContainer.querySelectorAll('[data-genre]:not([data-genre="all"])');
 
-        // Если ничего не выбрано, активируем кнопку "Все"
         if (selectedGenres.size === 0) {
             allBtn.classList.add('active');
         } else {
             allBtn.classList.remove('active');
         }
 
-        // Пробегаемся по кнопкам жанров и красим их
         genreBtns.forEach(btn => {
             const genre = btn.dataset.genre;
             if (selectedGenres.has(genre)) {
@@ -112,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function applyFiltersAndSort() {
         let result = [...allMoviesLibrary]; 
 
-        // А. Поиск (по названию или режиссеру)
         const searchTerm = searchInput.value.toLowerCase().trim();
         if (searchTerm) {
             result = result.filter(movie => {
@@ -121,8 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Б. Мульти-фильтр по жанрам (ЛОГИКА "ИЛИ")
-        // Если выбран хотя бы один жанр, показываем фильмы, где есть ХОТЯ БЫ ОДИН из выбранных
         if (selectedGenres.size > 0) {
             result = result.filter(movie => {
                 const movieTags = movie.tags || [];
@@ -130,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // В. Сортировка
         const sortType = sortSelect.value;
         result.sort((a, b) => {
             if (sortType === 'newest') {
@@ -147,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderLibrary(result);
     }
 
-    // 4. РЕНДЕР КАРТОЧЕК
+    // 4. РЕНДЕР
     function renderLibrary(movies) {
         libraryContainer.innerHTML = '';
 
@@ -159,11 +144,18 @@ document.addEventListener('DOMContentLoaded', () => {
         movies.forEach(movie => {
             const card = document.createElement('div');
             card.className = 'lib-card';
-            
-            // Показываем все теги через запятую (без обрезки)
             const displayTags = movie.tags ? movie.tags.join(', ') : '';
+            
+            // Определяем цвет рейтинга
+            const rating = movie.rating || 0;
+            let ratingClass = '';
+            if (rating < 5) ratingClass = 'rating-low';
+            else if (rating < 7) ratingClass = 'rating-mid';
 
             card.innerHTML = `
+                <!-- НОВОЕ: Бейдж рейтинга -->
+                <span class="lib-rating-badge ${ratingClass}">${movie.rating || '-'}</span>
+                
                 <span class="lib-age ${movie.ageClass}">${movie.age}</span>
                 <img src="${movie.poster}" alt="${movie.title}" class="lib-poster">
                 <div class="lib-info">
@@ -177,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Слушатели событий
+    // Слушатели
     searchInput.addEventListener('input', applyFiltersAndSort);
     sortSelect.addEventListener('change', applyFiltersAndSort);
 
@@ -187,6 +179,14 @@ document.addEventListener('DOMContentLoaded', () => {
         infoTitle.textContent = movie.title;
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
         
+        // НОВОЕ: Заполняем рейтинг в модалке
+        infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
+        
+        // Красим цвет оценки в модалке
+        if(movie.rating >= 7) infoRating.style.color = '#4ade80';
+        else if(movie.rating >= 5) infoRating.style.color = '#facc15';
+        else infoRating.style.color = '#ef4444';
+
         infoDesc.textContent = movie.description;
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
