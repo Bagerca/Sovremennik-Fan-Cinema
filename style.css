@@ -188,21 +188,33 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .buy-btn { background-color: var(--accent-blue); color: #fff; padding: 12px 30px; border: none; border-radius: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 20px; transition: 0.3s; width: 100%; }
 .buy-btn:hover { background-color: var(--accent-dark); }
 
-/* ИНФО О ФИЛЬМЕ (FINAL LAYOUT) */
+/* ИНФО О ФИЛЬМЕ (FINAL LAYOUT: POSTER | TRAILER | INFO) */
 .info-modal-content { max-width: 1300px !important; text-align: left !important; padding: 0 !important; overflow: hidden; }
 .info-modal-body { padding: 50px; }
 
-/* Сетка: 3 колонки с вертикальным центрированием */
-.info-layout { display: grid; grid-template-columns: 300px 1fr 1.4fr; gap: 40px; align-items: center; }
+/* Сетка: 3 колонки (ТРЕЙЛЕР В ЦЕНТРЕ) */
+.info-layout {
+    display: grid;
+    /* Poster (260px) | Trailer (Самый широкий) | Info (Средний) */
+    grid-template-columns: 260px 1.5fr 1fr;
+    gap: 40px;
+    align-items: center; 
+}
 
-/* 1. Левая колонка (Визуал) */
+/* 1. Левая колонка (Постер + Название) */
 .info-col-visual { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .info-col-visual img { width: 100%; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: block; margin-bottom: 20px; transition: transform 0.3s; }
 .info-col-visual img:hover { transform: scale(1.02); }
 .info-main-title { color: #fff; font-size: 1.8rem; line-height: 1.2; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
 .centered-meta { justify-content: center !important; margin-bottom: 0 !important; }
 
-/* 2. Центральная колонка (Данные) */
+/* 2. Центральная колонка (Трейлер) */
+.info-col-trailer { display: flex; flex-direction: column; align-items: center; }
+.video-responsive { width: 100%; overflow: hidden; padding-bottom: 56.25%; position: relative; height: 0; border-radius: 16px; background: #000; border: 1px solid #334155; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
+.video-responsive iframe { left: 0; top: 0; height: 100%; width: 100%; position: absolute; }
+.trailer-label { margin-top: 15px; font-size: 0.9rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+
+/* 3. Правая колонка (Информация) */
 .info-col-data { display: flex; flex-direction: column; justify-content: center; }
 .info-specs { display: flex; flex-direction: column; gap: 10px; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 25px; }
 .spec-row { display: flex; font-size: 0.95rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 8px; margin-bottom: 2px; }
@@ -211,12 +223,6 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .spec-value { color: #f1f5f9; font-weight: 500; }
 .spec-badge { display: inline-block; border: 1px solid #64748b; padding: 0 6px; border-radius: 4px; font-size: 0.8em; color: #cbd5e1; }
 .info-description { color: #cbd5e1; font-size: 1rem; line-height: 1.6; }
-
-/* 3. Правая колонка (Трейлер) */
-.info-col-trailer { display: flex; flex-direction: column; align-items: center; }
-.video-responsive { width: 100%; overflow: hidden; padding-bottom: 56.25%; position: relative; height: 0; border-radius: 16px; background: #000; border: 1px solid #334155; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
-.video-responsive iframe { left: 0; top: 0; height: 100%; width: 100%; position: absolute; }
-.trailer-label { margin-top: 15px; font-size: 0.9rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
 
 /* СХЕМА ЗАЛА (398 мест) */
 .hall-modal-content { max-width: 750px; padding: 30px; }
