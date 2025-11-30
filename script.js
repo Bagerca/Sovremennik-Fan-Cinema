@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. ГЕНЕРАЦИЯ ДАТ ---
     function generateDates() {
         dateSlider.innerHTML = '';
-        const today = new Date(); // Используем текущую дату
+        const today = new Date();
         
         for (let i = -3; i <= 3; i++) {
             const date = new Date(today);
@@ -175,8 +175,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             filmNameSpan.innerHTML = `${title} <span style="font-weight:400; color:#94a3b8;">(${time})</span>`;
             
+            // Рендерим пустой зал
             renderHall();
-            updateSelectedCount();
+
+            // Сбрасываем счетчики на 0
+            document.getElementById('count').innerText = '0';
+            document.getElementById('total').innerText = '0';
             
             ticketModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -192,40 +196,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-// --- 7. ЛОГИКА ЗАЛА (ОБНОВЛЕННАЯ: 16 рядов, 398 мест) ---
+    // --- 7. ЛОГИКА ЗАЛА (РОВНО 398 МЕСТ, 16 РЯДОВ) ---
     function renderHall() {
         const seatsArea = document.getElementById('seatsArea');
         seatsArea.innerHTML = ''; 
 
-        const totalSeats = 398; // Точное количество мест
-        const rows = 16;        // Количество рядов
-        const seatsPerRow = 25; // Мест в ряду (примерно 398 / 16)
+        const totalSeats = 398;
+        const rows = 16;        
+        const seatsPerRow = 25; 
         
         let seatsCreated = 0;
 
         for (let i = 0; i < rows; i++) {
             const rowDiv = document.createElement('div');
             rowDiv.className = 'seat-row';
-            
-            // Добавляем номер ряда (опционально, для красоты подсказок)
             rowDiv.setAttribute('title', `Ряд ${i + 1}`);
 
             for (let j = 0; j < seatsPerRow; j++) {
-                // Если мы уже создали 398 мест, прерываемся
                 if (seatsCreated >= totalSeats) break;
 
                 const seat = document.createElement('div');
                 seat.className = 'seat';
                 
-                // Случайная занятость (20% мест уже куплено)
-                if (Math.random() < 0.2) {
-                    seat.classList.add('occupied');
-                } else {
-                    seat.addEventListener('click', () => {
-                        seat.classList.toggle('selected');
-                        updateSelectedCount();
-                    });
-                }
+                // Все места свободны (без рандома)
+                
+                seat.addEventListener('click', () => {
+                    seat.classList.toggle('selected');
+                    updateSelectedCount();
+                });
                 
                 rowDiv.appendChild(seat);
                 seatsCreated++;
