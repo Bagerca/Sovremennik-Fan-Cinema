@@ -83,7 +83,39 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
 }
 
 /* =========================================
-   4. РАСПИСАНИЕ И ФИЛЬМЫ
+   4. СТРАНИЦА "О НАС" (ВОССТАНОВЛЕНО)
+   ========================================= */
+.intro-section { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: calc(100vh - 140px); padding: 0 0 40px; position: relative; }
+.intro-badge { background: rgba(255, 255, 255, 0.05); border: 1px solid #334155; color: #38bdf8; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; padding: 8px 16px; border-radius: 50px; margin-bottom: 30px; box-shadow: 0 0 15px rgba(56, 189, 248, 0.1); }
+.intro-title { font-size: 5rem; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 25px; color: #fff; letter-spacing: -2px; }
+.gradient-text { background: linear-gradient(90deg, #22d3ee 0%, #3b82f6 50%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: inline-block; }
+.intro-desc { color: #94a3b8; font-size: 1.2rem; max-width: 600px; margin-bottom: 50px; }
+.red-glow-btn { background-color: #e11d48; color: #fff; font-size: 18px; font-weight: 700; padding: 18px 45px; border-radius: 50px; text-transform: none; transition: all 0.3s ease; box-shadow: 0 0 30px rgba(225, 29, 72, 0.4); display: inline-block; }
+.red-glow-btn:hover { background-color: #be123c; transform: translateY(-3px) scale(1.05); box-shadow: 0 0 50px rgba(225, 29, 72, 0.7); }
+
+/* Grid для "О нас" */
+.about-hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; padding-top: 80px; margin-top: 0; border-top: 1px solid rgba(255,255,255,0.05); }
+.year-badge { display: inline-block; border: 1px solid #1e3a8a; color: var(--accent-blue); padding: 8px 16px; border-radius: 50px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px; background: rgba(30, 58, 138, 0.2); }
+.hero-title { font-size: 4rem; line-height: 1; font-weight: 900; color: #fff; margin-bottom: 30px; text-transform: uppercase; letter-spacing: -2px; }
+.hero-title .text-gray { color: #475569; display: block; }
+.hero-desc { color: #94a3b8; font-size: 1.1rem; line-height: 1.7; margin-bottom: 50px; max-width: 100%; }
+
+/* Статистика и правая колонка */
+.stats-row { display: flex; gap: 30px; }
+.stat-box { background-color: #0f172a; border: 1px solid #1e293b; padding: 30px; border-radius: 16px; min-width: 180px; }
+.stat-number { display: block; font-size: 48px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 8px; }
+.stat-label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+.about-right { display: flex; flex-direction: column; gap: 30px; }
+.map-preview { height: 400px; width: 100%; border-radius: 20px; overflow: hidden; border: 1px solid #334155; box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5); background: #1e293b; }
+.game-zone-card { background: rgba(15, 23, 42, 0.6); border: 1px solid #1e3a8a; border-radius: 20px; padding: 30px; display: flex; align-items: center; gap: 25px; transition: transform 0.3s; }
+.game-zone-card:hover { background: rgba(30, 58, 138, 0.3); transform: translateY(-5px); border-color: var(--accent-blue); }
+.icon-circle { width: 60px; height: 60px; background: var(--accent-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); flex-shrink: 0; }
+.game-info h3 { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 5px; }
+.game-info p { font-size: 0.95rem; color: #94a3b8; line-height: 1.4; }
+
+
+/* =========================================
+   5. РАСПИСАНИЕ И ФИЛЬМЫ
    ========================================= */
 .schedule-header { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 40px; gap: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 30px; }
 .date-slider { display: flex; gap: 12px; overflow-x: auto; width: 100%; padding-bottom: 10px; justify-content: center; }
@@ -94,17 +126,16 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
 .day-name { display: block; font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
 .day-number { display: block; font-size: 20px; font-weight: 800; color: #fff; }
 
-/* ФИЛЬТРЫ (ИСПРАВЛЕНИЕ: PADDING TOP) */
 .filters-bar { 
     display: flex; 
     gap: 12px; 
     margin-bottom: 30px; 
     flex-wrap: wrap; 
     justify-content: center;
-    padding-top: 10px; /* <--- ЭТО ВАЖНО: Место для "подпрыгивания" */
+    padding-top: 10px; 
 }
 .filter-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 700; transition: 0.3s; text-transform: uppercase; }
-.filter-btn:hover { border-color: var(--accent-blue); color: #fff; transform: translateY(-3px); /* <--- Эффект подъема */ }
+.filter-btn:hover { border-color: var(--accent-blue); color: #fff; transform: translateY(-3px); }
 .filter-btn.active { background: #fff; color: #020617; border-color: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
 
 .schedule-list { display: flex; flex-direction: column; gap: 24px; width: 1200px; max-width: 95%; margin: 0 auto; min-height: 600px; }
@@ -168,7 +199,7 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
 .rules-header { text-align: center; max-width: 800px; margin: 0 auto; }
 
 /* =========================================
-   7. ФУТЕР
+   6. ФУТЕР
    ========================================= */
 footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e293b; margin-top: auto; }
 .footer-container { max-width: 1440px; margin: 0 auto; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
@@ -187,7 +218,7 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .tg-btn:hover { background-color: #229ED9; border-color: #229ED9; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(34, 158, 217, 0.3); }
 
 /* =========================================
-   8. МОДАЛЬНЫЕ ОКНА
+   7. МОДАЛЬНЫЕ ОКНА
    ========================================= */
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); align-items: center; justify-content: center; overflow-y: auto; padding: 20px; }
 .modal-content { background-color: #1e293b; padding: 40px; border-radius: 16px; text-align: center; width: 100%; max-width: 420px; border: 1px solid #334155; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); position: relative; margin: auto; }
@@ -197,12 +228,18 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .buy-btn:hover { background-color: var(--accent-dark); }
 
 /* ИНФО О ФИЛЬМЕ (FINAL LAYOUT: POSTER | TRAILER | INFO) */
-.info-modal-content { max-width: 1400px !important; text-align: left !important; padding: 0 !important; overflow: hidden; }
+.info-modal-content { 
+    max-width: 1400px !important; 
+    text-align: left !important; 
+    padding: 0 !important; 
+    overflow: hidden; 
+}
 .info-modal-body { padding: 50px; }
 
 /* Сетка: 3 колонки (ТРЕЙЛЕР В ЦЕНТРЕ) */
 .info-layout {
     display: grid;
+    /* Poster (230px) | Trailer (Резиновый центр) | Info (340px) */
     grid-template-columns: 230px 1fr 340px;
     gap: 30px;
     align-items: center; 
@@ -257,6 +294,9 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     .info-col-trailer { order: -1; }
     .info-modal-content { text-align: center !important; }
     .spec-row { justify-content: space-between; text-align: left; }
+    
+    /* Добавляем стили для страницы "О нас" в мобиле, чтобы не ломалось */
+    .about-hero-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 @media (max-width: 900px) {
     .header-fluid { padding: 0 20px; flex-direction: column; gap: 15px; }
