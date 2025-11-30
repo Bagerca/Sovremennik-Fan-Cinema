@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CINEMA BLUE | Фанатская версия</title>
+    <title>Кинотеатр СОВРЕМЕННИК | Fan Version</title>
+    
+    <!-- Фавиконка (Проектор во вкладке) -->
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     
     <!-- Подключение шрифтов -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,17 +25,18 @@
             theme: {
                 extend: {
                     colors: {
-                        dark: '#020617',
-                        card: '#0f172a',
+                        dark: '#020617', /* Slate 950 */
+                        card: '#0f172a', /* Slate 900 */
                         brand: {
-                            light: '#22d3ee',
-                            DEFAULT: '#0ea5e9',
-                            dark: '#2563eb',
+                            light: '#22d3ee', /* Cyan 400 */
+                            DEFAULT: '#0ea5e9', /* Sky 500 */
+                            dark: '#2563eb', /* Blue 600 */
                             glow: 'rgba(14, 165, 233, 0.5)'
                         }
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        // Можно добавить отдельный шрифт для логотипа, если нужно
                     }
                 }
             }
@@ -50,33 +54,68 @@
     <header 
         x-data="headerLogic" 
         @scroll.window="handleScroll"
-        :class="scrolled ? 'bg-dark/90 backdrop-blur-md py-4 shadow-[0_4px_20px_-5px_rgba(8,145,178,0.3)] border-b border-white/10' : 'bg-transparent py-6'"
+        :class="scrolled ? 'bg-dark/95 backdrop-blur-md py-3 shadow-[0_4px_20px_-5px_rgba(8,145,178,0.3)] border-b border-white/10' : 'bg-transparent py-6'"
         class="fixed top-0 w-full z-50 transition-all duration-300"
     >
         <div class="container mx-auto px-6 flex justify-between items-center">
-            <a href="#" class="text-2xl font-black tracking-tighter uppercase flex items-center gap-2 group">
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600 group-hover:from-cyan-300 group-hover:to-blue-500 transition-all drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
-                    CINEMA<span class="text-white">BLUE</span>
-                </span>
+            
+            <!-- ЛОГОТИП (СОВРЕМЕННИК + ПРОЕКТОР) -->
+            <a href="#" class="flex items-center gap-3 group">
+                <svg class="h-10 md:h-14 w-auto text-white group-hover:text-brand-light transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" viewBox="0 0 380 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    
+                    <!-- Текстовая часть -->
+                    <g fill="currentColor" style="font-family: 'Arial Black', 'Arial', sans-serif; font-weight: 900; font-style: italic;">
+                        <text x="0" y="22" font-size="19" letter-spacing="1">КИНОТЕАТР</text>
+                        <text x="0" y="60" font-size="36" letter-spacing="-1.5">СОВРЕМЕННИК</text>
+                    </g>
+                    
+                    <!-- Проектор (Neon Line Style) -->
+                    <g transform="translate(295, -2)" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- Бобины -->
+                        <circle cx="16" cy="10" r="6"/>
+                        <circle cx="36" cy="8" r="6"/>
+                        <!-- Корпус -->
+                        <rect x="8" y="24" width="36" height="22" rx="2"/>
+                        <!-- Луч слева -->
+                        <path d="M8 35 L2 35"/> 
+                        <!-- Линза справа -->
+                        <path d="M44 30 L54 24 V46 L44 40"/> 
+                        <!-- Ножка спираль -->
+                        <path d="M16 50 H36 M18 55 H34 M20 60 H32 M24 65 H28"/>
+                    </g>
+                </svg>
             </a>
 
+            <!-- Навигация -->
             <nav class="hidden md:flex space-x-8 font-medium text-sm tracking-wide">
-                <a href="#about" class="hover:text-brand-light transition-colors relative group">О нас</a>
-                <a href="#schedule" class="hover:text-brand-light transition-colors relative group">Расписание</a>
-                <a href="#rules" class="hover:text-brand-light transition-colors relative group">Правила</a>
+                <a href="#about" class="hover:text-brand-light transition-colors relative group">
+                    О нас
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-light transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#schedule" class="hover:text-brand-light transition-colors relative group">
+                    Расписание
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-light transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#rules" class="hover:text-brand-light transition-colors relative group">
+                    Правила
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-light transition-all group-hover:w-full"></span>
+                </a>
             </nav>
 
+            <!-- Кнопка билетов -->
             <div class="hidden md:block">
                 <button class="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-2 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-[0_0_15px_rgba(14,165,233,0.6)] border border-white/10">
                     Купить билет
                 </button>
             </div>
 
+            <!-- Мобильная кнопка -->
             <button @click="toggleMenu" class="md:hidden text-white focus:outline-none">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
         </div>
 
+        <!-- Мобильное меню -->
         <div x-show="mobileMenu" x-transition.opacity class="md:hidden bg-card border-t border-white/10 absolute w-full left-0 top-full shadow-2xl">
             <div class="flex flex-col p-6 space-y-4 text-center">
                 <a @click="toggleMenu" href="#about" class="block hover:text-brand-light">О нас</a>
@@ -86,59 +125,61 @@
         </div>
     </header>
 
-    <!-- HERO (Здесь оставил атмосферный фон с Unsplash, т.к. постеры вертикальные) -->
+    <!-- HERO SECTION (Фон пока оставляем абстрактным или можешь заменить на hero-bg.jpg) -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
+            <!-- Здесь ссылка на Unsplash для общего фона, т.к. постеры фильмов вертикальные и не подходят для фона во весь экран -->
             <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 grayscale mix-blend-luminosity" alt="Cinema Background">
             <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/80 to-blue-900/20"></div>
         </div>
         
         <div class="relative z-10 text-center px-4 max-w-5xl mx-auto mt-16">
             <div class="inline-block px-4 py-1 mb-6 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 text-xs font-bold tracking-widest uppercase">
-                Премиум кинотеатр
+                Главный кинотеатр города
             </div>
             <h1 class="text-5xl md:text-8xl font-black mb-6 tracking-tight leading-tight drop-shadow-2xl">
-                РЕАЛЬНОСТЬ <br>
+                БОЛЬШОЕ КИНО <br>
                 <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 animate-pulse">
-                    ЭТО ИЛЛЮЗИЯ
+                    РЯДОМ С ТОБОЙ
                 </span>
             </h1>
             <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto font-light">
-                Испытайте полное погружение с технологией <span class="text-white font-semibold">IMAX Laser</span> и звуком, который пробирает до мурашек.
+                Обновленный зал, современный звук и атмосфера, которую нельзя скачать в интернете.
             </p>
             <a href="#schedule" class="inline-block bg-white text-dark font-extrabold px-10 py-4 rounded-full text-lg hover:bg-gray-200 hover:scale-105 transition-all shadow-[0_0_25px_rgba(255,255,255,0.4)]">
-                Выбрать сеанс
+                Смотреть афишу
             </a>
         </div>
     </section>
 
-    <!-- О НАС (Оставил красивый зал) -->
+    <!-- О НАС -->
     <section id="about" class="py-24 bg-dark relative">
         <div class="absolute left-0 top-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px]"></div>
 
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row items-center gap-16">
+                <!-- Абстрактное фото зала -->
                 <div class="w-full md:w-1/2 relative group">
                     <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
                     <img src="https://images.unsplash.com/photo-1517604931442-710c8ef555c9?q=80&w=2069&auto=format&fit=crop" 
-                         alt="Зал" 
+                         alt="Зал Современник" 
                          class="relative rounded-2xl shadow-2xl w-full h-auto object-cover grayscale-[30%] hover:grayscale-0 transition duration-700">
                 </div>
                 
                 <div class="w-full md:w-1/2">
-                    <h2 class="text-sm font-bold text-brand-light tracking-widest uppercase mb-4">Технологии</h2>
-                    <h3 class="text-4xl font-bold mb-6 text-white leading-tight">Кинотеатр <br>нового поколения</h3>
+                    <h2 class="text-sm font-bold text-brand-light tracking-widest uppercase mb-4">История и Комфорт</h2>
+                    <h3 class="text-4xl font-bold mb-6 text-white leading-tight">Кинотеатр <br>твоего города</h3>
                     <p class="text-gray-400 mb-6 leading-relaxed">
-                        Смотрите новинки и любимую классику в лучшем качестве. От анимации до хорроров — мы подобрали репертуар для каждого.
+                        «Современник» — это больше, чем просто экран. Это место встреч, громких премьер и запаха свежего попкорна. Мы сохранили традиции, но полностью обновили оборудование.
                     </p>
                     <ul class="space-y-4 text-gray-300">
                         <li class="flex items-center gap-4">
                             <div class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]"></div>
-                            <span>Звук Dolby Atmos 360°</span>
+                            <span>Цифровая 3D проекция</span>
                         </li>
                         <li class="flex items-center gap-4">
                             <div class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6]"></div>
-                            <span>Лазерная проекция 4K</span>
+                            <span>Звук Dolby Surround</span>
                         </li>
                     </ul>
                 </div>
@@ -146,18 +187,18 @@
         </div>
     </section>
 
-    <!-- РАСПИСАНИЕ (Здесь фильмы, которые уже вышли или идут сейчас) -->
+    <!-- РАСПИСАНИЕ -->
     <section id="schedule" class="py-24 bg-card border-t border-white/5">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Сейчас в кино</h2>
+                <h2 class="text-4xl font-bold mb-4">Сейчас в прокате</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto rounded-full"></div>
             </div>
 
             <!-- Сетка карточек -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 
-                <!-- Card 1: Kingsman -->
+                <!-- Kingsman -->
                 <div class="movie-card group">
                     <img src="assets/images/Kingsman Секретная служба (2015).jpg" alt="Kingsman" class="movie-img">
                     <div class="movie-overlay">
@@ -170,7 +211,7 @@
                     </div>
                 </div>
 
-                <!-- Card 2: Дикий робот -->
+                <!-- Дикий робот -->
                 <div class="movie-card group">
                     <img src="assets/images/Дикий робот (2024).jpg" alt="Дикий робот" class="movie-img">
                     <div class="movie-overlay">
@@ -184,7 +225,7 @@
                     </div>
                 </div>
 
-                <!-- Card 3: Фредди -->
+                <!-- Фредди -->
                 <div class="movie-card group">
                     <img src="assets/images/Пять ночей с Фредди (2023).jpg" alt="FNAF" class="movie-img">
                     <div class="movie-overlay">
@@ -197,7 +238,7 @@
                     </div>
                 </div>
                 
-                 <!-- Card 4: ВАЛЛ-И -->
+                 <!-- ВАЛЛ-И -->
                  <div class="movie-card group">
                     <img src="assets/images/ВАЛЛ·И (2008).jpg" alt="WALL-E" class="movie-img">
                     <div class="movie-overlay">
@@ -237,7 +278,7 @@
         </div>
     </section>
 
-    <!-- СКОРО В КИНО (Слайдер новинок 2025 и спецпоказов) -->
+    <!-- СКОРО В КИНО (Слайдер) -->
     <section id="coming-soon" class="py-24 bg-card border-t border-white/5">
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-end mb-10">
@@ -247,9 +288,10 @@
                 </div>
             </div>
 
+            <!-- Горизонтальный скролл -->
             <div class="flex overflow-x-auto space-x-6 pb-8 snap-x hide-scrollbar">
                 
-                <!-- Человек-бензопила (PNG) -->
+                <!-- Человек-бензопила -->
                 <div class="poster-card snap-center group">
                     <div class="relative rounded-lg overflow-hidden h-[360px] mb-4">
                         <img src="assets/images/Человек-бензопила. Фильм: История Резе (2025).png" class="poster-img">
@@ -279,7 +321,7 @@
                     <p class="text-xs text-gray-500 mt-1">Drama / History</p>
                 </div>
                 
-                <!-- Кошмар перед Рождеством (Ретроспектива) -->
+                <!-- Кошмар перед Рождеством -->
                  <div class="poster-card snap-center group">
                     <div class="relative rounded-lg overflow-hidden h-[360px] mb-4">
                         <img src="assets/images/Кошмар перед Рождеством (1993).jpg" class="poster-img">
@@ -296,16 +338,20 @@
     <!-- FOOTER -->
     <footer class="bg-black border-t border-gray-900 pt-16 pb-8">
         <div class="container mx-auto px-6 text-center">
-            <span class="text-2xl font-black uppercase bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600">
-                CINEMA BLUE
-            </span>
+            <!-- Логотип в футере -->
+            <div class="flex justify-center items-center gap-2 mb-6 opacity-50 hover:opacity-100 transition">
+                <span style="font-family: 'Arial Black', sans-serif; font-style: italic; font-weight: 900;" class="text-2xl uppercase text-white">
+                    СОВРЕМЕННИК
+                </span>
+            </div>
+
             <div class="flex justify-center gap-6 mt-6 mb-8">
                 <a href="#" class="social-btn">VK</a>
                 <a href="#" class="social-btn">TG</a>
                 <a href="#" class="social-btn">YT</a>
             </div>
             <div class="text-gray-600 text-sm">
-                &copy; 2025 Fan Version. All rights reserved.
+                &copy; 2025 Современник Fan Version.
             </div>
         </div>
     </footer>
