@@ -219,9 +219,12 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .video-responsive iframe { left: 0; top: 0; height: 100%; width: 100%; position: absolute; }
 
 /* =========================================
-   8. СХЕМА ЗАЛА (НОВЫЕ СТИЛИ)
+   8. СХЕМА ЗАЛА (ОБНОВЛЕННАЯ ПОД 400 МЕСТ)
    ========================================= */
-.hall-modal-content { max-width: 500px; padding: 30px; }
+.hall-modal-content { 
+    max-width: 750px; /* Увеличили ширину, чтобы влезло 25 мест в ряд */
+    padding: 30px; 
+}
 .hall-title { color: var(--accent-blue); margin-bottom: 5px; }
 .hall-subtitle { color: #fff; font-size: 1.1em; font-weight: 700; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #334155; }
 
@@ -233,6 +236,39 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     transform: perspective(400px) rotateX(-10deg); box-shadow: 0 15px 20px -10px rgba(255, 255, 255, 0.2); border-radius: 8px;
     color: rgba(255,255,255,0.3); font-size: 10px; display: flex; align-items: center; justify-content: center; letter-spacing: 5px;
 }
+
+.seats-area { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 6px; /* Отступ между рядами */
+}
+
+.seat-row { 
+    display: flex; 
+    gap: 4px; /* Отступ между креслами (уменьшили) */
+    justify-content: center;
+}
+
+/* Компактные кресла */
+.seat { 
+    background-color: #334155; 
+    height: 16px; /* Было 20 */
+    width: 18px;  /* Было 24 */
+    border-top-left-radius: 6px; 
+    border-top-right-radius: 6px; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+    font-size: 0; /* Скрываем текст, если он там будет */
+}
+
+.seat:not(.occupied):hover { transform: scale(1.3); background-color: #64748b; z-index: 2; }
+.seat.selected { background-color: var(--accent-blue); box-shadow: 0 0 8px var(--accent-blue); }
+.seat.occupied { background-color: #1e293b; cursor: not-allowed; opacity: 0.4; }
+
+.ticket-footer { margin-top: 30px; border-top: 1px solid #334155; padding-top: 20px; }
+.ticket-info { display: flex; justify-content: space-between; margin-bottom: 15px; color: #fff; font-weight: 700; font-size: 1.1em; }
+.ticket-info span { color: var(--accent-blue); }
 .seats-area { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .seat-row { display: flex; gap: 6px; }
 .seat { background-color: #334155; height: 20px; width: 24px; border-top-left-radius: 8px; border-top-right-radius: 8px; cursor: pointer; transition: all 0.2s; }
