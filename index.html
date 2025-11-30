@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEON CINEMA | Фанатская версия</title>
+    
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Подключение Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Настройка шрифта и цветов -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+        }
+
+        /* Скрытие скроллбара для секции "Скоро" */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+    
+    <!-- Конфигурация Tailwind для кастомных цветов (опционально) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0B0F19',
+                        brand: {
+                            purple: '#A855F7',
+                            pink: '#EC4899'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-100 antialiased bg-dark selection:bg-purple-500 selection:text-white">
+
+    <!-- HEADER / NAVBAR -->
+    <!-- Alpine.js отслеживает скролл для изменения прозрачности -->
+    <header 
+        x-data="{ scrolled: false, mobileMenu: false }" 
+        @scroll.window="scrolled = (window.pageYOffset > 50)"
+        :class="scrolled ? 'bg-dark/90 backdrop-blur-md py-4 shadow-lg border-b border-gray-800' : 'bg-transparent py-6'"
+        class="fixed top-0 w-full z-50 transition-all duration-300"
+    >
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <!-- Логотип -->
+            <a href="#" class="text-2xl font-black tracking-tighter uppercase flex items-center gap-2 group">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600 group-hover:from-purple-300 group-hover:to-pink-500 transition-all">
+                    NEON<span class="text-white">CINEMA</span>
+                </span>
+            </a>
+
+            <!-- Десктоп Меню -->
+            <nav class="hidden md:flex space-x-8 font-medium">
+                <a href="#about" class="hover:text-purple-400 transition-colors">О нас</a>
+                <a href="#schedule" class="hover:text-purple-400 transition-colors">Расписание</a>
+                <a href="#rules" class="hover:text-purple-400 transition-colors">Правила</a>
+                <a href="#coming-soon" class="hover:text-purple-400 transition-colors">Скоро</a>
+            </nav>
+
+            <!-- Кнопка билетов -->
+            <div class="hidden md:block">
+                <button class="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-2 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-[0_0_15px_rgba(168,85,247,0.5)]">
+                    Купить билет
+                </button>
+            </div>
+
+            <!-- Мобильная кнопка -->
+            <button @click="mobileMenu = !mobileMenu" class="md:hidden text-white focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+
+        <!-- Мобильное меню (выпадающее) -->
+        <div x-show="mobileMenu" x-transition class="md:hidden bg-gray-900 border-t border-gray-800 absolute w-full left-0 top-full">
+            <div class="flex flex-col p-6 space-y-4 text-center">
+                <a @click="mobileMenu = false" href="#about" class="block hover:text-purple-400">О нас</a>
+                <a @click="mobileMenu = false" href="#schedule" class="block hover:text-purple-400">Расписание</a>
+                <a @click="mobileMenu = false" href="#rules" class="block hover:text-purple-400">Правила</a>
+                <a @click="mobileMenu = false" href="#coming-soon" class="block hover:text-purple-400">Скоро</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION (Приветствие) -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Фон картинка -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-40" alt="Cinema Background">
+            <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent"></div>
+        </div>
+        
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16">
+            <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-tight">
+                ПОГРУЗИСЬ В МАГИЮ <br>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 animate-pulse">
+                    БОЛЬШОГО ЭКРАНА
+                </span>
+            </h1>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Лучший звук, 4K проекторы и атмосфера настоящего кино. Твои эмоции начинаются здесь.
+            </p>
+            <a href="#schedule" class="inline-block bg-white text-dark font-extrabold px-8 py-4 rounded-full text-lg hover:bg-gray-200 hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                Смотреть афишу
+            </a>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ: О КИНОТЕАТРЕ -->
+    <section id="about" class="py-20 bg-dark">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <!-- Картинка слева -->
+                <div class="w-full md:w-1/2 relative group">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000"></div>
+                    <img src="https://images.unsplash.com/photo-1517604931442-710c8ef555c9?q=80&w=2069&auto=format&fit=crop" 
+                         alt="Зал кинотеатра" 
+                         class="relative rounded-2xl shadow-2xl w-full h-auto object-cover transform transition duration-500 hover:scale-[1.01]">
+                </div>
+                
+                <!-- Текст справа -->
+                <div class="w-full md:w-1/2">
+                    <h2 class="text-sm font-bold text-purple-500 tracking-widest uppercase mb-2">О нас</h2>
+                    <h3 class="text-3xl md:text-4xl font-bold mb-6 text-white leading-tight">Технологии будущего <br>для вашего комфорта</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Neon Cinema — это не просто место для просмотра фильмов. Это пространство, где встречаются передовые технологии лазерной проекции IMAX Laser и объемный звук Dolby Atmos. 
+                    </p>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        Наши залы оборудованы креслами-реклайнерами, чтобы вы чувствовали себя как дома, только с экраном размером с 5-этажный дом.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3">
+                            <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+                            <span>Залы повышенной комфортности VIP</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                            <span>Кинобар с гурмэ-попкорном</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ: РАСПИСАНИЕ (Hover эффект) -->
+    <section id="schedule" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Сейчас в кино</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- Карточка фильма 1 -->
+                <div class="group relative h-[450px] rounded-xl overflow-hidden cursor-pointer shadow-lg shadow-purple-900/20">
+                    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1000&auto=format&fit=crop" alt="Movie 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    
+                    <!-- Overlay (Появляется при наведении) -->
+                    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center p-6 text-center">
+                        <h3 class="text-2xl font-bold text-white mb-2">Кибер-Одиссея</h3>
+                        <p class="text-sm text-gray-300 mb-6">Фантастика / 2ч 15м</p>
+                        <p class="text-gray-400 text-sm mb-6 line-clamp-3">Будущее наступило, но готовы ли мы к нему? Эпическая сага о выживании в цифровом мире.</p>
+                        
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <button class="bg-gray-700 hover:bg-purple-600 text-white text-xs py-1 px-3 rounded transition">14:00</button>
+                            <button class="bg-gray-700 hover:bg-purple-600 text-white text-xs py-1 px-3 rounded transition">18:30</button>
+                            <button class="bg-gray-700 hover:bg-purple-600 text-white text-xs py-1 px-3 rounded transition">21:45</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка фильма 2 -->
+                <div class="group relative h-[450px] rounded-xl overflow-hidden cursor-pointer shadow-lg shadow-purple-900/20">
+                    <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=1000&auto=format&fit=crop" alt="Movie 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center p-6 text-center">
+                        <h3 class="text-2xl font-bold text-white mb-2">Неоновый Гонщик</h3>
+                        <p class="text-sm text-gray-300 mb-6">Боевик / 1ч 50м</p>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <button class="bg-gray-700 hover:bg-pink-600 text-white text-xs py-1 px-3 rounded transition">15:10</button>
+                            <button class="bg-gray-700 hover:bg-pink-600 text-white text-xs py-1 px-3 rounded transition">19:20</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка фильма 3 -->
+                <div class="group relative h-[450px] rounded-xl overflow-hidden cursor-pointer shadow-lg shadow-purple-900/20">
+                    <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=1000&auto=format&fit=crop" alt="Movie 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center p-6 text-center">
+                        <h3 class="text-2xl font-bold text-white mb-2">Тишина Космоса</h3>
+                        <p class="text-sm text-gray-300 mb-6">Хоррор / 1ч 40м</p>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <button class="bg-gray-700 hover:bg-purple-600 text-white text-xs py-1 px-3 rounded transition">22:00</button>
+                            <button class="bg-gray-700 hover:bg-purple-600 text-white text-xs py-1 px-3 rounded transition">00:15</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка фильма 4 -->
+                <div class="group relative h-[450px] rounded-xl overflow-hidden cursor-pointer shadow-lg shadow-purple-900/20">
+                    <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?q=80&w=1000&auto=format&fit=crop" alt="Movie 4" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center p-6 text-center">
+                        <h3 class="text-2xl font-bold text-white mb-2">Ритм Города</h3>
+                        <p class="text-sm text-gray-300 mb-6">Мюзикл / 2ч 05м</p>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <button class="bg-gray-700 hover:bg-pink-600 text-white text-xs py-1 px-3 rounded transition">12:00</button>
+                            <button class="bg-gray-700 hover:bg-pink-600 text-white text-xs py-1 px-3 rounded transition">16:40</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ: ПРАВИЛА (Аккордеон на Alpine.js) -->
+    <section id="rules" class="py-20 bg-dark relative overflow-hidden">
+        <!-- Декоративный элемент -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-purple-900/20 rounded-full blur-3xl -z-0 pointer-events-none"></div>
+
+        <div class="container mx-auto px-6 max-w-3xl relative z-10">
+            <h2 class="text-3xl font-bold mb-10 text-center"><span class="text-purple-400">Правила</span> посещения</h2>
+            
+            <div x-data="{ active: 1 }" class="space-y-4">
+                
+                <!-- Пункт 1 -->
+                <div class="border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm overflow-hidden">
+                    <button @click="active = (active === 1 ? null : 1)" class="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-gray-800 transition">
+                        <span class="font-semibold text-lg">Покупка и возврат билетов</span>
+                        <svg :class="active === 1 ? 'rotate-180 text-purple-400' : ''" class="w-5 h-5 transform transition-transform duration-300 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                    <div x-show="active === 1" x-collapse>
+                        <div class="px-6 pb-4 text-gray-400 text-sm leading-relaxed border-t border-gray-800 pt-4">
+                            Билеты можно приобрести на сайте или в кассе. Возврат средств осуществляется не позднее, чем за 30 минут до начала сеанса. Электронные билеты не требуют распечатки.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Пункт 2 -->
+                <div class="border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm overflow-hidden">
+                    <button @click="active = (active === 2 ? null : 2)" class="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-gray-800 transition">
+                        <span class="font-semibold text-lg">Еда и напитки</span>
+                        <svg :class="active === 2 ? 'rotate-180 text-purple-400' : ''" class="w-5 h-5 transform transition-transform duration-300 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                    <div x-show="active === 2" x-collapse>
+                        <div class="px-6 pb-4 text-gray-400 text-sm leading-relaxed border-t border-gray-800 pt-4">
+                            В залы разрешено проходить только с продукцией, приобретенной в нашем кинобаре. Это гарантирует отсутствие резких запахов и шуршащих упаковок, мешающих другим зрителям.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Пункт 3 -->
+                <div class="border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm overflow-hidden">
+                    <button @click="active = (active === 3 ? null : 3)" class="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-gray-800 transition">
+                        <span class="font-semibold text-lg">Возрастные ограничения</span>
+                        <svg :class="active === 3 ? 'rotate-180 text-purple-400' : ''" class="w-5 h-5 transform transition-transform duration-300 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                    <div x-show="active === 3" x-collapse>
+                        <div class="px-6 pb-4 text-gray-400 text-sm leading-relaxed border-t border-gray-800 pt-4">
+                            Администрация вправе запросить документ, подтверждающий возраст, если рейтинг фильма 16+ или 18+. Дети до 6 лет на сеансы 12+ не допускаются даже с родителями.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ: СКОРО В КИНО (Слайдер) -->
+    <section id="coming-soon" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-end mb-10">
+                <div>
+                    <h2 class="text-3xl font-bold text-white">Скоро в кино</h2>
+                    <p class="text-gray-400 mt-2">Самые ожидаемые премьеры сезона</p>
+                </div>
+                <!-- Индикаторы скролла (декоративные) -->
+                <div class="hidden md:flex gap-2">
+                    <div class="w-8 h-1 bg-purple-500 rounded-full"></div>
+                    <div class="w-2 h-1 bg-gray-700 rounded-full"></div>
+                    <div class="w-2 h-1 bg-gray-700 rounded-full"></div>
+                </div>
+            </div>
+
+            <!-- Горизонтальный скролл -->
+            <div class="flex overflow-x-auto space-x-6 pb-8 snap-x hide-scrollbar">
+                
+                <!-- Постер 1 -->
+                <div class="min-w-[200px] md:min-w-[240px] snap-center">
+                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4 group">
+                        <img src="https://images.unsplash.com/photo-1596727147705-54a9d0943f94?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover transition duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                        <div class="absolute top-2 right-2 bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">25 ДЕК</div>
+                    </div>
+                    <h4 class="font-bold text-lg text-white">Звездный путь: Начало</h4>
+                    <p class="text-gray-500 text-sm">Фантастика</p>
+                </div>
+
+                <!-- Постер 2 -->
+                <div class="min-w-[200px] md:min-w-[240px] snap-center">
+                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4 group">
+                        <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover transition duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                        <div class="absolute top-2 right-2 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded">1 ЯНВ</div>
+                    </div>
+                    <h4 class="font-bold text-lg text-white">Детектив из прошлого</h4>
+                    <p class="text-gray-500 text-sm">Триллер</p>
+                </div>
+
+                <!-- Постер 3 -->
+                <div class="min-w-[200px] md:min-w-[240px] snap-center">
+                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4 group">
+                        <img src="https://images.unsplash.com/photo-1533488765986-dfa2a9939acd?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover transition duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                        <div class="absolute top-2 right-2 bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">14 ЯНВ</div>
+                    </div>
+                    <h4 class="font-bold text-lg text-white">Любовь в Париже</h4>
+                    <p class="text-gray-500 text-sm">Мелодрама</p>
+                </div>
+
+                <!-- Постер 4 -->
+                <div class="min-w-[200px] md:min-w-[240px] snap-center">
+                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4 group">
+                        <img src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover transition duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                        <div class="absolute top-2 right-2 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded">20 ФЕВ</div>
+                    </div>
+                    <h4 class="font-bold text-lg text-white">Битва роботов</h4>
+                    <p class="text-gray-500 text-sm">Экшн</p>
+                </div>
+
+                <!-- Постер 5 -->
+                <div class="min-w-[200px] md:min-w-[240px] snap-center">
+                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4 group">
+                        <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e63?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover transition duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                        <div class="absolute top-2 right-2 bg-gray-600 text-white text-xs font-bold px-2 py-1 rounded">СКОРО</div>
+                    </div>
+                    <h4 class="font-bold text-lg text-white">Тайна леса</h4>
+                    <p class="text-gray-500 text-sm">Приключения</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black border-t border-gray-900 pt-16 pb-8">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <div class="mb-6 md:mb-0">
+                    <span class="text-2xl font-black uppercase bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+                        NEON CINEMA
+                    </span>
+                    <p class="text-gray-500 text-sm mt-2">Кинотеатр нового поколения</p>
+                </div>
+                <div class="flex gap-6">
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-purple-600 hover:text-white transition">VK</a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-pink-600 hover:text-white transition">TG</a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-white hover:text-black transition">YT</a>
+                </div>
+            </div>
+            <div class="border-t border-gray-900 pt-8 text-center text-gray-600 text-sm">
+                &copy; 2023 Neon Cinema Fan Version. Все права защищены. <br> Дизайн создан в демонстрационных целях.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
