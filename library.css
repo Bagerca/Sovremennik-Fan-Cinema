@@ -198,6 +198,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start; /* Контент сверху */
 }
 
 .lib-title {
@@ -213,6 +214,15 @@
     color: var(--text-muted);
     font-size: 0.85rem;
     margin-bottom: 10px;
+}
+
+/* Стиль для списка жанров на карточке */
+.lib-tags-text {
+    font-size: 0.85em;
+    color: var(--accent-blue);
+    font-weight: 600;
+    line-height: 1.4;
+    margin-top: auto; /* Прижимает к низу */
 }
 
 .lib-age {
@@ -241,6 +251,7 @@
 
 /* =========================================================
    FIX: СТИЛИ ДЛЯ МОДАЛЬНОГО ОКНА "О ФИЛЬМЕ"
+   (Исправление ширины и сетки)
    ========================================================= */
 
 .info-modal-content { max-width: 1400px !important; text-align: left !important; padding: 0 !important; overflow: hidden; }
