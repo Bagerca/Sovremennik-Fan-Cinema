@@ -1,5 +1,5 @@
 /* =========================================
-   1. ГЛОБАЛЬНЫЕ НАСТРОЙКИ
+   1. ГЛОБАЛЬНЫЕ НАСТРОЙКИ (PREMIUM NAVY)
    ========================================= */
 :root {
     --bg-color: #020617;
@@ -12,7 +12,10 @@
     --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
 }
 
-html { overflow-y: scroll !important; }
+html { 
+    overflow-y: scroll !important; /* Фикс скачков верстки */
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -27,6 +30,7 @@ body {
     background-attachment: fixed;
 }
 
+/* Скроллбар */
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: #020617; }
 ::-webkit-scrollbar-thumb { background: #334155; border-radius: 5px; }
@@ -48,7 +52,15 @@ header {
     z-index: 1000;
     backdrop-filter: blur(12px);
 }
-.header-fluid { width: 100%; padding: 0 50px; display: flex; justify-content: space-between; align-items: center; }
+
+.header-fluid {
+    width: 100%;
+    padding: 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .logo-link { display: flex; align-items: center; padding: 5px 0; transition: transform 0.3s ease; }
 .logo-img { height: 45px; width: auto; filter: brightness(0) invert(1); transition: filter 0.3s ease; }
 .logo-link:hover { transform: scale(1.02); filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.3)); }
@@ -77,13 +89,42 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 0 20px rgba(14, 165, 233, 0.15));
 }
+
 .subtitle {
     display: block; font-size: 1rem; color: var(--accent-blue); font-weight: 600;
     margin-top: 10px; letter-spacing: 2px; text-transform: uppercase; -webkit-text-fill-color: var(--accent-blue);
 }
 
 /* =========================================
-   4. РАСПИСАНИЕ И ФИЛЬТРЫ
+   4. СЕКЦИИ (HERO + ABOUT)
+   ========================================= */
+.intro-section { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: calc(100vh - 140px); padding: 0 0 40px; position: relative; }
+.intro-badge { background: rgba(255, 255, 255, 0.05); border: 1px solid #334155; color: #38bdf8; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; padding: 8px 16px; border-radius: 50px; margin-bottom: 30px; box-shadow: 0 0 15px rgba(56, 189, 248, 0.1); }
+.intro-title { font-size: 5rem; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 25px; color: #fff; letter-spacing: -2px; }
+.gradient-text { background: linear-gradient(90deg, #22d3ee 0%, #3b82f6 50%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: inline-block; }
+.intro-desc { color: #94a3b8; font-size: 1.2rem; max-width: 600px; margin-bottom: 50px; }
+.red-glow-btn { background-color: #e11d48; color: #fff; font-size: 18px; font-weight: 700; padding: 18px 45px; border-radius: 50px; text-transform: none; transition: all 0.3s ease; box-shadow: 0 0 30px rgba(225, 29, 72, 0.4); display: inline-block; }
+.red-glow-btn:hover { background-color: #be123c; transform: translateY(-3px) scale(1.05); box-shadow: 0 0 50px rgba(225, 29, 72, 0.7); }
+
+.about-hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; padding-top: 100px; margin-top: 0; border-top: 1px solid rgba(255,255,255,0.05); }
+.year-badge { display: inline-block; border: 1px solid #1e3a8a; color: var(--accent-blue); padding: 8px 16px; border-radius: 50px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px; background: rgba(30, 58, 138, 0.2); }
+.hero-title { font-size: 4rem; line-height: 1; font-weight: 900; color: #fff; margin-bottom: 30px; text-transform: uppercase; letter-spacing: -2px; }
+.hero-title .text-gray { color: #475569; display: block; }
+.hero-desc { color: #94a3b8; font-size: 1.1rem; line-height: 1.7; margin-bottom: 50px; max-width: 100%; }
+.stats-row { display: flex; gap: 30px; }
+.stat-box { background-color: #0f172a; border: 1px solid #1e293b; padding: 30px; border-radius: 16px; min-width: 180px; }
+.stat-number { display: block; font-size: 48px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 8px; }
+.stat-label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+.about-right { display: flex; flex-direction: column; gap: 30px; }
+.map-preview { height: 400px; width: 100%; border-radius: 20px; overflow: hidden; border: 1px solid #334155; box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5); background: #1e293b; }
+.game-zone-card { background: rgba(15, 23, 42, 0.6); border: 1px solid #1e3a8a; border-radius: 20px; padding: 30px; display: flex; align-items: center; gap: 25px; transition: transform 0.3s; }
+.game-zone-card:hover { background: rgba(30, 58, 138, 0.3); transform: translateY(-5px); border-color: var(--accent-blue); }
+.icon-circle { width: 60px; height: 60px; background: var(--accent-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); flex-shrink: 0; }
+.game-info h3 { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 5px; }
+.game-info p { font-size: 0.95rem; color: #94a3b8; line-height: 1.4; }
+
+/* =========================================
+   5. ЭЛЕМЕНТЫ РАСПИСАНИЯ
    ========================================= */
 .schedule-header { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 40px; gap: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 30px; }
 .date-slider { display: flex; gap: 12px; overflow-x: auto; width: 100%; padding-bottom: 10px; justify-content: center; }
@@ -94,62 +135,153 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
 .day-name { display: block; font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
 .day-number { display: block; font-size: 20px; font-weight: 800; color: #fff; }
 
-/* ЦЕНТРИРОВАНИЕ ФИЛЬТРОВ */
-.filters-bar { display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; justify-content: center; }
+/* --- ФИЛЬТРЫ: ПО ЦЕНТРУ --- */
+.filters-bar { 
+    display: flex; 
+    gap: 12px; 
+    margin-bottom: 30px; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+}
 .filter-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 700; transition: 0.3s; text-transform: uppercase; }
 .filter-btn:hover { border-color: var(--accent-blue); color: #fff; }
 .filter-btn.active { background: #fff; color: #020617; border-color: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
 
-/* --- КАРТОЧКА ФИЛЬМА --- */
-.schedule-list { display: flex; flex-direction: column; gap: 24px; width: 1200px; max-width: 95%; margin: 0 auto; min-height: 600px; }
-.movie-row {
-    display: flex; background-color: var(--card-bg); border: 1px solid var(--border-color);
-    border-radius: 16px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 280px; position: relative;
+/* --- СПИСОК ФИЛЬМОВ (Контейнер) --- */
+.schedule-list { 
+    display: flex; flex-direction: column; gap: 24px;
+    width: 1200px; max-width: 95%; margin: 0 auto; min-height: 600px; 
 }
+
+/* === КАРТОЧКА ФИЛЬМА (TICKET STYLE) === */
+.movie-row {
+    display: flex; 
+    background-color: var(--card-bg); 
+    border: 1px solid var(--border-color);
+    border-radius: 16px; 
+    overflow: hidden; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 280px; 
+    position: relative;
+}
+
 .movie-row:hover { transform: translateY(-5px); border-color: #334155; box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5); }
-.movie-primary-content { display: flex; flex: 1; cursor: pointer; position: relative; min-width: 0; }
+
+/* 1. Кликабельная левая часть (Картинка + Описание) */
+.movie-primary-content {
+    display: flex;
+    flex: 1; 
+    cursor: pointer;
+    position: relative;
+    min-width: 0; 
+}
 .movie-primary-content:hover .row-title { color: var(--accent-blue); transition: color 0.3s; }
 
-.row-poster { width: 200px; flex-shrink: 0; position: relative; height: 100%; }
+/* Постер (Фиксированный) */
+.row-poster { 
+    width: 200px; 
+    flex-shrink: 0;
+    position: relative; 
+    height: 100%;
+}
 .row-poster img { width: 100%; height: 100%; object-fit: cover; }
 .age-badge { position: absolute; top: 10px; left: 10px; padding: 6px 10px; border-radius: 6px; font-weight: 800; font-size: 12px; color: #fff; z-index: 2; backdrop-filter: blur(4px); }
 .age-green { background: rgba(34, 197, 94, 0.9); }
 .age-orange { background: rgba(249, 115, 22, 0.9); }
 .age-red { background: rgba(239, 68, 68, 0.9); }
 
-/* ТЕКСТ СЛЕВА, НО ВВЕРХУ */
+/* Информация (Средняя часть - ТЕКСТ СЛЕВА, НО ВВЕРХУ) */
 .row-info { 
-    flex: 1; padding: 30px 25px 20px; display: flex; flex-direction: column; 
-    justify-content: flex-start; min-width: 0; overflow: hidden; text-align: left; 
+    flex: 1; 
+    padding: 30px 25px 20px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-start; /* Название ВВЕРХУ */
+    min-width: 0; 
+    overflow: hidden; 
+    text-align: left; /* Текст СЛЕВА */
 }
+
 .row-title { 
-    font-size: 1.8rem; font-weight: 900; color: #fff; margin-bottom: 12px; text-transform: uppercase; line-height: 1.2; 
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; padding-bottom: 2px;
+    font-size: 1.8rem; 
+    font-weight: 900; 
+    color: #fff; 
+    margin-bottom: 12px; 
+    text-transform: uppercase; 
+    line-height: 1.2; 
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-bottom: 2px;
 }
+
+/* Жанры внутри карточки (слева) */
 .row-meta { 
-    display: flex; gap: 10px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; 
-    align-items: center; font-weight: 600; justify-content: flex-start; 
+    display: flex; 
+    gap: 10px; 
+    font-size: 0.85rem; 
+    color: var(--text-muted); 
+    margin-bottom: 20px; 
+    align-items: center; 
+    font-weight: 600;
+    justify-content: flex-start; 
 }
 .meta-tag { background: rgba(255, 255, 255, 0.1); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
+
 .row-desc { 
-    font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; 
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;    
+    font-size: 0.95rem; 
+    color: var(--text-muted); 
+    line-height: 1.5; 
+    display: -webkit-box;
+    -webkit-line-clamp: 2;      
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;    
 }
 
-/* Правая часть (Сеансы) */
+/* 2. Правая часть - Сеансы (Фиксированная зона) */
 .row-sessions { 
-    width: 480px; flex-shrink: 0; padding: 25px; background: rgba(15, 23, 42, 0.3); 
-    display: flex; flex-direction: column; justify-content: center; border-left: 2px dashed #334155; position: relative;
+    width: 480px;
+    flex-shrink: 0; /* ЗАПРЕЩАЕМ СЖИМАТЬСЯ */
+    padding: 25px; 
+    background: rgba(15, 23, 42, 0.3); 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+    border-left: 2px dashed #334155; 
+    position: relative;
 }
-.row-sessions::before, .row-sessions::after { content: ''; position: absolute; left: -10px; width: 20px; height: 20px; background-color: var(--bg-color); border-radius: 50%; border: 1px solid var(--border-color); }
+
+.row-sessions::before, .row-sessions::after {
+    content: ''; position: absolute; left: -10px; width: 20px; height: 20px;
+    background-color: var(--bg-color); border-radius: 50%; border: 1px solid var(--border-color);
+}
 .row-sessions::before { top: -11px; border-bottom-color: transparent; }
 .row-sessions::after { bottom: -11px; border-top-color: transparent; }
-.sessions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
+.sessions-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; /* 2 колонки */
+    gap: 15px; 
+}
+
+/* Кнопка сеанса */
 .session-btn {
-    background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 8px 15px; cursor: pointer; transition: all 0.2s ease; 
-    color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 60px;
+    background: #1e293b;
+    border: 1px solid #334155; 
+    border-radius: 12px; 
+    padding: 8px 15px;
+    cursor: pointer; 
+    transition: all 0.2s ease; 
+    color: #fff;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    gap: 4px;
+    min-height: 60px;
 }
 .btn-top .session-time { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
 .btn-bottom { display: flex; align-items: center; gap: 8px; }
@@ -158,8 +290,9 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
 .session-btn:hover { background: var(--accent-blue); border-color: var(--accent-blue); transform: translateY(-3px); box-shadow: 0 5px 20px rgba(14, 165, 233, 0.4); }
 .session-btn:hover .session-price, .session-btn:hover .session-format { color: #fff; }
 
+
 /* =========================================
-   5. АКЦИИ И ПРАВИЛА
+   6. АКЦИИ И ПРАВИЛА
    ========================================= */
 .promotions-section { margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--border-color); }
 .promo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
@@ -172,8 +305,26 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
 .promo-content h3 { font-size: 1.2rem; color: #fff; margin-bottom: 10px; font-weight: 800; }
 .promo-content p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
 
+.rules-container { max-width: 900px; margin: 0 auto; }
+.rules-container details { background-color: var(--card-bg); margin-bottom: 20px; border-radius: 16px; border: 1px solid var(--border-color); transition: all 0.3s ease; overflow: hidden; }
+.rules-container details:hover { border-color: #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.rules-container details[open] { border-color: var(--accent-blue); background-color: rgba(15, 23, 42, 0.8); }
+.rules-container summary { font-weight: 700; color: #fff; font-size: 1.2rem; padding: 25px 30px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; outline: none; }
+.rules-container summary::after { content: '+'; color: var(--accent-blue); font-size: 28px; font-weight: 300; transition: transform 0.3s ease; }
+.rules-container details[open] summary::after { transform: rotate(45deg); color: #ef4444; }
+.rules-content { padding: 0 30px 30px 30px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); font-size: 1rem; line-height: 1.7; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.styled-list { list-style: none; padding: 0; margin-top: 20px; }
+.styled-list li { position: relative; padding-left: 25px; margin-bottom: 12px; }
+.styled-list li::before { content: '•'; color: var(--accent-blue); font-size: 1.5em; position: absolute; left: 0; top: -5px; }
+.styled-list ul { margin-top: 8px; margin-bottom: 8px; padding-left: 10px; }
+.styled-list ul li::before { content: '-'; color: #64748b; top: -2px; }
+.warning-list li::before { color: #ef4444; }
+.legal-note { max-width: 900px; margin: 40px auto 0; font-size: 0.85rem; color: #475569; text-align: center; line-height: 1.5; padding-top: 20px; border-top: 1px solid #1e293b; }
+.rules-header { text-align: center; max-width: 800px; margin: 0 auto; }
+
 /* =========================================
-   6. ФУТЕР
+   7. ФУТЕР
    ========================================= */
 footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e293b; margin-top: auto; }
 .footer-container { max-width: 1440px; margin: 0 auto; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
@@ -191,35 +342,82 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .vk-btn:hover { background-color: #0077FF; border-color: #0077FF; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 119, 255, 0.3); }
 .tg-btn:hover { background-color: #229ED9; border-color: #229ED9; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(34, 158, 217, 0.3); }
 
+
 /* =========================================
-   7. МОДАЛЬНЫЕ ОКНА
+   8. МОДАЛЬНЫЕ ОКНА И АДАПТИВ
    ========================================= */
+
+/* Общая подложка */
 .modal { 
-    display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; 
-    background-color: rgba(2, 6, 23, 0.95); backdrop-filter: blur(8px); align-items: center; justify-content: center; overflow-y: auto; padding: 20px;
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(2, 6, 23, 0.95);
+    backdrop-filter: blur(8px); 
+    align-items: center; 
+    justify-content: center; 
+    overflow-y: auto; 
+    padding: 20px;
 }
+
+/* 1. Маленькое окно (Покупка билета - ТЕПЕРЬ ШИРОКОЕ ДЛЯ ЗАЛА) */
 .modal-content { 
-    background-color: #1e293b; padding: 40px; border-radius: 16px; text-align: center; width: 100%; max-width: 420px; 
-    border: 1px solid #334155; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); position: relative; margin: auto; 
+    background-color: #1e293b; 
+    padding: 40px; 
+    border-radius: 16px; 
+    text-align: center; 
+    width: 100%; 
+    max-width: 420px; /* Базовый стиль */
+    border: 1px solid #334155; 
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
+    position: relative; 
+    margin: auto; 
 }
-.close-btn { position: absolute; top: 15px; right: 20px; font-size: 32px; color: var(--text-muted); cursor: pointer; z-index: 10; line-height: 1; }
+
+/* 2. Большое окно (Информация о фильме) */
+.info-modal-content {
+    max-width: 900px !important; 
+    text-align: left !important; 
+    padding: 0 !important; 
+    overflow: hidden; 
+}
+
+.close-btn { 
+    position: absolute; 
+    top: 15px; right: 20px; 
+    font-size: 32px; color: var(--text-muted); 
+    cursor: pointer; z-index: 10; line-height: 1;
+}
 .close-btn:hover { color: #fff; }
-.buy-btn { background-color: var(--accent-blue); color: #fff; padding: 12px 30px; border: none; border-radius: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 20px; transition: 0.3s; width: 100%; }
+
+.buy-btn { 
+    background-color: var(--accent-blue); color: #fff; padding: 12px 30px; border: none; border-radius: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 20px; transition: 0.3s; width: 100%;
+}
 .buy-btn:hover { background-color: var(--accent-dark); }
 
-/* Инфо-окно */
-.info-modal-content { max-width: 900px !important; text-align: left !important; padding: 0 !important; overflow: hidden; }
+
+/* Внутренности Инфо-окна */
 .info-modal-body { padding: 40px; }
 .info-modal-grid { display: flex; gap: 40px; margin-bottom: 30px; }
-.info-poster { width: 260px; flex-shrink: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
+
+.info-poster { 
+    width: 260px; flex-shrink: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative;
+}
 .info-poster img { width: 100%; height: auto; display: block; }
 .info-text { flex: 1; }
+
 .trailer-container { border-top: 1px solid #334155; padding-top: 30px; margin-top: 10px; }
-.video-responsive { overflow: hidden; padding-bottom: 56.25%; position: relative; height: 0; border-radius: 12px; background: #000; border: 1px solid #334155; }
+.video-responsive {
+    overflow: hidden; padding-bottom: 56.25%; position: relative; height: 0; border-radius: 12px; background: #000; border: 1px solid #334155;
+}
 .video-responsive iframe { left: 0; top: 0; height: 100%; width: 100%; position: absolute; }
 
 /* =========================================
-   8. СХЕМА ЗАЛА (ОБНОВЛЕННАЯ ПОД 400 МЕСТ)
+   9. СХЕМА ЗАЛА (ОБНОВЛЕННАЯ ПОД 398 МЕСТ)
    ========================================= */
 .hall-modal-content { 
     max-width: 750px; /* Увеличили ширину, чтобы влезло 25 мест в ряд */
@@ -264,32 +462,45 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 
 .seat:not(.occupied):hover { transform: scale(1.3); background-color: #64748b; z-index: 2; }
 .seat.selected { background-color: var(--accent-blue); box-shadow: 0 0 8px var(--accent-blue); }
-.seat.occupied { background-color: #1e293b; cursor: not-allowed; opacity: 0.4; }
+
+/* Занято (Светло-серый, хорошо видно) */
+.seat.occupied {
+    background-color: #64748b; /* Светло-серый цвет */
+    cursor: not-allowed;
+    opacity: 1; /* Убрали прозрачность */
+    position: relative;
+}
 
 .ticket-footer { margin-top: 30px; border-top: 1px solid #334155; padding-top: 20px; }
 .ticket-info { display: flex; justify-content: space-between; margin-bottom: 15px; color: #fff; font-weight: 700; font-size: 1.1em; }
 .ticket-info span { color: var(--accent-blue); }
-.seats-area { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.seat-row { display: flex; gap: 6px; }
-.seat { background-color: #334155; height: 20px; width: 24px; border-top-left-radius: 8px; border-top-right-radius: 8px; cursor: pointer; transition: all 0.2s; }
-.seat:not(.occupied):hover { transform: scale(1.2); background-color: #64748b; }
-.seat.selected { background-color: var(--accent-blue); box-shadow: 0 0 10px var(--accent-blue); }
-.seat.occupied { background-color: #1e293b; cursor: not-allowed; opacity: 0.5; }
 
-.ticket-footer { margin-top: 30px; border-top: 1px solid #334155; padding-top: 20px; }
-.ticket-info { display: flex; justify-content: space-between; margin-bottom: 15px; color: #fff; font-weight: 700; font-size: 1.1em; }
-.ticket-info span { color: var(--accent-blue); }
 
 /* АДАПТИВ */
 @media (max-width: 900px) {
     .header-fluid { padding: 0 20px; flex-direction: column; gap: 15px; }
     .page-title { font-size: 2.2rem; }
+    .intro-title { font-size: 3rem; }
+    .hero-title { font-size: 2.2rem; }
+    
+    /* Список фильмов */
+    .about-hero-grid, .about-grid { flex-direction: column; }
+    
+    /* Сброс фиксации правой колонки на мобильных */
     .row-sessions { width: 100%; flex-shrink: 1; border-left: none; border-top: 2px dashed #334155; }
     .row-poster { width: 100%; height: 300px; }
     .sessions-grid { grid-template-columns: repeat(3, 1fr); }
     .movie-row { flex-direction: column; height: auto; }
     .schedule-list { width: 100%; max-width: 100%; min-height: auto; }
+    
+    /* Модалка инфо - адаптив */
     .info-modal-grid { flex-direction: column; align-items: center; }
     .info-text { text-align: center; }
     .info-modal-content { text-align: center !important; }
+}
+
+@media (max-width: 768px) {
+    .footer-container { flex-direction: column; text-align: center; gap: 25px; }
+    .footer-info { text-align: center; }
+    .sessions-grid { grid-template-columns: 1fr 1fr; }
 }
