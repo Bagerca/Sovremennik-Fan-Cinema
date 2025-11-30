@@ -543,8 +543,8 @@ footer {
 
 /* Увеличиваем ВК, чтобы было ровно с Телеграмом */
 .vk-btn svg {
-    width: 28px;
-    height: 28px;
+    width: 38px;
+    height: 38px;
 }
 
 .social-btn svg path {
