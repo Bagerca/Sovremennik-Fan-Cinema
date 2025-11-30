@@ -2,29 +2,68 @@
     {
         "id": 1,
         "title": "Дикий робот",
-        "poster": "assets/images/wild-robot.jpg",
+        "poster": "assets/images/Дикий робот (2024).jpg",
         "age": "6+",
-        "ageColor": "age-green", 
-        "category": "family", 
+        "ageClass": "age-green",
+        "category": "family",
         "tags": ["Анимация", "3D", "IMDb 8.5"],
-        "description": "Эпическое приключение робота ROZZUM 7134, который терпит кораблекрушение...",
+        "description": "Эпическое приключение робота ROZZUM 7134, который терпит кораблекрушение на необитаемом острове и должен научиться выживать в дикой природе.",
         "sessions": [
-            { "time": "10:00", "format": "2D", "price": 250 },
-            { "time": "12:30", "format": "3D", "price": 350 }
+            { "time": "10:00", "format": "2D" },
+            { "time": "12:30", "format": "3D", "isSpecial": true }
         ]
     },
     {
         "id": 2,
         "title": "Иллюзия обмана 3",
-        "poster": "assets/images/nysm3.jpg",
+        "poster": "assets/images/Иллюзия обмана 3 (2025).jpg",
         "age": "16+",
-        "ageColor": "age-orange",
+        "ageClass": "age-orange",
         "category": "action",
         "tags": ["Триллер", "2ч 10мин"],
-        "description": "Четыре Всадника возвращаются для своего самого опасного ограбления...",
+        "description": "Четыре Всадника возвращаются для своего самого опасного ограбления. На этот раз ставки выше, чем когда-либо.",
         "sessions": [
-            { "time": "18:00", "format": "2D", "price": 400 },
-            { "time": "20:30", "format": "Atmos", "price": 500 }
+            { "time": "18:00", "format": "2D" },
+            { "time": "20:30", "format": "Atmos" }
+        ]
+    },
+    {
+        "id": 3,
+        "title": "Пять ночей с Фредди",
+        "poster": "assets/images/Пять ночей с Фредди (2023).jpg",
+        "age": "16+",
+        "ageClass": "age-orange",
+        "category": "horror",
+        "tags": ["Ужасы", "1ч 50мин"],
+        "description": "Охранник пиццерии Freddy Fazbear's Pizza сталкивается с ожившими аниматрониками, жаждущими крови.",
+        "sessions": [
+            { "time": "22:00", "format": "2D" }
+        ]
+    },
+    {
+        "id": 4,
+        "title": "Kingsman: Секретная служба",
+        "poster": "assets/images/Kingsman Секретная служба (2015).jpg",
+        "age": "18+",
+        "ageClass": "age-red",
+        "category": "action",
+        "tags": ["Боевик", "2ч 09мин"],
+        "description": "Элитная секретная служба набирает новичков. Стильный экшн, черный юмор и джентльменские манеры.",
+        "sessions": [
+            { "time": "19:30", "format": "2D" }
+        ]
+    },
+    {
+        "id": 5,
+        "title": "ВАЛЛ-И",
+        "poster": "assets/images/ВАЛЛ-И (2008).jpg",
+        "age": "0+",
+        "ageClass": "age-green",
+        "category": "family",
+        "tags": ["Семья", "1ч 38мин"],
+        "description": "Робот ВАЛЛ-И из года в год прилежно трудится на опустевшей Земле, очищая нашу планету от гор мусора.",
+        "sessions": [
+            { "time": "11:00", "format": "2D" }
         ]
     }
 ]
