@@ -3,8 +3,8 @@
    ========================================= */
 :root {
     --bg-color: #0f1014;       /* Глубокий черный фон */
-    --card-bg: #1b1e24;        /* Фон карточек */
-    --accent-blue: #00f2ff;    /* Неоновый голубой (основной акцент) */
+    --card-bg: #1b1e24;        /* Фон карточек/блоков */
+    --accent-blue: #00f2ff;    /* Неоновый голубой (акцент) */
     --accent-glow: rgba(0, 242, 255, 0.5); /* Свечение */
     --text-main: #ffffff;      /* Белый текст */
     --text-muted: #a0a0a0;     /* Серый текст */
@@ -82,19 +82,20 @@ header {
     font-weight: 500;
     color: var(--text-muted);
     position: relative;
+    padding-bottom: 5px;
 }
 
 .nav-links a:hover, .nav-links a.active {
     color: var(--text-main);
 }
 
-/* Линия подчеркивания при наведении */
+/* Эффект подчеркивания меню */
 .nav-links a::after {
     content: '';
     position: absolute;
     width: 0;
     height: 2px;
-    bottom: -5px;
+    bottom: 0;
     left: 0;
     background-color: var(--accent-blue);
     transition: width 0.3s;
@@ -106,14 +107,13 @@ header {
 }
 
 /* =========================================
-   3. ОСНОВНОЙ КОНТЕНТ
+   3. ОСНОВНОЙ КОНТЕНТ (TITLES)
    ========================================= */
 main {
     flex: 1;
     padding: 40px 0;
 }
 
-/* Заголовки страниц */
 .section-title {
     font-size: 2.5rem;
     text-align: center;
@@ -127,127 +127,193 @@ main {
     text-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
 }
 
-/* =========================================
-   4. КАРТОЧКИ ФИЛЬМОВ (GRID)
-   ========================================= */
-.movies-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px;
-    padding: 20px 0;
-}
-
-.movie-card {
-    background-color: var(--card-bg);
-    border-radius: 12px;
-    overflow: hidden;
-    position: relative;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27), box-shadow 0.4s;
-    border: 1px solid var(--border-color);
-}
-
-.movie-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 30px rgba(0, 242, 255, 0.15);
-    border-color: var(--accent-blue);
-}
-
-/* Постер */
-.poster-wrapper {
-    width: 100%;
-    height: 400px;
-    overflow: hidden;
-    position: relative;
-}
-
-.poster-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.movie-card:hover .poster-wrapper img {
-    transform: scale(1.05);
-}
-
-/* Бейджи (Возраст) */
+/* Бейджи возраста (для постеров) */
 .age-badge {
     position: absolute;
     top: 10px;
-    right: 10px;
-    padding: 5px 10px;
-    border-radius: 6px;
+    left: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
     z-index: 2;
     backdrop-filter: blur(5px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
 .age-green { background: rgba(46, 204, 113, 0.9); color: white; }
 .age-orange { background: rgba(243, 156, 18, 0.9); color: white; }
 .age-red { background: rgba(231, 76, 60, 0.9); color: white; }
 
-/* Информация о фильме */
-.movie-info {
-    padding: 20px;
-    background: linear-gradient(180deg, var(--card-bg) 0%, #15171c 100%);
+/* =========================================
+   4. РАСПИСАНИЕ СПИСКОМ (НОВЫЙ ДИЗАЙН)
+   ========================================= */
+.schedule-list {
     display: flex;
     flex-direction: column;
-    height: calc(100% - 400px); /* Чтобы кнопки были внизу */
+    gap: 20px;
+    padding-bottom: 40px;
 }
 
-.movie-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 5px;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.movie-genre {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-bottom: 15px;
-}
-
-/* Время сеансов */
-.schedule-container {
+.movie-row {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 20px;
-    flex-grow: 1;
+    background-color: #16191f;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
 }
 
-.time-slot {
-    background: #2c313a;
-    color: #fff;
-    padding: 6px 10px;
-    border-radius: 4px;
-    font-size: 13px;
-    cursor: default;
-    border: 1px solid transparent;
-    transition: 0.3s;
-}
-
-.time-slot:hover {
+.movie-row:hover {
+    transform: translateX(5px);
     border-color: var(--accent-blue);
-    color: var(--accent-blue);
-    box-shadow: 0 0 8px var(--accent-glow);
+    box-shadow: -5px 5px 20px rgba(0, 242, 255, 0.1);
 }
 
-/* Кнопка купить */
-.buy-btn {
+/* Левая колонка: Постер */
+.row-poster {
+    width: 160px;
+    min-width: 160px;
+    position: relative;
+    overflow: hidden;
+}
+
+.row-poster img {
     width: 100%;
-    padding: 12px;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.movie-row:hover .row-poster img {
+    transform: scale(1.1);
+}
+
+/* Средняя колонка: Инфо */
+.row-info {
+    flex: 1;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid var(--border-color);
+}
+
+.row-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.row-meta {
+    display: flex;
+    gap: 15px;
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.meta-tag {
+    background: #252a33;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #333;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.row-desc {
+    font-size: 0.95rem;
+    color: #b0b0b0;
+    line-height: 1.5;
+    max-width: 600px;
+}
+
+/* Правая колонка: Сеансы (Билеты) */
+.row-sessions {
+    width: 350px;
+    min-width: 300px;
+    padding: 25px;
+    background: rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.sessions-title {
+    font-size: 12px;
+    color: var(--accent-blue);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.sessions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+}
+
+/* Кнопка-Билет */
+.session-btn {
+    background: linear-gradient(145deg, #23272e, #1e2128);
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 8px 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.session-time {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.session-price {
+    font-size: 11px;
+    color: #888;
+}
+
+.session-format {
+    font-size: 10px;
+    color: var(--accent-blue);
+    font-weight: bold;
+}
+
+.session-btn:hover {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 242, 255, 0.3);
+}
+
+.session-btn:hover .session-time,
+.session-btn:hover .session-price,
+.session-btn:hover .session-format {
+    color: #000;
+}
+
+/* Обычная кнопка (для других страниц) */
+.buy-btn {
+    display: inline-block;
+    padding: 10px 20px;
     background: transparent;
     border: 2px solid var(--accent-blue);
     color: var(--accent-blue);
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 1px;
     cursor: pointer;
     border-radius: 6px;
     transition: 0.3s;
@@ -256,7 +322,6 @@ main {
 .buy-btn:hover {
     background: var(--accent-blue);
     color: #000;
-    box-shadow: 0 0 20px var(--accent-glow);
 }
 
 /* =========================================
@@ -320,6 +385,7 @@ main {
     align-items: center;
 }
 
+/* Крестик при открытии */
 .rules-container summary::after {
     content: '+';
     font-size: 24px;
@@ -351,7 +417,7 @@ main {
    7. МОДАЛЬНОЕ ОКНО
    ========================================= */
 .modal {
-    display: none; /* Скрыто по умолчанию */
+    display: none;
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -405,23 +471,43 @@ footer {
 }
 
 /* =========================================
-   9. АДАПТИВ (MOBILE)
+   9. АДАПТИВНОСТЬ (MOBILE)
    ========================================= */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+    /* Меню в столбик */
     .nav-bar {
         flex-direction: column;
         gap: 15px;
     }
-    
+
+    /* О нас в столбик */
     .about-grid {
         grid-template-columns: 1fr;
     }
-
-    .section-title {
-        font-size: 1.8rem;
+    
+    /* Расписание в столбик */
+    .movie-row {
+        flex-direction: column;
     }
     
-    .poster-wrapper {
-        height: 350px;
+    .row-poster {
+        width: 100%;
+        height: 250px;
+    }
+
+    .row-info {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 20px;
+    }
+
+    .row-sessions {
+        width: 100%;
+        background: transparent;
+        padding: 20px;
+    }
+
+    .sessions-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 кнопки в ряд на телефоне */
     }
 }
