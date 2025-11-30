@@ -1,263 +1,157 @@
-/* Основные настройки и сброс */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+/* ---- Глобальные стили ---- */
+:root {
+    --bg-color: #0f1014; /* Глубокий черный */
+    --card-bg: #1b1e24;
+    --accent-blue: #00f2ff; /* Неоновый голубой */
+    --accent-glow: rgba(0, 242, 255, 0.5);
+    --text-main: #ffffff;
+    --text-muted: #a0a0a0;
 }
 
 body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #1a1a1d; /* Темно-серый фон */
-    color: #e0e0e0; /* Светло-серый текст */
-    line-height: 1.6;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
-    transition: 0.3s;
-}
-
-ul {
-    list-style: none;
-}
-
-/* Шапка сайта */
-header {
-    background-color: #212529;
+/* ---- Улучшенная сетка фильмов ---- */
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
     padding: 20px 0;
-    border-bottom: 3px solid #0056b3; /* Синий акцент */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    position: sticky;
-    top: 0;
-    z-index: 100;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.nav-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #3b82f6; /* Яркий синий */
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-.nav-links {
-    display: flex;
-    gap: 30px;
-}
-
-.nav-links a {
-    font-size: 16px;
-    font-weight: 500;
-    color: #b0b0b0;
-}
-
-.nav-links a:hover, .nav-links a.active {
-    color: #3b82f6;
-}
-
-/* Основной контент */
-main {
-    flex: 1;
-    padding: 40px 0;
-}
-
-h1, h2, h3 {
-    color: #fff;
-    margin-bottom: 20px;
-}
-
-h1 {
-    font-size: 36px;
-    text-align: center;
-    margin-bottom: 40px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 15px;
-}
-
-/* Карточки (для расписания и инфо) */
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
-
-.card {
-    background-color: #2c3035;
-    border-radius: 8px;
+.movie-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    transition: transform 0.3s;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27), box-shadow 0.4s;
+    border: 1px solid #2a2e35;
 }
 
-.card:hover {
-    transform: translateY(-5px);
+.movie-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0, 242, 255, 0.15); /* Неоновое свечение */
+    border-color: var(--accent-blue);
 }
 
-.card-content {
-    padding: 20px;
-}
-
-.card-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #60a5fa;
-    margin-bottom: 10px;
-}
-
-.movie-time {
-    display: inline-block;
-    background: #333;
-    padding: 5px 10px;
-    border-radius: 4px;
-    margin-right: 10px;
-    font-size: 14px;
-}
-
-/* Кнопки */
-.btn {
-    display: inline-block;
-    background: linear-gradient(135deg, #0056b3, #004494);
-    color: white;
-    padding: 10px 25px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 15px;
-    transition: background 0.3s;
-}
-
-.btn:hover {
-    background: linear-gradient(135deg, #0069d9, #0056b3);
-}
-
-/* Стили для страницы "О нас" */
-.about-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    margin-bottom: 40px;
-}
-
-.about-text {
-    font-size: 16px;
-    color: #d1d1d1;
-}
-
-.tech-list li {
-    margin-bottom: 10px;
-    padding-left: 20px;
+/* Постер с зумом */
+.poster-wrapper {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
     position: relative;
 }
 
-.tech-list li::before {
-    content: "•";
-    color: #3b82f6;
-    position: absolute;
-    left: 0;
-    font-weight: bold;
-}
-
-.map-container {
-    width: 100%;
-    height: 400px;
-    background: #333;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-top: 20px;
-}
-
-/* Стили для правил */
-.rules-container details {
-    background: #2c3035;
-    margin-bottom: 10px;
-    padding: 15px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.rules-container summary {
-    font-weight: bold;
-    color: #60a5fa;
-    outline: none;
-}
-
-.rules-content {
-    margin-top: 10px;
-    padding-left: 20px;
-    font-size: 14px;
-    color: #ccc;
-}
-
-/* Футер */
-footer {
-    background-color: #111;
-    padding: 20px 0;
-    text-align: center;
-    font-size: 14px;
-    color: #777;
-    margin-top: auto;
-}
-
-/* Модальное окно */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
+.poster-wrapper img {
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.8);
-    align-items: center;
-    justify-content: center;
+    object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
-.modal-content {
-    background-color: #2c3035;
-    padding: 40px;
-    border-radius: 8px;
-    text-align: center;
-    width: 100%;
-    max-width: 400px;
-    border: 1px solid #444;
+.movie-card:hover .poster-wrapper img {
+    transform: scale(1.05);
 }
 
-.close-btn {
-    float: right;
-    font-size: 28px;
+/* Бейдж возраста */
+.age-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    border-radius: 6px;
     font-weight: bold;
-    cursor: pointer;
-    color: #aaa;
+    font-size: 14px;
+    z-index: 2;
+    backdrop-filter: blur(5px);
+}
+.age-green { background: rgba(46, 204, 113, 0.8); color: white; }
+.age-orange { background: rgba(243, 156, 18, 0.8); color: white; }
+.age-red { background: rgba(231, 76, 60, 0.8); color: white; }
+
+/* Информация о фильме */
+.movie-info {
+    padding: 20px;
+    background: linear-gradient(180deg, var(--card-bg) 0%, #15171c 100%);
 }
 
-.close-btn:hover {
+.movie-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 5px;
     color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Адаптив для телефонов */
-@media (max-width: 768px) {
-    .about-section {
-        grid-template-columns: 1fr;
-    }
-    .nav-bar {
-        flex-direction: column;
-        gap: 15px;
-    }
+.movie-genre {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+/* Расписание (Плашки времени) */
+.schedule-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.time-slot {
+    background: #2c313a;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: default;
+    border: 1px solid transparent;
+    transition: 0.3s;
+}
+
+.time-slot:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    box-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* Неоновая кнопка */
+.buy-btn {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 2px solid var(--accent-blue);
+    color: var(--accent-blue);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.buy-btn:hover {
+    background: var(--accent-blue);
+    color: #000;
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* Адаптивность для заголовков */
+h1.section-title {
+    font-size: 2.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 40px;
+    color: transparent;
+    background: linear-gradient(90deg, #fff, var(--accent-blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
 }
