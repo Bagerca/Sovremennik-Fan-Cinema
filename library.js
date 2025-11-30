@@ -95,12 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 5. МОДАЛЬНОЕ ОКНО
     function openInfoModal(movie) {
+        // Левая колонка
         infoPoster.src = movie.poster;
         document.getElementById('infoTitle').textContent = movie.title;
-        document.getElementById('infoDesc').textContent = movie.description;
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
 
-        // Таблица
+        // Правая колонка (Описание + Таблица)
+        document.getElementById('infoDesc').textContent = movie.description;
         document.getElementById('infoYear').textContent = movie.year || '-';
         document.getElementById('infoCountry').textContent = movie.country || '-';
         document.getElementById('infoGenre').textContent = movie.tags.join(', ');
@@ -108,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('infoDuration').textContent = movie.duration || '-';
         document.getElementById('infoMpaa').textContent = movie.mpaa || 'N/A';
 
-        // Трейлер
+        // Центральная колонка (Трейлер)
         if(movie.trailer) {
             infoTrailer.src = `https://www.youtube.com/embed/${movie.trailer}?autoplay=1`;
         } else {
