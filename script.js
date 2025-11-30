@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filmNameSpan = document.getElementById('filmName');
     
     // Глобальные переменные
-    let allMovies = []; // Тут будет храниться объединенный массив (Фильм + Расписание)
+    let allMovies = []; 
     let selectedDate = new Date(); 
 
     // --- 1. ГЕНЕРАЦИЯ ДАТ (-3 ... Сегодня ... +3) ---
@@ -47,19 +47,15 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedDate = today.toISOString().split('T')[0];
     }
 
-    // --- 2. ЗАГРУЗКА ДАННЫХ (БИБЛИОТЕКА + РАСПИСАНИЕ) ---
+    // --- 2. ЗАГРУЗКА ДАННЫХ ---
     fetch('movies.json')
         .then(response => response.json())
         .then(data => {
-            // "Склеиваем" данные из library и schedule
             allMovies = data.schedule.map(item => {
-                // Находим описание фильма по ID
                 const movieInfo = data.library[item.movieId];
-                
-                // Возвращаем объединенный объект
                 return {
-                    ...item,       // даты, сеансы (из schedule)
-                    ...movieInfo   // название, постер, описание (из library)
+                    ...item,       
+                    ...movieInfo   
                 };
             });
 
@@ -91,16 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
             moviesContainer.insertAdjacentHTML('beforeend', cardHTML);
         });
         
-        // Сброс фильтров при смене дня
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
     }
 
-    // --- 4. HTML ШАБЛОН КАРТОЧКИ ---
+    // --- 4. HTML ШАБЛОН ---
     function createMovieCard(movie) {
         const tagsHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
         
-        // Генерация кнопок с ценой
         const sessionsHTML = movie.sessions.map(session => `
             <button class="session-btn buy-ticket-btn" 
                     data-film="${movie.title}" 
@@ -137,19 +131,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 5. ФИЛЬТРЫ ---
     function initFilters() {
         const filterButtons = document.querySelectorAll('.filter-btn');
-        
         filterButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 filterButtons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-
                 const filterValue = btn.getAttribute('data-filter');
                 const rows = document.querySelectorAll('.movie-row');
-
                 rows.forEach(row => {
                     if (filterValue === 'all' || row.dataset.category === filterValue) {
-                        // Очищаем display, чтобы CSS сам решил (grid или flex для мобильных)
-                        row.style.display = ''; 
+                        row.style.display = 'flex'; // ТУТ ВАЖНО: flex, так как мы сменили grid на flex в CSS
                     } else {
                         row.style.display = 'none';
                     }
@@ -165,8 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const title = btn.getAttribute('data-film');
             const time = btn.getAttribute('data-time');
             const price = btn.getAttribute('data-price');
-            
-            // Формируем заголовок модалки
             filmNameSpan.innerHTML = `${title}<br><span style="font-size:0.8em; color:var(--accent-blue)">${time} — ${price} ₽</span>`;
             modal.style.display = 'flex';
         }
