@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoDesc = document.getElementById('infoDesc');
     const infoTags = document.getElementById('infoTags');
     const infoTrailer = document.getElementById('infoTrailer');
-    // Доп поля модалки
+    
     const infoYear = document.getElementById('infoYear');
     const infoCountry = document.getElementById('infoCountry');
     const infoGenre = document.getElementById('infoGenre');
@@ -21,25 +21,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoMpaa = document.getElementById('infoMpaa');
 
     let allMoviesLibrary = []; 
-    let currentGenre = 'all'; // Текущий активный жанр
+    
+    // ИЗМЕНЕНИЕ: Используем Set для хранения множества выбранных жанров
+    let selectedGenres = new Set(); 
 
     // 1. ЗАГРУЗКА ДАННЫХ
     fetch('movies.json')
         .then(response => response.json())
         .then(data => {
             allMoviesLibrary = Object.values(data.library);
-            
-            // Сначала генерируем жанры на основе загруженных фильмов
             generateGenreButtons(allMoviesLibrary);
-            
-            // Затем показываем фильмы
             applyFiltersAndSort();
         })
         .catch(error => console.error('Ошибка:', error));
 
-    // 2. ГЕНЕРАЦИЯ КНОПОК ЖАНРОВ (Автоматическая)
+    // 2. ГЕНЕРАЦИЯ КНОПОК
     function generateGenreButtons(movies) {
-        // Собираем все уникальные теги в Set
         const allTags = new Set();
         movies.forEach(movie => {
             if (movie.tags && Array.isArray(movie.tags)) {
@@ -47,40 +44,67 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Превращаем Set в массив и сортируем по алфавиту
         const sortedTags = Array.from(allTags).sort();
-
-        // Очищаем контейнер
         genresContainer.innerHTML = '';
 
-        // Создаем кнопку "Все"
+        // Кнопка "Все"
         const allBtn = document.createElement('button');
-        allBtn.className = 'genre-btn active';
+        allBtn.className = 'genre-btn active'; // По умолчанию активна
         allBtn.textContent = 'Все';
         allBtn.dataset.genre = 'all';
-        allBtn.addEventListener('click', () => handleGenreClick(allBtn, 'all'));
+        
+        allBtn.addEventListener('click', () => {
+            selectedGenres.clear(); // Очищаем выбор
+            updateButtonsState();   // Обновляем вид кнопок
+            applyFiltersAndSort();  // Фильтруем
+        });
+        
         genresContainer.appendChild(allBtn);
 
-        // Создаем кнопки для каждого тега
+        // Остальные кнопки
         sortedTags.forEach(tag => {
             const btn = document.createElement('button');
             btn.className = 'genre-btn';
             btn.textContent = tag;
-            btn.dataset.genre = tag; // Сохраняем имя тега
-            btn.addEventListener('click', () => handleGenreClick(btn, tag));
+            btn.dataset.genre = tag;
+            
+            btn.addEventListener('click', () => {
+                // Логика мультивыбора:
+                if (selectedGenres.has(tag)) {
+                    selectedGenres.delete(tag); // Если уже выбран — убираем
+                } else {
+                    selectedGenres.add(tag);    // Если не выбран — добавляем
+                }
+                
+                updateButtonsState();
+                applyFiltersAndSort();
+            });
+            
             genresContainer.appendChild(btn);
         });
     }
 
-    // Обработка клика по жанру
-    function handleGenreClick(clickedBtn, genre) {
-        // Убираем активный класс у всех кнопок
-        document.querySelectorAll('.genre-btn').forEach(btn => btn.classList.remove('active'));
-        // Добавляем активный класс нажатой
-        clickedBtn.classList.add('active');
-        
-        currentGenre = genre;
-        applyFiltersAndSort();
+    // Функция обновления внешнего вида кнопок
+    function updateButtonsState() {
+        const allBtn = genresContainer.querySelector('[data-genre="all"]');
+        const genreBtns = genresContainer.querySelectorAll('[data-genre]:not([data-genre="all"])');
+
+        // Если ничего не выбрано, активируем кнопку "Все"
+        if (selectedGenres.size === 0) {
+            allBtn.classList.add('active');
+        } else {
+            allBtn.classList.remove('active');
+        }
+
+        // Пробегаемся по кнопкам жанров и красим их
+        genreBtns.forEach(btn => {
+            const genre = btn.dataset.genre;
+            if (selectedGenres.has(genre)) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
     }
 
     // 3. ФИЛЬТРАЦИЯ И СОРТИРОВКА
@@ -97,11 +121,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Б. Фильтр по Жанру (Тегу)
-        if (currentGenre !== 'all') {
+        // Б. Мульти-фильтр по жанрам
+        if (selectedGenres.size > 0) {
             result = result.filter(movie => {
-                // Проверяем, есть ли выбранный жанр в массиве тегов фильма
-                return movie.tags && movie.tags.includes(currentGenre);
+                // Проверяем: фильм должен содержать ВСЕ выбранные теги (логика AND)
+                // Если хотите логику OR (хотя бы один), замените every на some
+                const movieTags = movie.tags || [];
+                
+                // Превращаем Set выбранных жанров в массив и проверяем
+                return Array.from(selectedGenres).every(selectedGenre => movieTags.includes(selectedGenre));
             });
         }
 
@@ -122,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderLibrary(result);
     }
 
-    // 4. РЕНДЕР КАРТОЧЕК
+    // 4. РЕНДЕР
     function renderLibrary(movies) {
         libraryContainer.innerHTML = '';
 
@@ -134,8 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
         movies.forEach(movie => {
             const card = document.createElement('div');
             card.className = 'lib-card';
-            
-            // Собираем первые 2 тега для отображения на карточке
             const displayTags = movie.tags ? movie.tags.slice(0, 2).join(', ') : '';
 
             card.innerHTML = `
@@ -147,22 +173,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="lib-meta" style="font-size: 0.85em; color: var(--accent-blue); font-weight: 600;">${displayTags}</div>
                 </div>
             `;
-            
             card.addEventListener('click', () => openInfoModal(movie));
             libraryContainer.appendChild(card);
         });
     }
 
-    // 5. СЛУШАТЕЛИ СОБЫТИЙ
+    // Слушатели
     searchInput.addEventListener('input', applyFiltersAndSort);
     sortSelect.addEventListener('change', applyFiltersAndSort);
 
-    // 6. ЛОГИКА МОДАЛЬНОГО ОКНА
+    // Модалка
     function openInfoModal(movie) {
         infoPoster.src = movie.poster;
         infoTitle.textContent = movie.title;
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
-
         infoDesc.textContent = movie.description;
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
@@ -176,7 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             infoTrailer.src = '';
         }
-
         infoModal.style.display = 'flex';
         document.body.style.overflow = 'hidden'; 
     }
