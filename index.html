@@ -3,154 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEON CINEMA | Фанатская версия</title>
+    <title>CINEMA BLUE | Фанатская версия</title>
     
-    <!-- Подключение Tailwind CSS -->
+    <!-- Подключение шрифтов -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+    <!-- Твои стили -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Подключение Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <!-- Настройка шрифта и цветов -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f172a; /* Slate 900 */
-        }
-
-        /* Скрытие скроллбара для секции "Скоро" */
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
-    
-    <!-- Конфигурация Tailwind для кастомных цветов (опционально) -->
+    <!-- Настройка темы Tailwind (цвета) -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        dark: '#0B0F19',
+                        dark: '#020617', /* Slate 950 - очень глубокий синий */
+                        card: '#0f172a', /* Slate 900 */
                         brand: {
-                            purple: '#A855F7',
-                            pink: '#EC4899'
+                            light: '#22d3ee', /* Cyan 400 */
+                            DEFAULT: '#0ea5e9', /* Sky 500 */
+                            dark: '#2563eb', /* Blue 600 */
+                            glow: 'rgba(14, 165, 233, 0.5)'
                         }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
+    
+    <!-- Alpine.js (CDN) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Твой скрипт -->
+    <script src="script.js"></script>
 </head>
-<body class="text-gray-100 antialiased bg-dark selection:bg-purple-500 selection:text-white">
+<body class="text-gray-100 antialiased bg-dark selection:bg-brand-light selection:text-dark">
 
-    <!-- HEADER / NAVBAR -->
-    <!-- Alpine.js отслеживает скролл для изменения прозрачности -->
+    <!-- HEADER -->
     <header 
-        x-data="{ scrolled: false, mobileMenu: false }" 
-        @scroll.window="scrolled = (window.pageYOffset > 50)"
-        :class="scrolled ? 'bg-dark/90 backdrop-blur-md py-4 shadow-lg border-b border-gray-800' : 'bg-transparent py-6'"
+        x-data="headerLogic" 
+        @scroll.window="handleScroll"
+        :class="scrolled ? 'bg-dark/90 backdrop-blur-md py-4 shadow-[0_4px_20px_-5px_rgba(8,145,178,0.3)] border-b border-white/10' : 'bg-transparent py-6'"
         class="fixed top-0 w-full z-50 transition-all duration-300"
     >
         <div class="container mx-auto px-6 flex justify-between items-center">
             <!-- Логотип -->
             <a href="#" class="text-2xl font-black tracking-tighter uppercase flex items-center gap-2 group">
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600 group-hover:from-purple-300 group-hover:to-pink-500 transition-all">
-                    NEON<span class="text-white">CINEMA</span>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600 group-hover:from-cyan-300 group-hover:to-blue-500 transition-all drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
+                    CINEMA<span class="text-white">BLUE</span>
                 </span>
             </a>
 
             <!-- Десктоп Меню -->
-            <nav class="hidden md:flex space-x-8 font-medium">
-                <a href="#about" class="hover:text-purple-400 transition-colors">О нас</a>
-                <a href="#schedule" class="hover:text-purple-400 transition-colors">Расписание</a>
-                <a href="#rules" class="hover:text-purple-400 transition-colors">Правила</a>
-                <a href="#coming-soon" class="hover:text-purple-400 transition-colors">Скоро</a>
+            <nav class="hidden md:flex space-x-8 font-medium text-sm tracking-wide">
+                <a href="#about" class="hover:text-brand-light transition-colors relative group">
+                    О нас
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-light transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#schedule" class="hover:text-brand-light transition-colors relative group">
+                    Расписание
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-light transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#rules" class="hover:text-brand-light transition-colors relative group">
+                    Правила
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-light transition-all group-hover:w-full"></span>
+                </a>
             </nav>
 
-            <!-- Кнопка билетов -->
+            <!-- Кнопка -->
             <div class="hidden md:block">
-                <button class="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-2 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-[0_0_15px_rgba(168,85,247,0.5)]">
+                <button class="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-2 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-[0_0_15px_rgba(14,165,233,0.6)] border border-white/10">
                     Купить билет
                 </button>
             </div>
 
-            <!-- Мобильная кнопка -->
-            <button @click="mobileMenu = !mobileMenu" class="md:hidden text-white focus:outline-none">
+            <!-- Моб. меню кнопка -->
+            <button @click="toggleMenu" class="md:hidden text-white focus:outline-none">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
         </div>
 
-        <!-- Мобильное меню (выпадающее) -->
-        <div x-show="mobileMenu" x-transition class="md:hidden bg-gray-900 border-t border-gray-800 absolute w-full left-0 top-full">
+        <!-- Моб. меню -->
+        <div x-show="mobileMenu" x-transition.opacity class="md:hidden bg-card border-t border-white/10 absolute w-full left-0 top-full shadow-2xl">
             <div class="flex flex-col p-6 space-y-4 text-center">
-                <a @click="mobileMenu = false" href="#about" class="block hover:text-purple-400">О нас</a>
-                <a @click="mobileMenu = false" href="#schedule" class="block hover:text-purple-400">Расписание</a>
-                <a @click="mobileMenu = false" href="#rules" class="block hover:text-purple-400">Правила</a>
-                <a @click="mobileMenu = false" href="#coming-soon" class="block hover:text-purple-400">Скоро</a>
+                <a @click="toggleMenu" href="#about" class="block hover:text-brand-light">О нас</a>
+                <a @click="toggleMenu" href="#schedule" class="block hover:text-brand-light">Расписание</a>
+                <a @click="toggleMenu" href="#rules" class="block hover:text-brand-light">Правила</a>
             </div>
         </div>
     </header>
 
-    <!-- HERO SECTION (Приветствие) -->
+    <!-- HERO -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
-        <!-- Фон картинка -->
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-40" alt="Cinema Background">
-            <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent"></div>
+            <!-- Синий оверлей -->
+            <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 grayscale mix-blend-luminosity" alt="Cinema Background">
+            <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/80 to-blue-900/20"></div>
         </div>
         
-        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16">
-            <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-tight">
-                ПОГРУЗИСЬ В МАГИЮ <br>
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 animate-pulse">
-                    БОЛЬШОГО ЭКРАНА
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto mt-16">
+            <div class="inline-block px-4 py-1 mb-6 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 text-xs font-bold tracking-widest uppercase">
+                Премиум кинотеатр
+            </div>
+            <h1 class="text-5xl md:text-8xl font-black mb-6 tracking-tight leading-tight drop-shadow-2xl">
+                РЕАЛЬНОСТЬ <br>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 animate-pulse">
+                    ЭТО ИЛЛЮЗИЯ
                 </span>
             </h1>
-            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Лучший звук, 4K проекторы и атмосфера настоящего кино. Твои эмоции начинаются здесь.
+            <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto font-light">
+                Испытайте полное погружение с технологией <span class="text-white font-semibold">IMAX Laser</span> и звуком, который пробирает до мурашек.
             </p>
-            <a href="#schedule" class="inline-block bg-white text-dark font-extrabold px-8 py-4 rounded-full text-lg hover:bg-gray-200 hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-                Смотреть афишу
+            <a href="#schedule" class="inline-block bg-white text-dark font-extrabold px-10 py-4 rounded-full text-lg hover:bg-gray-200 hover:scale-105 transition-all shadow-[0_0_25px_rgba(255,255,255,0.4)]">
+                Выбрать сеанс
             </a>
         </div>
     </section>
 
-    <!-- СЕКЦИЯ: О КИНОТЕАТРЕ -->
-    <section id="about" class="py-20 bg-dark">
+    <!-- О НАС -->
+    <section id="about" class="py-24 bg-dark relative">
+        <!-- Фоновый эффект свечения -->
+        <div class="absolute left-0 top-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px]"></div>
+
         <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row items-center gap-12">
-                <!-- Картинка слева -->
+            <div class="flex flex-col md:flex-row items-center gap-16">
                 <div class="w-full md:w-1/2 relative group">
-                    <div class="absolute -inset-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000"></div>
+                    <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
                     <img src="https://images.unsplash.com/photo-1517604931442-710c8ef555c9?q=80&w=2069&auto=format&fit=crop" 
-                         alt="Зал кинотеатра" 
-                         class="relative rounded-2xl shadow-2xl w-full h-auto object-cover transform transition duration-500 hover:scale-[1.01]">
+                         alt="Зал" 
+                         class="relative rounded-2xl shadow-2xl w-full h-auto object-cover grayscale-[30%] hover:grayscale-0 transition duration-700">
                 </div>
                 
-                <!-- Текст справа -->
                 <div class="w-full md:w-1/2">
-                    <h2 class="text-sm font-bold text-purple-500 tracking-widest uppercase mb-2">О нас</h2>
-                    <h3 class="text-3xl md:text-4xl font-bold mb-6 text-white leading-tight">Технологии будущего <br>для вашего комфорта</h3>
+                    <h2 class="text-sm font-bold text-brand-light tracking-widest uppercase mb-4">Технологии</h2>
+                    <h3 class="text-4xl font-bold mb-6 text-white leading-tight">Кинотеатр <br>нового поколения</h3>
                     <p class="text-gray-400 mb-6 leading-relaxed">
-                        Neon Cinema — это не просто место для просмотра фильмов. Это пространство, где встречаются передовые технологии лазерной проекции IMAX Laser и объемный звук Dolby Atmos. 
+                        Мы отказались от старых стандартов. Только лазерные проекторы, серебряные экраны и кресла, разработанные аэрокосмическими инженерами.
                     </p>
-                    <p class="text-gray-400 mb-8 leading-relaxed">
-                        Наши залы оборудованы креслами-реклайнерами, чтобы вы чувствовали себя как дома, только с экраном размером с 5-этажный дом.
-                    </p>
-                    <ul class="space-y-4">
-                        <li class="flex items-center gap-3">
-                            <span class="w-2 h-2 rounded-full bg-pink-500"></span>
-                            <span>Залы повышенной комфортности VIP</span>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="flex items-center gap-4">
+                            <div class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]"></div>
+                            <span>Звук Dolby Atmos 360°</span>
                         </li>
-                        <li class="flex items-center gap-3">
-                            <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-                            <span>Кинобар с гурмэ-попкорном</span>
+                        <li class="flex items-center gap-4">
+                            <div class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6]"></div>
+                            <span>Лазерная проекция 4K</span>
                         </li>
                     </ul>
                 </div>
@@ -158,69 +162,66 @@
         </div>
     </section>
 
-    <!-- СЕКЦИЯ: РАСПИСАНИЕ (Hover эффект) -->
-    <section id="schedule" class="py-20 bg-gray-900">
+    <!-- РАСПИСАНИЕ -->
+    <section id="schedule" class="py-24 bg-card border-t border-white/5">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Сейчас в кино</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
+                <h2 class="text-4xl font-bold mb-4">Афиша</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto rounded-full"></div>
             </div>
 
+            <!-- Сетка карточек -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Карточки генерируются вручную или через цикл. Для примера статика. -->
                 
-                <!-- Карточка фильма 1 -->
-                <div class="group relative h-[450px] rounded-xl overflow-hidden cursor-pointer shadow-lg shadow-purple-900/20">
-                    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1000&auto=format&fit=crop" alt="Movie 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    
-                    <!-- Overlay (Появляется при наведении) -->
-                    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center p-6 text-center">
-                        <h3 class="text-2xl font-bold text-white mb-2">Кибер-Одиссея</h3>
-                        <p class="text-sm text-gray-300 mb-6">Фантастика / 2ч 15м</p>
-                        <p class="text-gray-400 text-sm mb-6 line-clamp-3">Будущее наступило, но готовы ли мы к нему? Эпическая сага о выживании в цифровом мире.</p>
-                        
+                <!-- Card 1 -->
+                <div class="movie-card group">
+                    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1000&auto=format&fit=crop" alt="Movie" class="movie-img">
+                    <div class="movie-overlay">
+                        <h3 class="text-xl font-bold text-white mb-2">Гравитация ноль</h3>
+                        <p class="text-xs text-cyan-300 mb-4 uppercase tracking-wider">Sci-Fi / 2ч 15м</p>
                         <div class="flex flex-wrap justify-center gap-2">
-                            <button class="bg-gray-700 hover:bg-purple-600 text-white text-xs py-1 px-3 rounded transition">14:00</button>
-                            <button class="bg-gray-700 hover:bg-purple-600 text-white text-xs py-1 px-3 rounded transition">18:30</button>
-                            <button class="bg-gray-700 hover:bg-purple-600 text-white text-xs py-1 px-3 rounded transition">21:45</button>
+                            <button class="time-btn">14:00</button>
+                            <button class="time-btn">18:30</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Карточка фильма 2 -->
-                <div class="group relative h-[450px] rounded-xl overflow-hidden cursor-pointer shadow-lg shadow-purple-900/20">
-                    <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=1000&auto=format&fit=crop" alt="Movie 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center p-6 text-center">
-                        <h3 class="text-2xl font-bold text-white mb-2">Неоновый Гонщик</h3>
-                        <p class="text-sm text-gray-300 mb-6">Боевик / 1ч 50м</p>
+                <!-- Card 2 -->
+                <div class="movie-card group">
+                    <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=1000&auto=format&fit=crop" alt="Movie" class="movie-img">
+                    <div class="movie-overlay">
+                        <h3 class="text-xl font-bold text-white mb-2">Неоновый драйв</h3>
+                        <p class="text-xs text-cyan-300 mb-4 uppercase tracking-wider">Action / 1ч 50м</p>
                         <div class="flex flex-wrap justify-center gap-2">
-                            <button class="bg-gray-700 hover:bg-pink-600 text-white text-xs py-1 px-3 rounded transition">15:10</button>
-                            <button class="bg-gray-700 hover:bg-pink-600 text-white text-xs py-1 px-3 rounded transition">19:20</button>
+                            <button class="time-btn">19:20</button>
+                            <button class="time-btn">21:40</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Карточка фильма 3 -->
-                <div class="group relative h-[450px] rounded-xl overflow-hidden cursor-pointer shadow-lg shadow-purple-900/20">
-                    <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=1000&auto=format&fit=crop" alt="Movie 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center p-6 text-center">
-                        <h3 class="text-2xl font-bold text-white mb-2">Тишина Космоса</h3>
-                        <p class="text-sm text-gray-300 mb-6">Хоррор / 1ч 40м</p>
+                <!-- Card 3 -->
+                <div class="movie-card group">
+                    <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=1000&auto=format&fit=crop" alt="Movie" class="movie-img">
+                    <div class="movie-overlay">
+                        <h3 class="text-xl font-bold text-white mb-2">Тихий Горизонт</h3>
+                        <p class="text-xs text-cyan-300 mb-4 uppercase tracking-wider">Horror / 1ч 40м</p>
                         <div class="flex flex-wrap justify-center gap-2">
-                            <button class="bg-gray-700 hover:bg-purple-600 text-white text-xs py-1 px-3 rounded transition">22:00</button>
-                            <button class="bg-gray-700 hover:bg-purple-600 text-white text-xs py-1 px-3 rounded transition">00:15</button>
+                            <button class="time-btn">22:00</button>
+                            <button class="time-btn">00:15</button>
                         </div>
                     </div>
                 </div>
-
-                <!-- Карточка фильма 4 -->
-                <div class="group relative h-[450px] rounded-xl overflow-hidden cursor-pointer shadow-lg shadow-purple-900/20">
-                    <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?q=80&w=1000&auto=format&fit=crop" alt="Movie 4" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center p-6 text-center">
-                        <h3 class="text-2xl font-bold text-white mb-2">Ритм Города</h3>
-                        <p class="text-sm text-gray-300 mb-6">Мюзикл / 2ч 05м</p>
+                
+                 <!-- Card 4 -->
+                 <div class="movie-card group">
+                    <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?q=80&w=1000&auto=format&fit=crop" alt="Movie" class="movie-img">
+                    <div class="movie-overlay">
+                        <h3 class="text-xl font-bold text-white mb-2">Симфония</h3>
+                        <p class="text-xs text-cyan-300 mb-4 uppercase tracking-wider">Drama / 2ч 05м</p>
                         <div class="flex flex-wrap justify-center gap-2">
-                            <button class="bg-gray-700 hover:bg-pink-600 text-white text-xs py-1 px-3 rounded transition">12:00</button>
-                            <button class="bg-gray-700 hover:bg-pink-600 text-white text-xs py-1 px-3 rounded transition">16:40</button>
+                            <button class="time-btn">12:00</button>
+                            <button class="time-btn">15:30</button>
                         </div>
                     </div>
                 </div>
@@ -229,150 +230,92 @@
         </div>
     </section>
 
-    <!-- СЕКЦИЯ: ПРАВИЛА (Аккордеон на Alpine.js) -->
-    <section id="rules" class="py-20 bg-dark relative overflow-hidden">
-        <!-- Декоративный элемент -->
-        <div class="absolute top-0 right-0 w-96 h-96 bg-purple-900/20 rounded-full blur-3xl -z-0 pointer-events-none"></div>
+    <!-- ПРАВИЛА (Аккордеон) -->
+    <section id="rules" class="py-24 bg-dark relative overflow-hidden">
+        <!-- Синий декоративный шар -->
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[120px] pointer-events-none"></div>
 
-        <div class="container mx-auto px-6 max-w-3xl relative z-10">
-            <h2 class="text-3xl font-bold mb-10 text-center"><span class="text-purple-400">Правила</span> посещения</h2>
+        <div class="container mx-auto px-6 max-w-3xl relative z-10" x-data="rulesAccordion">
+            <h2 class="text-3xl font-bold mb-10 text-center">Правила <span class="text-cyan-400">посещения</span></h2>
             
-            <div x-data="{ active: 1 }" class="space-y-4">
-                
-                <!-- Пункт 1 -->
-                <div class="border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm overflow-hidden">
-                    <button @click="active = (active === 1 ? null : 1)" class="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-gray-800 transition">
-                        <span class="font-semibold text-lg">Покупка и возврат билетов</span>
-                        <svg :class="active === 1 ? 'rotate-180 text-purple-400' : ''" class="w-5 h-5 transform transition-transform duration-300 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                    </button>
-                    <div x-show="active === 1" x-collapse>
-                        <div class="px-6 pb-4 text-gray-400 text-sm leading-relaxed border-t border-gray-800 pt-4">
-                            Билеты можно приобрести на сайте или в кассе. Возврат средств осуществляется не позднее, чем за 30 минут до начала сеанса. Электронные билеты не требуют распечатки.
+            <div class="space-y-4">
+                <!-- Карточки правил генерируем через x-for для чистоты HTML -->
+                <template x-for="item in items" :key="item.id">
+                    <div class="border border-white/10 rounded-lg bg-card/50 backdrop-blur-sm overflow-hidden transition hover:border-cyan-500/30">
+                        <button @click="toggle(item.id)" class="w-full px-6 py-5 flex justify-between items-center text-left hover:bg-white/5 transition">
+                            <span class="font-semibold text-lg text-white" x-text="item.title"></span>
+                            <svg :class="active === item.id ? 'rotate-180 text-cyan-400' : 'text-gray-500'" class="w-5 h-5 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+                        <div x-show="active === item.id" class="overflow-hidden">
+                            <div class="px-6 pb-5 text-gray-400 text-sm leading-relaxed border-t border-white/5 pt-4" x-text="item.text"></div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Пункт 2 -->
-                <div class="border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm overflow-hidden">
-                    <button @click="active = (active === 2 ? null : 2)" class="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-gray-800 transition">
-                        <span class="font-semibold text-lg">Еда и напитки</span>
-                        <svg :class="active === 2 ? 'rotate-180 text-purple-400' : ''" class="w-5 h-5 transform transition-transform duration-300 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                    </button>
-                    <div x-show="active === 2" x-collapse>
-                        <div class="px-6 pb-4 text-gray-400 text-sm leading-relaxed border-t border-gray-800 pt-4">
-                            В залы разрешено проходить только с продукцией, приобретенной в нашем кинобаре. Это гарантирует отсутствие резких запахов и шуршащих упаковок, мешающих другим зрителям.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Пункт 3 -->
-                <div class="border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm overflow-hidden">
-                    <button @click="active = (active === 3 ? null : 3)" class="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-gray-800 transition">
-                        <span class="font-semibold text-lg">Возрастные ограничения</span>
-                        <svg :class="active === 3 ? 'rotate-180 text-purple-400' : ''" class="w-5 h-5 transform transition-transform duration-300 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                    </button>
-                    <div x-show="active === 3" x-collapse>
-                        <div class="px-6 pb-4 text-gray-400 text-sm leading-relaxed border-t border-gray-800 pt-4">
-                            Администрация вправе запросить документ, подтверждающий возраст, если рейтинг фильма 16+ или 18+. Дети до 6 лет на сеансы 12+ не допускаются даже с родителями.
-                        </div>
-                    </div>
-                </div>
-
+                </template>
             </div>
         </div>
     </section>
 
-    <!-- СЕКЦИЯ: СКОРО В КИНО (Слайдер) -->
-    <section id="coming-soon" class="py-20 bg-gray-900">
+    <!-- СКОРО В КИНО (Слайдер) -->
+    <section id="coming-soon" class="py-24 bg-card border-t border-white/5">
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-end mb-10">
                 <div>
-                    <h2 class="text-3xl font-bold text-white">Скоро в кино</h2>
-                    <p class="text-gray-400 mt-2">Самые ожидаемые премьеры сезона</p>
-                </div>
-                <!-- Индикаторы скролла (декоративные) -->
-                <div class="hidden md:flex gap-2">
-                    <div class="w-8 h-1 bg-purple-500 rounded-full"></div>
-                    <div class="w-2 h-1 bg-gray-700 rounded-full"></div>
-                    <div class="w-2 h-1 bg-gray-700 rounded-full"></div>
+                    <h2 class="text-3xl font-bold text-white">Скоро на экранах</h2>
+                    <p class="text-gray-400 mt-2">Премьеры будущего месяца</p>
                 </div>
             </div>
 
             <!-- Горизонтальный скролл -->
             <div class="flex overflow-x-auto space-x-6 pb-8 snap-x hide-scrollbar">
+                <!-- Постеры -->
+                <div class="poster-card snap-center group">
+                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4">
+                        <img src="https://images.unsplash.com/photo-1596727147705-54a9d0943f94?q=80&w=1000&auto=format&fit=crop" class="poster-img">
+                        <div class="badge-date bg-blue-600">25 ДЕК</div>
+                    </div>
+                    <h4 class="font-bold text-lg text-white group-hover:text-cyan-400 transition">Космический рубеж</h4>
+                </div>
+
+                <div class="poster-card snap-center group">
+                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4">
+                        <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1000&auto=format&fit=crop" class="poster-img">
+                        <div class="badge-date bg-cyan-600">10 ЯНВ</div>
+                    </div>
+                    <h4 class="font-bold text-lg text-white group-hover:text-cyan-400 transition">Вторжение</h4>
+                </div>
+
+                <div class="poster-card snap-center group">
+                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4">
+                        <img src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?q=80&w=1000&auto=format&fit=crop" class="poster-img">
+                        <div class="badge-date bg-indigo-600">20 ФЕВ</div>
+                    </div>
+                    <h4 class="font-bold text-lg text-white group-hover:text-cyan-400 transition">Киборг: Начало</h4>
+                </div>
                 
-                <!-- Постер 1 -->
-                <div class="min-w-[200px] md:min-w-[240px] snap-center">
-                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4 group">
-                        <img src="https://images.unsplash.com/photo-1596727147705-54a9d0943f94?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover transition duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                        <div class="absolute top-2 right-2 bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">25 ДЕК</div>
+                 <div class="poster-card snap-center group">
+                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4">
+                        <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e63?q=80&w=1000&auto=format&fit=crop" class="poster-img">
+                        <div class="badge-date bg-gray-600">СКОРО</div>
                     </div>
-                    <h4 class="font-bold text-lg text-white">Звездный путь: Начало</h4>
-                    <p class="text-gray-500 text-sm">Фантастика</p>
+                    <h4 class="font-bold text-lg text-white group-hover:text-cyan-400 transition">Темный лес</h4>
                 </div>
-
-                <!-- Постер 2 -->
-                <div class="min-w-[200px] md:min-w-[240px] snap-center">
-                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4 group">
-                        <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover transition duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                        <div class="absolute top-2 right-2 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded">1 ЯНВ</div>
-                    </div>
-                    <h4 class="font-bold text-lg text-white">Детектив из прошлого</h4>
-                    <p class="text-gray-500 text-sm">Триллер</p>
-                </div>
-
-                <!-- Постер 3 -->
-                <div class="min-w-[200px] md:min-w-[240px] snap-center">
-                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4 group">
-                        <img src="https://images.unsplash.com/photo-1533488765986-dfa2a9939acd?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover transition duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                        <div class="absolute top-2 right-2 bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">14 ЯНВ</div>
-                    </div>
-                    <h4 class="font-bold text-lg text-white">Любовь в Париже</h4>
-                    <p class="text-gray-500 text-sm">Мелодрама</p>
-                </div>
-
-                <!-- Постер 4 -->
-                <div class="min-w-[200px] md:min-w-[240px] snap-center">
-                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4 group">
-                        <img src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover transition duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                        <div class="absolute top-2 right-2 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded">20 ФЕВ</div>
-                    </div>
-                    <h4 class="font-bold text-lg text-white">Битва роботов</h4>
-                    <p class="text-gray-500 text-sm">Экшн</p>
-                </div>
-
-                <!-- Постер 5 -->
-                <div class="min-w-[200px] md:min-w-[240px] snap-center">
-                    <div class="relative rounded-lg overflow-hidden h-[360px] mb-4 group">
-                        <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e63?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover transition duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                        <div class="absolute top-2 right-2 bg-gray-600 text-white text-xs font-bold px-2 py-1 rounded">СКОРО</div>
-                    </div>
-                    <h4 class="font-bold text-lg text-white">Тайна леса</h4>
-                    <p class="text-gray-500 text-sm">Приключения</p>
-                </div>
-
             </div>
         </div>
     </section>
 
     <!-- FOOTER -->
     <footer class="bg-black border-t border-gray-900 pt-16 pb-8">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
-                <div class="mb-6 md:mb-0">
-                    <span class="text-2xl font-black uppercase bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-                        NEON CINEMA
-                    </span>
-                    <p class="text-gray-500 text-sm mt-2">Кинотеатр нового поколения</p>
-                </div>
-                <div class="flex gap-6">
-                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-purple-600 hover:text-white transition">VK</a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-pink-600 hover:text-white transition">TG</a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-white hover:text-black transition">YT</a>
-                </div>
+        <div class="container mx-auto px-6 text-center">
+            <span class="text-2xl font-black uppercase bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600">
+                CINEMA BLUE
+            </span>
+            <div class="flex justify-center gap-6 mt-6 mb-8">
+                <a href="#" class="social-btn">VK</a>
+                <a href="#" class="social-btn">TG</a>
+                <a href="#" class="social-btn">YT</a>
             </div>
-            <div class="border-t border-gray-900 pt-8 text-center text-gray-600 text-sm">
-                &copy; 2023 Neon Cinema Fan Version. Все права защищены. <br> Дизайн создан в демонстрационных целях.
+            <div class="text-gray-600 text-sm">
+                &copy; 2023 Fan Version. All rights reserved.
             </div>
         </div>
     </footer>
