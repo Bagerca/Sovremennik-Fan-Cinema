@@ -129,66 +129,153 @@ main { flex: 1; padding: 60px 0; }
 }
 
 /* =========================================
-   4. СТРАНИЦА "О НАС" (REDESIGN)
+   4. СТРАНИЦА "О НАС" (PRO VERSION)
    ========================================= */
+
+/* Сетка: Делаем шире и воздушнее */
 .about-hero-grid {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr; /* Левая часть шире */
-    gap: 60px;
-    margin-bottom: 40px;
-    align-items: start;
+    grid-template-columns: 1fr 1fr; /* Две равные колонки */
+    gap: 80px; /* Большой отступ между ними (было 60) */
+    align-items: center; /* Центрируем по вертикали */
+    min-height: 60vh; /* Минимальная высота, чтобы не прилипало к футеру */
 }
 
-/* Левая колонка */
+/* Левая колонка (Текст) */
+.about-left {
+    padding-right: 20px; /* Доп. воздух справа от текста */
+}
+
 .year-badge {
-    display: inline-block; border: 1px solid #1e3a8a; color: var(--accent-blue);
-    padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 800;
-    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px;
-    background: rgba(30, 58, 138, 0.2);
+    display: inline-block;
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    color: var(--accent-blue);
+    padding: 8px 16px;
+    border-radius: 50px; /* Овальный бейдж смотрится современнее */
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    background: rgba(14, 165, 233, 0.1);
 }
 
 .hero-title {
-    font-size: 3.5rem; line-height: 1; font-weight: 900; color: #fff;
-    margin-bottom: 30px; text-transform: uppercase; letter-spacing: -1px;
+    font-size: 4rem; /* Еще крупнее заголовок */
+    line-height: 1;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: -1px;
 }
-.hero-title .text-gray { color: #475569; display: block; }
 
-.hero-desc { color: #94a3b8; font-size: 1rem; line-height: 1.6; margin-bottom: 40px; max-width: 600px; }
+.hero-title .text-gray {
+    color: #475569;
+    display: block;
+}
 
-.stats-row { display: flex; gap: 20px; }
+.hero-desc {
+    color: #94a3b8;
+    font-size: 1.1rem; /* Чуть крупнее шрифт чтения */
+    line-height: 1.7;  /* Больше межстрочный интервал */
+    margin-bottom: 50px;
+    max-width: 100%; /* Текст на всю ширину колонки */
+}
+
+/* Статистика */
+.stats-row {
+    display: flex;
+    gap: 25px;
+}
+
 .stat-box {
-    background-color: #0f172a; border: 1px solid #1e293b; padding: 25px 30px;
-    border-radius: 12px; min-width: 180px;
+    background-color: rgba(15, 23, 42, 0.5); /* Полупрозрачный */
+    border: 1px solid #1e293b;
+    padding: 30px;
+    border-radius: 16px;
+    min-width: 160px;
 }
-.stat-number { display: block; font-size: 42px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 5px; }
-.stat-label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+
+.stat-number {
+    display: block;
+    font-size: 48px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #64748b;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
 
 /* Правая колонка */
-.about-right { display: flex; flex-direction: column; gap: 20px; }
+.about-right {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Отступ между картой и игровой зоной */
+}
 
+/* Карта - делаем выше */
 .map-preview {
-    height: 350px;
+    height: 400px; /* Было 350, делаем выше */
     width: 100%;
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
     border: 1px solid #334155;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5); /* Глубокая тень */
     background: #1e293b;
+    position: relative;
 }
 
+/* Карточка игры */
 .game-zone-card {
-    background: rgba(15, 23, 42, 0.6); border: 1px solid #1e3a8a; border-radius: 16px;
-    padding: 25px; display: flex; align-items: center; gap: 20px; transition: transform 0.3s;
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.4));
+    border: 1px solid #1e3a8a;
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    transition: transform 0.3s;
 }
-.game-zone-card:hover { background: rgba(30, 58, 138, 0.3); transform: translateY(-3px); }
+
+.game-zone-card:hover {
+    background: rgba(30, 58, 138, 0.2);
+    transform: translateY(-5px);
+    border-color: var(--accent-blue);
+}
 
 .icon-circle {
-    width: 50px; height: 50px; background: var(--accent-blue); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); flex-shrink: 0;
+    width: 60px; /* Чуть крупнее иконка */
+    height: 60px;
+    background: var(--accent-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+    flex-shrink: 0;
 }
-.game-info h3 { font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 5px; }
-.game-info p { font-size: 0.9rem; color: #94a3b8; line-height: 1.3; }
+
+.game-info h3 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.game-info p {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    line-height: 1.4;
+}
 
 /* =========================================
    5. ЭЛЕМЕНТЫ РАСПИСАНИЯ (INDEX)
