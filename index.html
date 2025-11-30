@@ -4,44 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Расписание | Современник</title>
-    
-    <!-- Подключение стилей -->
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Иконка вкладки -->
     <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
-    
-    <!-- Шрифт Inter (для современного вида) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Шапка сайта -->
     <header>
         <div class="container nav-bar">
-            <div class="logo">Современник</div>
+            <!-- Логотип SVG -->
+            <a href="index.html" class="logo-link">
+                <img src="assets/images/logo.svg" alt="Кинотеатр Современник" class="logo-img">
+            </a>
+            <!-- Меню -->
             <nav class="nav-links">
-                <a href="index.html" class="active">Расписание</a>
                 <a href="about.html">О нас</a>
+                <a href="index.html" class="active">Расписание</a>
                 <a href="rules.html">Правила</a>
             </nav>
         </div>
     </header>
 
-    <!-- Основной контент -->
     <main class="container">
-        
-        <!-- Верхняя панель: Заголовок и Даты -->
+        <!-- Шапка расписания -->
         <div class="schedule-header">
-            <!-- Заголовок -->
             <h1 class="page-title">
                 Расписание сеансов
                 <span class="subtitle">Выберите удобное время</span>
             </h1>
             
-            <!-- Слайдер дат -->
             <div class="date-slider">
                 <div class="date-card active">
                     <span class="day-name">Сегодня</span>
@@ -70,7 +61,6 @@
             </div>
         </div>
 
-        <!-- Фильтры жанров -->
         <div class="filters-bar">
             <button class="filter-btn active" data-filter="all">Все фильмы</button>
             <button class="filter-btn" data-filter="family">Детям и семье</button>
@@ -78,10 +68,8 @@
             <button class="filter-btn" data-filter="horror">Ужасы 18+</button>
         </div>
         
-        <!-- Список фильмов -->
         <div class="schedule-list">
-
-            <!-- ФИЛЬМ 1: Дикий робот -->
+            <!-- Фильм 1 -->
             <div class="movie-row" data-category="family">
                 <div class="row-poster">
                     <span class="age-badge age-green">6+</span>
@@ -114,7 +102,7 @@
                 </div>
             </div>
 
-            <!-- ФИЛЬМ 2: Иллюзия обмана 3 -->
+            <!-- Фильм 2 -->
             <div class="movie-row" data-category="action">
                 <div class="row-poster">
                     <span class="age-badge age-orange">16+</span>
@@ -142,7 +130,7 @@
                 </div>
             </div>
 
-            <!-- ФИЛЬМ 3: Пять ночей с Фредди -->
+            <!-- Фильм 3 -->
             <div class="movie-row" data-category="horror">
                 <div class="row-poster">
                     <span class="age-badge age-orange">16+</span>
@@ -170,7 +158,7 @@
                 </div>
             </div>
 
-            <!-- ФИЛЬМ 4: Kingsman -->
+            <!-- Фильм 4 -->
             <div class="movie-row" data-category="action">
                 <div class="row-poster">
                     <span class="age-badge age-red">18+</span>
@@ -194,11 +182,11 @@
                 </div>
             </div>
 
-             <!-- ФИЛЬМ 5: ВАЛЛ-И -->
-             <div class="movie-row" data-category="family">
+            <!-- Фильм 5 -->
+            <div class="movie-row" data-category="family">
                 <div class="row-poster">
                     <span class="age-badge age-green">0+</span>
-                    <img src="assets/images/ВАЛЛ·И (2008).jpg" alt="Poster">
+                    <img src="assets/images/ВАЛЛ-И (2008).jpg" alt="Poster">
                 </div>
                 <div class="row-info">
                     <h2 class="row-title">ВАЛЛ-И</h2>
@@ -221,11 +209,44 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <!-- Акции -->
+        <div class="promotions-section">
+            <h2 class="page-title" style="font-size: 2rem; margin-bottom: 30px;">Акции и предложения</h2>
+            <div class="promo-grid">
+                <div class="promo-card">
+                    <div class="promo-image" style="background-image: url('https://clck.ru/36Jg9d');">
+                        <span class="promo-badge">Выгодно</span>
+                    </div>
+                    <div class="promo-content">
+                        <h3>Пушкинская карта</h3>
+                        <p>Молодые люди от 14 до 22 лет могут посещать кино бесплатно!</p>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-image" style="background-image: url('https://images.unsplash.com/photo-1572177191856-3cde618dee1f?q=80&w=600&auto=format&fit=crop');">
+                        <span class="promo-badge">Скидка 50%</span>
+                    </div>
+                    <div class="promo-content">
+                        <h3>Студенческая среда</h3>
+                        <p>Каждую среду билеты для студентов и школьников за полцены.</p>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-image" style="background-image: url('https://images.unsplash.com/photo-1585647347483-22b66260dfff?q=80&w=600&auto=format&fit=crop');">
+                        <span class="promo-badge">Бар</span>
+                    </div>
+                    <div class="promo-content">
+                        <h3>Комбо «Киномания»</h3>
+                        <p>Большой попкорн + 2 напитка всего за 650₽. Спрашивайте в баре.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
-    <!-- Модальное окно покупки билета -->
+    <!-- Модальное окно -->
     <div id="ticketModal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
@@ -239,12 +260,10 @@
         </div>
     </div>
 
-    <!-- Подвал -->
     <footer>
         <p>© 2023 Кинотеатр «Современник». г. Ковров, ул. Социалистическая, д. 2</p>
     </footer>
 
-    <!-- Скрипт (логика) -->
     <script src="script.js"></script>
 </body>
 </html>
