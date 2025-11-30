@@ -294,7 +294,15 @@ main.container {
     margin-bottom: 40px; gap: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 30px;
 }
 
-.date-slider { display: flex; gap: 12px; overflow-x: auto; width: 100%; padding-bottom: 5px; }
+.date-slider { 
+    display: flex; 
+    gap: 12px; 
+    overflow-x: auto; 
+    width: 100%; 
+    padding-bottom: 10px; 
+    justify-content: center; /* Центрируем даты */
+}
+
 .date-card {
     background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
     padding: 12px 24px; border-radius: 12px; cursor: pointer; text-align: center; min-width: 85px;
@@ -621,6 +629,10 @@ footer {
     .sessions-grid { grid-template-columns: repeat(3, 1fr); }
     .stats-container { flex-direction: column; }
     .intro-section { min-height: calc(100vh - 140px); padding: 40px 0 80px; }
+    
+    .date-slider {
+        justify-content: flex-start; /* На мобилке скролл слева */
+    }
 }
 
 @media (max-width: 768px) {
