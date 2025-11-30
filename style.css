@@ -2,17 +2,17 @@
    1. ГЛОБАЛЬНЫЕ НАСТРОЙКИ (PREMIUM NAVY PALETTE)
    ========================================= */
 :root {
-    /* Палитра из скриншота */
-    --bg-color: #020617;       /* Очень глубокий темно-синий (почти черный) */
-    --card-bg: #0f172a;        /* Темно-синий сланец (для карточек) */
-    --accent-blue: #0ea5e9;    /* Яркий голубой (Sky Blue) - как на кнопках */
-    --accent-dark: #0284c7;    /* Темно-голубой (при наведении) */
+    /* Палитра */
+    --bg-color: #020617;       /* Глубокий темно-синий */
+    --card-bg: #0f172a;        /* Темно-синий сланец */
+    --accent-blue: #0ea5e9;    /* Яркий голубой (Sky Blue) */
+    --accent-dark: #0284c7;    /* Темно-голубой (Hover) */
     --text-main: #f8fafc;      /* Белоснежный текст */
-    --text-muted: #94a3b8;     /* Серо-голубой текст (Slate) */
-    --border-color: #1e293b;   /* Еле заметные границы */
+    --text-muted: #94a3b8;     /* Серо-голубой текст */
+    --border-color: #1e293b;   /* Границы */
     
     --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-    --shadow-glow: 0 0 15px rgba(14, 165, 233, 0.15); /* Мягкое свечение */
+    --shadow-glow: 0 0 15px rgba(14, 165, 233, 0.15);
 }
 
 * {
@@ -24,12 +24,12 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
-    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Более современный шрифт */
+    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-image: radial-gradient(circle at top center, #1e293b 0%, #020617 60%); /* Эффект прожектора сверху */
+    background-image: radial-gradient(circle at top center, #1e293b 0%, #020617 60%);
     background-attachment: fixed;
 }
 
@@ -47,7 +47,7 @@ ul {
    2. ШАПКА САЙТА (HEADER)
    ========================================= */
 header {
-    background-color: rgba(2, 6, 23, 0.8); /* Полупрозрачный фон */
+    background-color: rgba(2, 6, 23, 0.85);
     padding: 20px 0;
     border-bottom: 1px solid var(--border-color);
     position: sticky;
@@ -57,7 +57,7 @@ header {
 }
 
 .container {
-    max-width: 1240px; /* Чуть шире, как на современных сайтах */
+    max-width: 1240px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -70,11 +70,11 @@ header {
 
 .logo {
     font-size: 26px;
-    font-weight: 900; /* Очень жирный, как на скриншоте */
+    font-weight: 900;
     color: #fff;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-style: italic; /* Курсив для динамики */
+    font-style: italic;
 }
 
 .nav-links {
@@ -89,46 +89,134 @@ header {
     color: var(--text-muted);
     letter-spacing: 1px;
     transition: color 0.3s ease;
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
 }
 
 .nav-links a:hover, .nav-links a.active {
     color: #fff;
-}
-
-/* Кнопка в меню (если захочешь добавить "Войти" как на скрине) */
-.nav-btn-login {
-    border: 1px solid var(--border-color);
-    padding: 8px 20px;
-    border-radius: 50px;
-    font-size: 14px;
+    border-bottom-color: var(--accent-blue);
 }
 
 /* =========================================
-   3. ЗАГОЛОВКИ И ТИПОГРАФИКА
+   3. УПРАВЛЕНИЕ РАСПИСАНИЕМ (ДАТЫ И ФИЛЬТРЫ)
    ========================================= */
 main {
     flex: 1;
-    padding: 60px 0;
+    padding: 50px 0;
+}
+
+/* Блок заголовка и дат */
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .section-title {
     font-size: 3rem;
-    text-align: left; /* Выравнивание влево, как на скрине */
     text-transform: uppercase;
     font-weight: 900;
     letter-spacing: -1px;
-    margin-bottom: 40px;
     color: #fff;
     line-height: 1;
+    margin: 0;
 }
 
-/* Доп. цвет для части заголовка (если нужно выделить слово) */
-.section-title span {
+/* Слайдер дат */
+.date-slider {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.date-slider::-webkit-scrollbar {
+    height: 4px;
+}
+.date-slider::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+}
+
+.date-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 10px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+    min-width: 75px;
+    transition: all 0.2s ease;
+}
+
+.date-card:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-3px);
+}
+
+.date-card.active {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+.date-card.active .day-name, 
+.date-card.active .day-number {
+    color: #fff;
+}
+
+.day-name {
+    display: block;
+    font-size: 11px;
     color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.day-number {
+    display: block;
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+}
+
+/* Фильтры */
+.filters-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 8px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.filter-btn:hover {
+    border-color: #fff;
+    color: #fff;
+}
+
+.filter-btn.active {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
 }
 
 /* =========================================
-   4. РАСПИСАНИЕ (СПИСОК) - PREMIUM STYLE
+   4. СПИСОК ФИЛЬМОВ (PREMIUM LIST)
    ========================================= */
 .schedule-list {
     display: flex;
@@ -140,7 +228,7 @@ main {
     display: flex;
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
-    border-radius: 16px; /* Более круглые углы */
+    border-radius: 16px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -164,7 +252,25 @@ main {
     object-fit: cover;
 }
 
-/* Инфо */
+/* Бейджи возраста */
+.age-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 12px;
+    color: #fff;
+    z-index: 2;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+.age-green { background: rgba(34, 197, 94, 0.9); }
+.age-orange { background: rgba(249, 115, 22, 0.9); }
+.age-red { background: rgba(239, 68, 68, 0.9); }
+
+/* Информация */
 .row-info {
     flex: 1;
     padding: 32px;
@@ -210,24 +316,15 @@ main {
     max-width: 650px;
 }
 
-/* Секция сеансов */
+/* Блок сеансов */
 .row-sessions {
     width: 320px;
     min-width: 320px;
     padding: 32px;
-    background: rgba(15, 23, 42, 0.5); /* Чуть темнее */
+    background: rgba(15, 23, 42, 0.5);
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-.sessions-title {
-    font-size: 12px;
-    color: var(--accent-blue);
-    margin-bottom: 16px;
-    text-transform: uppercase;
-    font-weight: 800;
-    letter-spacing: 1px;
 }
 
 .sessions-grid {
@@ -236,7 +333,7 @@ main {
     gap: 12px;
 }
 
-/* КНОПКА-БИЛЕТ (В стиле скриншота) */
+/* Кнопка-Билет */
 .session-btn {
     background: transparent;
     border: 1px solid #334155;
@@ -258,11 +355,6 @@ main {
     color: #fff;
 }
 
-.session-price {
-    font-size: 12px;
-    color: var(--text-muted);
-}
-
 .session-format {
     font-size: 10px;
     color: var(--accent-blue);
@@ -270,7 +362,6 @@ main {
     text-transform: uppercase;
 }
 
-/* Ховер эффект для кнопки */
 .session-btn:hover {
     background: var(--accent-blue);
     border-color: var(--accent-blue);
@@ -279,14 +370,15 @@ main {
 }
 
 .session-btn:hover .session-time,
-.session-btn:hover .session-price,
 .session-btn:hover .session-format {
-    color: #fff; /* При наведении всё белое */
+    color: #fff;
 }
 
 /* =========================================
-   5. СТРАНИЦА "О КИНОТЕАТРЕ" (Стиль блоков со скрина)
+   5. СТИЛИ "О НАС" И "ПРАВИЛА"
    ========================================= */
+
+/* О нас */
 .about-grid {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
@@ -295,9 +387,6 @@ main {
 }
 
 .text-block {
-    /* Стиль прозрачного фона без рамки, как на скрине */
-    padding: 0; 
-    border: none;
     background: transparent;
 }
 
@@ -315,7 +404,6 @@ main {
     margin-bottom: 24px;
 }
 
-/* Инфо-блоки (Цифры как на скрине) */
 .stats-container {
     display: flex;
     gap: 20px;
@@ -347,7 +435,6 @@ main {
     letter-spacing: 1px;
 }
 
-/* Карта */
 .map-wrapper {
     border-radius: 16px;
     overflow: hidden;
@@ -357,9 +444,7 @@ main {
     box-shadow: var(--shadow-soft);
 }
 
-/* =========================================
-   6. ПРАВИЛА (Аккуратный аккордеон)
-   ========================================= */
+/* Правила */
 .rules-container details {
     background-color: var(--card-bg);
     margin-bottom: 16px;
@@ -383,6 +468,7 @@ main {
     justify-content: space-between;
     align-items: center;
     list-style: none;
+    outline: none;
 }
 
 .rules-container summary::after {
@@ -413,7 +499,7 @@ main {
 }
 
 /* =========================================
-   7. МОДАЛЬНОЕ ОКНО
+   6. МОДАЛЬНОЕ ОКНО
    ========================================= */
 .modal {
     display: none;
@@ -471,7 +557,7 @@ main {
 }
 
 /* =========================================
-   8. ПОДВАЛ
+   7. ПОДВАЛ И АДАПТИВ
    ========================================= */
 footer {
     background-color: #020617;
@@ -483,27 +569,14 @@ footer {
     margin-top: auto;
 }
 
-/* Бейджи возраста */
-.age-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-weight: 800;
-    font-size: 12px;
-    color: #fff;
-    z-index: 2;
-    backdrop-filter: blur(4px);
-}
-.age-green { background: rgba(34, 197, 94, 0.9); }
-.age-orange { background: rgba(249, 115, 22, 0.9); }
-.age-red { background: rgba(239, 68, 68, 0.9); }
-
-/* АДАПТИВНОСТЬ */
 @media (max-width: 900px) {
     .nav-bar { flex-direction: column; gap: 20px; }
+    
+    .schedule-header { flex-direction: column; align-items: flex-start; }
+    .date-slider { width: 100%; }
+
     .about-grid, .movie-row { flex-direction: column; }
+    
     .row-info { border-right: none; border-bottom: 1px solid var(--border-color); }
     .row-poster { width: 100%; height: 300px; }
     .row-sessions { width: 100%; }
