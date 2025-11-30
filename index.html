@@ -16,18 +16,18 @@
     <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Настройка темы Tailwind (цвета) -->
+    <!-- Настройка темы Tailwind -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        dark: '#020617', /* Slate 950 - очень глубокий синий */
-                        card: '#0f172a', /* Slate 900 */
+                        dark: '#020617',
+                        card: '#0f172a',
                         brand: {
-                            light: '#22d3ee', /* Cyan 400 */
-                            DEFAULT: '#0ea5e9', /* Sky 500 */
-                            dark: '#2563eb', /* Blue 600 */
+                            light: '#22d3ee',
+                            DEFAULT: '#0ea5e9',
+                            dark: '#2563eb',
                             glow: 'rgba(14, 165, 233, 0.5)'
                         }
                     },
@@ -39,7 +39,7 @@
         }
     </script>
     
-    <!-- Alpine.js (CDN) -->
+    <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <!-- Твой скрипт -->
     <script src="script.js"></script>
@@ -54,43 +54,29 @@
         class="fixed top-0 w-full z-50 transition-all duration-300"
     >
         <div class="container mx-auto px-6 flex justify-between items-center">
-            <!-- Логотип -->
             <a href="#" class="text-2xl font-black tracking-tighter uppercase flex items-center gap-2 group">
                 <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600 group-hover:from-cyan-300 group-hover:to-blue-500 transition-all drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
                     CINEMA<span class="text-white">BLUE</span>
                 </span>
             </a>
 
-            <!-- Десктоп Меню -->
             <nav class="hidden md:flex space-x-8 font-medium text-sm tracking-wide">
-                <a href="#about" class="hover:text-brand-light transition-colors relative group">
-                    О нас
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-light transition-all group-hover:w-full"></span>
-                </a>
-                <a href="#schedule" class="hover:text-brand-light transition-colors relative group">
-                    Расписание
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-light transition-all group-hover:w-full"></span>
-                </a>
-                <a href="#rules" class="hover:text-brand-light transition-colors relative group">
-                    Правила
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-light transition-all group-hover:w-full"></span>
-                </a>
+                <a href="#about" class="hover:text-brand-light transition-colors relative group">О нас</a>
+                <a href="#schedule" class="hover:text-brand-light transition-colors relative group">Расписание</a>
+                <a href="#rules" class="hover:text-brand-light transition-colors relative group">Правила</a>
             </nav>
 
-            <!-- Кнопка -->
             <div class="hidden md:block">
                 <button class="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-2 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-[0_0_15px_rgba(14,165,233,0.6)] border border-white/10">
                     Купить билет
                 </button>
             </div>
 
-            <!-- Моб. меню кнопка -->
             <button @click="toggleMenu" class="md:hidden text-white focus:outline-none">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
         </div>
 
-        <!-- Моб. меню -->
         <div x-show="mobileMenu" x-transition.opacity class="md:hidden bg-card border-t border-white/10 absolute w-full left-0 top-full shadow-2xl">
             <div class="flex flex-col p-6 space-y-4 text-center">
                 <a @click="toggleMenu" href="#about" class="block hover:text-brand-light">О нас</a>
@@ -100,10 +86,9 @@
         </div>
     </header>
 
-    <!-- HERO -->
+    <!-- HERO (Здесь оставил атмосферный фон с Unsplash, т.к. постеры вертикальные) -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <!-- Синий оверлей -->
             <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 grayscale mix-blend-luminosity" alt="Cinema Background">
             <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/80 to-blue-900/20"></div>
         </div>
@@ -127,9 +112,8 @@
         </div>
     </section>
 
-    <!-- О НАС -->
+    <!-- О НАС (Оставил красивый зал) -->
     <section id="about" class="py-24 bg-dark relative">
-        <!-- Фоновый эффект свечения -->
         <div class="absolute left-0 top-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px]"></div>
 
         <div class="container mx-auto px-6">
@@ -145,7 +129,7 @@
                     <h2 class="text-sm font-bold text-brand-light tracking-widest uppercase mb-4">Технологии</h2>
                     <h3 class="text-4xl font-bold mb-6 text-white leading-tight">Кинотеатр <br>нового поколения</h3>
                     <p class="text-gray-400 mb-6 leading-relaxed">
-                        Мы отказались от старых стандартов. Только лазерные проекторы, серебряные экраны и кресла, разработанные аэрокосмическими инженерами.
+                        Смотрите новинки и любимую классику в лучшем качестве. От анимации до хорроров — мы подобрали репертуар для каждого.
                     </p>
                     <ul class="space-y-4 text-gray-300">
                         <li class="flex items-center gap-4">
@@ -162,50 +146,50 @@
         </div>
     </section>
 
-    <!-- РАСПИСАНИЕ -->
+    <!-- РАСПИСАНИЕ (Здесь фильмы, которые уже вышли или идут сейчас) -->
     <section id="schedule" class="py-24 bg-card border-t border-white/5">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Афиша</h2>
+                <h2 class="text-4xl font-bold mb-4">Сейчас в кино</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto rounded-full"></div>
             </div>
 
             <!-- Сетка карточек -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Карточки генерируются вручную или через цикл. Для примера статика. -->
                 
-                <!-- Card 1 -->
+                <!-- Card 1: Kingsman -->
                 <div class="movie-card group">
-                    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1000&auto=format&fit=crop" alt="Movie" class="movie-img">
+                    <img src="assets/images/Kingsman Секретная служба (2015).jpg" alt="Kingsman" class="movie-img">
                     <div class="movie-overlay">
-                        <h3 class="text-xl font-bold text-white mb-2">Гравитация ноль</h3>
-                        <p class="text-xs text-cyan-300 mb-4 uppercase tracking-wider">Sci-Fi / 2ч 15м</p>
+                        <h3 class="text-xl font-bold text-white mb-2 leading-tight">Kingsman: Секретная служба</h3>
+                        <p class="text-xs text-cyan-300 mb-4 uppercase tracking-wider">Action / Spy</p>
                         <div class="flex flex-wrap justify-center gap-2">
                             <button class="time-btn">14:00</button>
-                            <button class="time-btn">18:30</button>
+                            <button class="time-btn">19:30</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 2 -->
+                <!-- Card 2: Дикий робот -->
                 <div class="movie-card group">
-                    <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=1000&auto=format&fit=crop" alt="Movie" class="movie-img">
+                    <img src="assets/images/Дикий робот (2024).jpg" alt="Дикий робот" class="movie-img">
                     <div class="movie-overlay">
-                        <h3 class="text-xl font-bold text-white mb-2">Неоновый драйв</h3>
-                        <p class="text-xs text-cyan-300 mb-4 uppercase tracking-wider">Action / 1ч 50м</p>
+                        <h3 class="text-xl font-bold text-white mb-2">Дикий робот</h3>
+                        <p class="text-xs text-cyan-300 mb-4 uppercase tracking-wider">Animation / Sci-Fi</p>
                         <div class="flex flex-wrap justify-center gap-2">
-                            <button class="time-btn">19:20</button>
-                            <button class="time-btn">21:40</button>
+                            <button class="time-btn">10:00</button>
+                            <button class="time-btn">12:40</button>
+                            <button class="time-btn">16:15</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 3 -->
+                <!-- Card 3: Фредди -->
                 <div class="movie-card group">
-                    <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=1000&auto=format&fit=crop" alt="Movie" class="movie-img">
+                    <img src="assets/images/Пять ночей с Фредди (2023).jpg" alt="FNAF" class="movie-img">
                     <div class="movie-overlay">
-                        <h3 class="text-xl font-bold text-white mb-2">Тихий Горизонт</h3>
-                        <p class="text-xs text-cyan-300 mb-4 uppercase tracking-wider">Horror / 1ч 40м</p>
+                        <h3 class="text-xl font-bold text-white mb-2 leading-tight">Пять ночей с Фредди</h3>
+                        <p class="text-xs text-cyan-300 mb-4 uppercase tracking-wider">Horror / Thriller</p>
                         <div class="flex flex-wrap justify-center gap-2">
                             <button class="time-btn">22:00</button>
                             <button class="time-btn">00:15</button>
@@ -213,14 +197,14 @@
                     </div>
                 </div>
                 
-                 <!-- Card 4 -->
+                 <!-- Card 4: ВАЛЛ-И -->
                  <div class="movie-card group">
-                    <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?q=80&w=1000&auto=format&fit=crop" alt="Movie" class="movie-img">
+                    <img src="assets/images/ВАЛЛ·И (2008).jpg" alt="WALL-E" class="movie-img">
                     <div class="movie-overlay">
-                        <h3 class="text-xl font-bold text-white mb-2">Симфония</h3>
-                        <p class="text-xs text-cyan-300 mb-4 uppercase tracking-wider">Drama / 2ч 05м</p>
+                        <h3 class="text-xl font-bold text-white mb-2">ВАЛЛ·И</h3>
+                        <p class="text-xs text-cyan-300 mb-4 uppercase tracking-wider">Family / Classic</p>
                         <div class="flex flex-wrap justify-center gap-2">
-                            <button class="time-btn">12:00</button>
+                            <button class="time-btn">11:00</button>
                             <button class="time-btn">15:30</button>
                         </div>
                     </div>
@@ -232,14 +216,12 @@
 
     <!-- ПРАВИЛА (Аккордеон) -->
     <section id="rules" class="py-24 bg-dark relative overflow-hidden">
-        <!-- Синий декоративный шар -->
         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[120px] pointer-events-none"></div>
 
         <div class="container mx-auto px-6 max-w-3xl relative z-10" x-data="rulesAccordion">
             <h2 class="text-3xl font-bold mb-10 text-center">Правила <span class="text-cyan-400">посещения</span></h2>
             
             <div class="space-y-4">
-                <!-- Карточки правил генерируем через x-for для чистоты HTML -->
                 <template x-for="item in items" :key="item.id">
                     <div class="border border-white/10 rounded-lg bg-card/50 backdrop-blur-sm overflow-hidden transition hover:border-cyan-500/30">
                         <button @click="toggle(item.id)" class="w-full px-6 py-5 flex justify-between items-center text-left hover:bg-white/5 transition">
@@ -255,50 +237,58 @@
         </div>
     </section>
 
-    <!-- СКОРО В КИНО (Слайдер) -->
+    <!-- СКОРО В КИНО (Слайдер новинок 2025 и спецпоказов) -->
     <section id="coming-soon" class="py-24 bg-card border-t border-white/5">
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-end mb-10">
                 <div>
                     <h2 class="text-3xl font-bold text-white">Скоро на экранах</h2>
-                    <p class="text-gray-400 mt-2">Премьеры будущего месяца</p>
+                    <p class="text-gray-400 mt-2">Главные премьеры 2025 года</p>
                 </div>
             </div>
 
-            <!-- Горизонтальный скролл -->
             <div class="flex overflow-x-auto space-x-6 pb-8 snap-x hide-scrollbar">
-                <!-- Постеры -->
+                
+                <!-- Человек-бензопила (PNG) -->
                 <div class="poster-card snap-center group">
                     <div class="relative rounded-lg overflow-hidden h-[360px] mb-4">
-                        <img src="https://images.unsplash.com/photo-1596727147705-54a9d0943f94?q=80&w=1000&auto=format&fit=crop" class="poster-img">
-                        <div class="badge-date bg-blue-600">25 ДЕК</div>
+                        <img src="assets/images/Человек-бензопила. Фильм: История Резе (2025).png" class="poster-img">
+                        <div class="badge-date bg-blue-600">СКОРО</div>
                     </div>
-                    <h4 class="font-bold text-lg text-white group-hover:text-cyan-400 transition">Космический рубеж</h4>
+                    <h4 class="font-bold text-lg text-white group-hover:text-cyan-400 transition leading-tight">Человек-бензопила: История Резе</h4>
+                    <p class="text-xs text-gray-500 mt-1">Anime / Action</p>
                 </div>
 
+                <!-- Иллюзия обмана 3 -->
                 <div class="poster-card snap-center group">
                     <div class="relative rounded-lg overflow-hidden h-[360px] mb-4">
-                        <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1000&auto=format&fit=crop" class="poster-img">
-                        <div class="badge-date bg-cyan-600">10 ЯНВ</div>
+                        <img src="assets/images/Иллюзия обмана 3 (2025).jpg" class="poster-img">
+                        <div class="badge-date bg-cyan-600">2025</div>
                     </div>
-                    <h4 class="font-bold text-lg text-white group-hover:text-cyan-400 transition">Вторжение</h4>
+                    <h4 class="font-bold text-lg text-white group-hover:text-cyan-400 transition">Иллюзия обмана 3</h4>
+                    <p class="text-xs text-gray-500 mt-1">Thriller / Magic</p>
                 </div>
 
+                <!-- Есть только МиГ -->
                 <div class="poster-card snap-center group">
                     <div class="relative rounded-lg overflow-hidden h-[360px] mb-4">
-                        <img src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?q=80&w=1000&auto=format&fit=crop" class="poster-img">
-                        <div class="badge-date bg-indigo-600">20 ФЕВ</div>
+                        <img src="assets/images/Есть только МиГ (2025).jpg" class="poster-img">
+                        <div class="badge-date bg-indigo-600">ПРЕМЬЕРА</div>
                     </div>
-                    <h4 class="font-bold text-lg text-white group-hover:text-cyan-400 transition">Киборг: Начало</h4>
+                    <h4 class="font-bold text-lg text-white group-hover:text-cyan-400 transition">Есть только МиГ</h4>
+                    <p class="text-xs text-gray-500 mt-1">Drama / History</p>
                 </div>
                 
+                <!-- Кошмар перед Рождеством (Ретроспектива) -->
                  <div class="poster-card snap-center group">
                     <div class="relative rounded-lg overflow-hidden h-[360px] mb-4">
-                        <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e63?q=80&w=1000&auto=format&fit=crop" class="poster-img">
-                        <div class="badge-date bg-gray-600">СКОРО</div>
+                        <img src="assets/images/Кошмар перед Рождеством (1993).jpg" class="poster-img">
+                        <div class="badge-date bg-gray-600">СПЕЦПОКАЗ</div>
                     </div>
-                    <h4 class="font-bold text-lg text-white group-hover:text-cyan-400 transition">Темный лес</h4>
+                    <h4 class="font-bold text-lg text-white group-hover:text-cyan-400 transition">Кошмар перед Рождеством</h4>
+                    <p class="text-xs text-gray-500 mt-1">Fantasy / Musical</p>
                 </div>
+
             </div>
         </div>
     </section>
@@ -315,7 +305,7 @@
                 <a href="#" class="social-btn">YT</a>
             </div>
             <div class="text-gray-600 text-sm">
-                &copy; 2023 Fan Version. All rights reserved.
+                &copy; 2025 Fan Version. All rights reserved.
             </div>
         </div>
     </footer>
