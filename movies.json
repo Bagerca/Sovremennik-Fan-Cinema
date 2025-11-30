@@ -1,74 +1,91 @@
-[
-    {
-        "id": 1,
-        "title": "Дикий робот",
-        "poster": "assets/images/Дикий робот (2024).jpg",
-        "age": "6+",
-        "ageClass": "age-green",
-        "category": "family",
-        "tags": ["Анимация", "3D", "IMDb 8.5"],
-        "description": "Эпическое приключение робота ROZZUM 7134.",
-        "dates": ["2025-11-27", "2025-11-28", "2025-11-29", "2025-11-30", "2025-12-01", "2025-12-02", "2025-12-03"],
-        "sessions": [
-            { "time": "10:00", "format": "2D" },
-            { "time": "12:30", "format": "3D", "isSpecial": true }
-        ]
+{
+    "library": {
+        "1": {
+            "title": "Дикий робот",
+            "poster": "assets/images/Дикий робот (2024).jpg",
+            "age": "6+",
+            "ageClass": "age-green",
+            "category": "family",
+            "tags": ["Анимация", "3D", "IMDb 8.5"],
+            "description": "Эпическое приключение робота ROZZUM 7134, потерпевшего кораблекрушение на необитаемом острове."
+        },
+        "2": {
+            "title": "Иллюзия обмана 3",
+            "poster": "assets/images/Иллюзия обмана 3 (2025).jpg",
+            "age": "16+",
+            "ageClass": "age-orange",
+            "category": "action",
+            "tags": ["Триллер", "2ч 10мин"],
+            "description": "Четыре Всадника возвращаются, чтобы совершить своё самое дерзкое ограбление в истории магии."
+        },
+        "3": {
+            "title": "Пять ночей с Фредди",
+            "poster": "assets/images/Пять ночей с Фредди (2023).jpg",
+            "age": "16+",
+            "ageClass": "age-orange",
+            "category": "horror",
+            "tags": ["Ужасы", "1ч 50мин"],
+            "description": "Охранник пиццерии Freddy Fazbear's Pizza сталкивается с ожившими аниматрониками."
+        },
+        "4": {
+            "title": "Kingsman: Секретная служба",
+            "poster": "assets/images/Kingsman Секретная служба (2015).jpg",
+            "age": "18+",
+            "ageClass": "age-red",
+            "category": "action",
+            "tags": ["Боевик", "2ч 09мин"],
+            "description": "Элитная секретная служба набирает новичков. Парню предстоит пройти обучение и спасти мир."
+        },
+        "5": {
+            "title": "ВАЛЛ-И",
+            "poster": "assets/images/ВАЛЛ-И (2008).jpg",
+            "age": "0+",
+            "ageClass": "age-green",
+            "category": "family",
+            "tags": ["Семья", "1ч 38мин"],
+            "description": "Робот ВАЛЛ-И из года в год прилежно трудится на опустевшей Земле, очищая нашу планету от гор мусора."
+        }
     },
-    {
-        "id": 2,
-        "title": "Иллюзия обмана 3",
-        "poster": "assets/images/Иллюзия обмана 3 (2025).jpg",
-        "age": "16+",
-        "ageClass": "age-orange",
-        "category": "action",
-        "tags": ["Триллер", "2ч 10мин"],
-        "description": "Четыре Всадника возвращаются.",
-        "dates": ["2025-11-30", "2025-12-01", "2025-12-02", "2025-12-03"],
-        "sessions": [
-            { "time": "18:00", "format": "2D" },
-            { "time": "20:30", "format": "Atmos" }
-        ]
-    },
-    {
-        "id": 3,
-        "title": "Пять ночей с Фредди",
-        "poster": "assets/images/Пять ночей с Фредди (2023).jpg",
-        "age": "16+",
-        "ageClass": "age-orange",
-        "category": "horror",
-        "tags": ["Ужасы", "1ч 50мин"],
-        "description": "Охранник пиццерии Freddy Fazbear's Pizza.",
-        "dates": ["2025-11-28", "2025-11-30", "2025-12-02"],
-        "sessions": [
-            { "time": "22:00", "format": "2D" }
-        ]
-    },
-    {
-        "id": 4,
-        "title": "Kingsman: Секретная служба",
-        "poster": "assets/images/Kingsman Секретная служба (2015).jpg",
-        "age": "18+",
-        "ageClass": "age-red",
-        "category": "action",
-        "tags": ["Боевик", "2ч 09мин"],
-        "description": "Элитная секретная служба набирает новичков.",
-        "dates": ["2025-11-27", "2025-11-28", "2025-11-29"],
-        "sessions": [
-            { "time": "19:30", "format": "2D" }
-        ]
-    },
-    {
-        "id": 5,
-        "title": "ВАЛЛ-И",
-        "poster": "assets/images/ВАЛЛ-И (2008).jpg",
-        "age": "0+",
-        "ageClass": "age-green",
-        "category": "family",
-        "tags": ["Семья", "1ч 38мин"],
-        "description": "Робот ВАЛЛ-И трудится на опустевшей Земле.",
-        "dates": ["2025-11-30", "2025-12-01"],
-        "sessions": [
-            { "time": "11:00", "format": "2D" }
-        ]
-    }
-]
+
+    "schedule": [
+        {
+            "movieId": "1",
+            "dates": ["2025-11-27", "2025-11-28", "2025-11-29", "2025-11-30", "2025-12-01", "2025-12-02", "2025-12-03"],
+            "sessions": [
+                { "time": "10:00", "format": "2D", "price": 250 },
+                { "time": "12:30", "format": "3D", "price": 350, "isSpecial": true },
+                { "time": "15:00", "format": "2D", "price": 350 }
+            ]
+        },
+        {
+            "movieId": "2",
+            "dates": ["2025-11-30", "2025-12-01", "2025-12-02", "2025-12-03"],
+            "sessions": [
+                { "time": "18:00", "format": "2D", "price": 450 },
+                { "time": "20:30", "format": "Atmos", "price": 600, "isSpecial": true },
+                { "time": "23:00", "format": "2D", "price": 400 }
+            ]
+        },
+        {
+            "movieId": "3",
+            "dates": ["2025-11-28", "2025-11-30", "2025-12-02"],
+            "sessions": [
+                { "time": "22:00", "format": "2D", "price": 400 }
+            ]
+        },
+        {
+            "movieId": "4",
+            "dates": ["2025-11-27", "2025-11-28", "2025-11-29"],
+            "sessions": [
+                { "time": "19:30", "format": "2D", "price": 450 }
+            ]
+        },
+        {
+            "movieId": "5",
+            "dates": ["2025-11-30", "2025-12-01"],
+            "sessions": [
+                { "time": "11:00", "format": "2D", "price": 250 }
+            ]
+        }
+    ]
+}
