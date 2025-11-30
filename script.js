@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 6. ОБРАБОТКА КЛИКОВ (ОСНОВНАЯ ЛОГИКА) ---
+    // --- 6. ОБРАБОТКА КЛИКОВ ---
     moviesContainer.addEventListener('click', (e) => {
         // 1. КУПИТЬ БИЛЕТ
         const buyBtn = e.target.closest('.buy-ticket-btn');
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             filmNameSpan.innerHTML = `${title} <span style="font-weight:400; color:#94a3b8;">(${time})</span>`;
             
             renderHall();
-            // Явно сбрасываем текст цены
+            // Сбрасываем текст цены
             document.getElementById('count').innerText = '0';
             document.getElementById('total').innerText = '0';
             
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 7. ЛОГИКА ЗАЛА (ИСПРАВЛЕНА) ---
+    // --- 7. ЛОГИКА ЗАЛА (398 мест) ---
     function renderHall() {
         const seatsArea = document.getElementById('seatsArea');
         seatsArea.innerHTML = ''; 
@@ -201,12 +201,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const seat = document.createElement('div');
                 seat.className = 'seat';
-                
-                // === НОВОЕ: Добавляем подсказку (Ряд, Место) ===
-                // i + 1 = номер ряда, j + 1 = номер места
-                seat.title = `Ряд ${i + 1}, Место ${j + 1}`;
+                seat.title = `Ряд ${i + 1}, Место ${j + 1}`; // Подсказка
 
-                // Обработчик клика
                 seat.addEventListener('click', () => {
                     seat.classList.toggle('selected');
                     updateSelectedCount();
@@ -219,11 +215,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === ИСПРАВЛЕНИЕ БАГА С ПОДСЧЕТОМ ===
     function updateSelectedCount() {
-        // Ищем .seat.selected ТОЛЬКО внутри #seatsArea, чтобы не считать легенду
+        // Считаем только внутри зоны зала, чтобы не цеплять легенду
         const selectedSeats = document.querySelectorAll('#seatsArea .seat.selected');
-        
         const count = selectedSeats.length;
         const total = count * currentPrice;
         
@@ -242,13 +236,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 8. ФУНКЦИИ МОДАЛОК (ОБЩИЕ) ---
+    // --- 8. ФУНКЦИИ МОДАЛОК ---
     function openInfoModal(movie) {
         infoPoster.src = movie.poster;
-        infoTitle.textContent = movie.title;
-        infoDesc.textContent = movie.description;
+        document.getElementById('infoTitle').textContent = movie.title;
+        document.getElementById('infoDesc').textContent = movie.description;
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
-        infoTrailer.src = movie.trailer ? `https://www.youtube.com/embed/${movie.trailer}?autoplay=1` : '';
+
+        // Заполняем таблицу
+        document.getElementById('infoYear').textContent = movie.year || '-';
+        document.getElementById('infoCountry').textContent = movie.country || '-';
+        document.getElementById('infoGenre').textContent = movie.tags.join(', ');
+        document.getElementById('infoDirector').textContent = movie.director || '-';
+        document.getElementById('infoActors').textContent = movie.actors || '-';
+        document.getElementById('infoDuration').textContent = movie.duration || '-';
+        document.getElementById('infoMpaa').textContent = movie.mpaa || 'N/A';
+
+        if(movie.trailer) {
+            infoTrailer.src = `https://www.youtube.com/embed/${movie.trailer}?autoplay=1`;
+        } else {
+            infoTrailer.src = '';
+        }
+
         infoModal.style.display = 'flex';
         document.body.style.overflow = 'hidden'; 
     }
