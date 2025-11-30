@@ -1,35 +1,106 @@
 document.addEventListener('DOMContentLoaded', () => {
     const moviesContainer = document.getElementById('movies-container');
+    const dateSlider = document.getElementById('date-slider');
     const modal = document.getElementById('ticketModal');
     const closeBtn = document.querySelector('.close-btn');
     const filmNameSpan = document.getElementById('filmName');
     
-    // --- 1. ЗАГРУЗКА ФИЛЬМОВ ИЗ JSON ---
+    // Глобальные переменные
+    let allMovies = []; // Тут будем хранить загруженные фильмы
+    let selectedDate = new Date(); // По умолчанию выбрана "Сегодня"
+
+    // --- 1. ГЕНЕРАЦИЯ ДАТ (-3 ... Сегодня ... +3) ---
+    function generateDates() {
+        dateSlider.innerHTML = '';
+        const today = new Date();
+        
+        // Цикл от -3 до +3
+        for (let i = -3; i <= 3; i++) {
+            const date = new Date(today);
+            date.setDate(today.getDate() + i);
+            
+            // Форматируем дату для атрибута (YYYY-MM-DD)
+            const dateString = date.toISOString().split('T')[0];
+            
+            // Форматируем для отображения (День недели и Число)
+            const dayNumber = date.getDate();
+            const monthName = date.toLocaleDateString('ru-RU', { month: 'short' }).replace('.', ''); // "ноя", "дек"
+            
+            // Определяем подпись (Сегодня/Завтра/День недели)
+            let dayLabel = date.toLocaleDateString('ru-RU', { weekday: 'short' });
+            if (i === 0) dayLabel = 'Сегодня';
+            if (i === 1) dayLabel = 'Завтра';
+            if (i === -1) dayLabel = 'Вчера';
+
+            // Создаем HTML элемент
+            const card = document.createElement('div');
+            card.className = `date-card ${i === 0 ? 'active' : ''}`;
+            card.setAttribute('data-date', dateString);
+            card.innerHTML = `
+                <span class="day-name">${dayLabel}</span>
+                <span class="day-number">${dayNumber} ${monthName}</span>
+            `;
+
+            // Клик по дате
+            card.addEventListener('click', () => {
+                // Визуальное переключение
+                document.querySelectorAll('.date-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                
+                // Фильтрация фильмов
+                selectedDate = dateString;
+                renderMovies(selectedDate);
+            });
+
+            dateSlider.appendChild(card);
+        }
+        
+        // Устанавливаем текущую дату в формате строки для первой загрузки
+        selectedDate = today.toISOString().split('T')[0];
+    }
+
+    // --- 2. ЗАГРУЗКА И ФИЛЬТРАЦИЯ ФИЛЬМОВ ---
+    function renderMovies(dateToFilter) {
+        moviesContainer.innerHTML = '';
+        
+        // Фильтруем: есть ли выбранная дата в массиве dates у фильма?
+        const filteredMovies = allMovies.filter(movie => {
+            // Если у фильма нет поля dates, показываем его всегда (или скрываем, как решишь)
+            if (!movie.dates) return true; 
+            return movie.dates.includes(dateToFilter);
+        });
+
+        if (filteredMovies.length === 0) {
+            moviesContainer.innerHTML = '<div style="text-align:center; padding: 40px; color: #64748b;">На эту дату сеансов нет</div>';
+            return;
+        }
+
+        filteredMovies.forEach(movie => {
+            const cardHTML = createMovieCard(movie);
+            moviesContainer.insertAdjacentHTML('beforeend', cardHTML);
+        });
+        
+        // После отрисовки обновляем фильтры категорий (сбрасываем на "Все")
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+    }
+
     fetch('movies.json')
         .then(response => response.json())
         .then(movies => {
-            moviesContainer.innerHTML = ''; // Очищаем "Загрузка..."
-            
-            movies.forEach(movie => {
-                const cardHTML = createMovieCard(movie);
-                moviesContainer.insertAdjacentHTML('beforeend', cardHTML);
-            });
-
-            // После того как фильмы загрузились, запускаем логику фильтров и модалок
-            initFilters();
-            initModalLogic();
+            allMovies = movies; // Сохраняем в глобальную переменную
+            generateDates();    // Рисуем даты
+            renderMovies(selectedDate); // Рисуем фильмы на сегодня
+            initFilters();      // Включаем кнопки жанров
         })
         .catch(error => {
-            console.error('Ошибка загрузки фильмов:', error);
-            moviesContainer.innerHTML = '<p style="color:red; text-align:center;">Не удалось загрузить расписание.</p>';
+            console.error(error);
+            moviesContainer.innerHTML = '<p style="color:red; text-align:center;">Ошибка загрузки расписания.</p>';
         });
 
-    // --- 2. ФУНКЦИЯ СОЗДАНИЯ HTML КАРТОЧКИ ---
+    // --- 3. HTML ШАБЛОН КАРТОЧКИ ---
     function createMovieCard(movie) {
-        // Генерируем теги (badges)
         const tagsHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
-        
-        // Генерируем кнопки сеансов
         const sessionsHTML = movie.sessions.map(session => `
             <button class="session-btn buy-ticket-btn" data-film="${movie.title} (${session.time})">
                 <span class="session-time">${session.time}</span>
@@ -45,35 +116,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="row-info">
                     <h2 class="row-title">${movie.title}</h2>
-                    <div class="row-meta">
-                        ${tagsHTML}
-                    </div>
+                    <div class="row-meta">${tagsHTML}</div>
                     <p class="row-desc">${movie.description}</p>
                 </div>
                 <div class="row-sessions">
-                    <div class="sessions-grid">
-                        ${sessionsHTML}
-                    </div>
+                    <div class="sessions-grid">${sessionsHTML}</div>
                 </div>
             </div>
         `;
     }
 
-    // --- 3. ЛОГИКА ФИЛЬТРОВ ---
+    // --- 4. ФИЛЬТРЫ ПО КАТЕГОРИЯМ ---
     function initFilters() {
         const filterButtons = document.querySelectorAll('.filter-btn');
-        const movieRows = document.querySelectorAll('.movie-row');
-
+        
         filterButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 filterButtons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
                 const filterValue = btn.getAttribute('data-filter');
+                const rows = document.querySelectorAll('.movie-row');
 
-                movieRows.forEach(row => {
-                    const category = row.getAttribute('data-category');
-                    if (filterValue === 'all' || category === filterValue) {
+                rows.forEach(row => {
+                    if (filterValue === 'all' || row.dataset.category === filterValue) {
                         row.style.display = 'flex';
                     } else {
                         row.style.display = 'none';
@@ -83,36 +149,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 4. ЛОГИКА МОДАЛЬНОГО ОКНА (Делегирование событий) ---
-    function initModalLogic() {
-        // Используем делегирование, так как кнопки создаются динамически
-        moviesContainer.addEventListener('click', (e) => {
-            const btn = e.target.closest('.buy-ticket-btn');
-            if (btn) {
-                const filmTitle = btn.getAttribute('data-film');
-                filmNameSpan.textContent = filmTitle;
-                modal.style.display = 'flex';
-            }
-        });
-    }
-
-    // Закрытие модалки
-    closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
+    // --- 5. МОДАЛКА ---
+    moviesContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.buy-ticket-btn');
+        if (btn) {
+            filmNameSpan.textContent = btn.getAttribute('data-film');
+            modal.style.display = 'flex';
         }
     });
 
-    // --- 5. ЛОГИКА ДАТ (Визуальная) ---
-    const dateCards = document.querySelectorAll('.date-card');
-    dateCards.forEach(card => {
-        card.addEventListener('click', () => {
-            dateCards.forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-        });
+    closeBtn.addEventListener('click', () => modal.style.display = 'none');
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) modal.style.display = 'none';
     });
 });
