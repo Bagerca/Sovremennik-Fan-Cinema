@@ -325,10 +325,14 @@ main.container {
 
 /* Список фильмов */
 .schedule-list { display: flex; flex-direction: column; gap: 24px; }
+
+/* ФИКС: Карточка фильма имеет фиксированную высоту */
 .movie-row {
     display: flex; background-color: var(--card-bg); border: 1px solid var(--border-color);
     border-radius: 16px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 280px; /* <--- ФИКС ВЫСОТЫ */
 }
+
 .movie-row:hover { transform: translateY(-5px); border-color: #334155; box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5); }
 .row-poster { width: 180px; min-width: 180px; position: relative; }
 .row-poster img { width: 100%; height: 100%; object-fit: cover; }
@@ -343,7 +347,20 @@ main.container {
 .row-title { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 12px; text-transform: uppercase; line-height: 1.1; }
 .row-meta { display: flex; gap: 12px; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; align-items: center; font-weight: 600; }
 .meta-tag { background: rgba(255, 255, 255, 0.1); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
-.row-desc { font-size: 1rem; color: var(--text-muted); line-height: 1.6; max-width: 650px; }
+
+/* ФИКС: Обрезаем длинный текст описания */
+.row-desc { 
+    font-size: 1rem; 
+    color: var(--text-muted); 
+    line-height: 1.6; 
+    max-width: 650px; 
+    display: -webkit-box;
+    -webkit-line-clamp: 3;      /* Оставляем 3 строки */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;    /* Добавляем ... */
+}
+
 .row-sessions { width: 320px; min-width: 320px; padding: 32px; background: rgba(15, 23, 42, 0.5); display: flex; flex-direction: column; justify-content: center; }
 .sessions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; }
 .session-btn {
@@ -632,6 +649,11 @@ footer {
     
     .date-slider {
         justify-content: flex-start; /* На мобилке скролл слева */
+    }
+
+    /* ФИКС: На мобильных сбрасываем фиксированную высоту */
+    .movie-row {
+        height: auto; 
     }
 }
 
