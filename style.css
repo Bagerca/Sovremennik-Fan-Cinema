@@ -14,19 +14,17 @@
     --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
 }
 
-/* --- ФИКС ДЕРГАНЬЯ ЭКРАНА --- */
+/* ФИКС ДЕРГАНЬЯ ЭКРАНА (Скроллбар всегда есть) */
 html {
-    overflow-y: scroll; /* Скроллбар будет виден всегда, ширина не будет прыгать */
+    overflow-y: scroll;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     background-color: var(--bg-color);
-    
-    /* ФОН: Радиальный градиент (пятно света сверху по центру) */
+    /* ФОН: Радиальный градиент */
     background-image: radial-gradient(circle at 50% 0%, #0f172a 0%, #020617 100%);
-    
     color: var(--text-main);
     font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6;
@@ -52,7 +50,7 @@ header {
     background-color: rgba(2, 6, 23, 0.9);
     padding: 15px 0;
     border-bottom: 1px solid var(--border-color);
-    position: fixed; /* Фиксируем шапку */
+    position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
@@ -67,7 +65,7 @@ header {
     align-items: center;
 }
 
-/* --- ЛОГОТИП С ЦВЕТНЫМ ХОВЕРОМ --- */
+/* ЛОГОТИП */
 .logo-link {
     display: flex;
     align-items: center;
@@ -79,7 +77,6 @@ header {
 .logo-img { 
     height: 45px; 
     width: auto;
-    /* По умолчанию белый */
     filter: brightness(0) invert(1);
     transition: filter 0.3s ease; 
 }
@@ -90,11 +87,8 @@ header {
 }
 
 .logo-link:hover .logo-img {
-    /* При наведении становится СИНИМ (#0ea5e9) с помощью фильтров */
     filter: brightness(0) saturate(100%) invert(60%) sepia(93%) saturate(1805%) hue-rotate(164deg) brightness(95%) contrast(93%);
 }
-/* ---------------------------------- */
-
 
 /* Меню */
 .nav-links { display: flex; gap: 12px; align-items: center; }
@@ -131,7 +125,6 @@ header {
     padding: 0 40px;
 }
 
-/* ОТСТУПЫ: main.container перебивает обычный .container */
 main.container { 
     flex: 1; 
     padding: 140px 40px 80px 40px; 
@@ -158,7 +151,6 @@ main.container {
     align-items: center;
     justify-content: center;
     text-align: center;
-    /* Высота экрана (100vh) минус отступ сверху (140px) */
     min-height: calc(100vh - 140px);
     padding: 0 0 40px;
     position: relative;
@@ -203,9 +195,8 @@ main.container {
     margin-bottom: 50px;
 }
 
-/* Красная кнопка */
 .red-glow-btn {
-    background-color: #e11d48; /* Яркий красный */
+    background-color: #e11d48;
     color: #fff;
     font-size: 18px;
     font-weight: 700;
@@ -224,16 +215,16 @@ main.container {
 }
 
 /* =========================================
-   5. СТАРЫЙ БЛОК О НАС (WIDE & SPACIOUS)
+   5. СТРАНИЦА О НАС
    ========================================= */
 .about-hero-grid {
     display: grid;
     grid-template-columns: 1fr 1fr; 
     gap: 100px; 
     align-items: center; 
-    padding-top: 100px; /* Отступ сверху для второго экрана */
+    padding-top: 100px; 
     margin-top: 0;
-    border-top: 1px solid rgba(255,255,255,0.05); /* Разделитель */
+    border-top: 1px solid rgba(255,255,255,0.05);
 }
 
 .year-badge {
@@ -263,7 +254,6 @@ main.container {
 .stat-number { display: block; font-size: 48px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 8px; }
 .stat-label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
 
-/* Правая колонка */
 .about-right { display: flex; flex-direction: column; gap: 30px; }
 
 .map-preview {
@@ -305,7 +295,7 @@ main.container {
     overflow-x: auto; 
     width: 100%; 
     padding-bottom: 10px; 
-    justify-content: center; /* Центрируем даты */
+    justify-content: center; 
 }
 
 .date-card {
@@ -328,28 +318,42 @@ main.container {
 .filter-btn:hover { border-color: var(--accent-blue); color: #fff; }
 .filter-btn.active { background: #fff; color: #020617; border-color: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
 
-/* --- ИЗМЕНЕНИЕ: ОГРАНИЧЕНИЕ ШИРИНЫ СПИСКА ФИЛЬМОВ --- */
-/* Теперь ячейки не будут прилипать к краям, а будут иметь отступы */
+/* --- СПИСОК ФИЛЬМОВ (GRID LAYOUT) --- */
+
 .schedule-list { 
     display: flex; 
     flex-direction: column; 
     gap: 24px;
     
-    /* Добавляем "полуфиксированную" ширину */
-    width: 90%;         /* Ширина блока - 90% от экрана */
-    max-width: 1200px;  /* Но не шире 1200px */
-    margin: 0 auto;     /* Выравниваем по центру */
+    /* ФИКС: Ограничиваем ширину списка 80% от экрана */
+    width: 80%;         
+    max-width: 1400px; /* Чтобы на 4K мониторах не было слишком широко */
+    margin: 0 auto;    /* Центрируем блок */
 }
 
-/* ФИКС ВЫСОТЫ КАРТОЧКИ */
+/* КАРТОЧКА ФИЛЬМА - ТЕПЕРЬ НА GRID */
 .movie-row {
-    display: flex; background-color: var(--card-bg); border: 1px solid var(--border-color);
-    border-radius: 16px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 280px; /* Фиксированная высота на ПК */
+    display: grid; /* Включаем Grid вместо Flex */
+    
+    /* ТРИ КОЛОНКИ: 
+       1. Постер (180px фиксировано)
+       2. Инфо (1fr - занимает ВСЁ свободное место, но не больше)
+       3. Сеансы (320px фиксировано) 
+    */
+    grid-template-columns: 180px 1fr 320px;
+    
+    background-color: var(--card-bg); 
+    border: 1px solid var(--border-color);
+    border-radius: 16px; 
+    overflow: hidden; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 280px; /* Фиксированная высота */
 }
 
 .movie-row:hover { transform: translateY(-5px); border-color: #334155; box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5); }
-.row-poster { width: 180px; min-width: 180px; position: relative; }
+
+/* Постер */
+.row-poster { position: relative; width: 100%; height: 100%; }
 .row-poster img { width: 100%; height: 100%; object-fit: cover; }
 .age-badge {
     position: absolute; top: 10px; left: 10px; padding: 6px 10px; border-radius: 6px;
@@ -359,19 +363,20 @@ main.container {
 .age-orange { background: rgba(249, 115, 22, 0.9); }
 .age-red { background: rgba(239, 68, 68, 0.9); }
 
-/* ФИКС ШИРИНЫ ЦЕНТРАЛЬНОЙ ЧАСТИ */
+/* Инфо (Средняя колонка) */
 .row-info { 
-    flex: 1; 
     padding: 32px; 
     display: flex; 
     flex-direction: column; 
     justify-content: center; 
     border-right: 1px solid var(--border-color);
-    min-width: 0; /* ВАЖНО: Не дает блоку растягиваться из-за длинного текста */
+    
+    /* Магия Grid + min-width:0 не дает блоку растягиваться */
+    min-width: 0; 
     overflow: hidden; 
 }
 
-/* ФИКС ЗАГОЛОВКА */
+/* Заголовок */
 .row-title { 
     font-size: 2rem; 
     font-weight: 800; 
@@ -389,20 +394,29 @@ main.container {
 .row-meta { display: flex; gap: 12px; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; align-items: center; font-weight: 600; }
 .meta-tag { background: rgba(255, 255, 255, 0.1); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
 
-/* ФИКС ОПИСАНИЯ */
+/* Описание */
 .row-desc { 
     font-size: 1rem; 
     color: var(--text-muted); 
     line-height: 1.6; 
-    max-width: 650px; 
+    
+    /* Обрезаем описание (3 строки + ...) */
     display: -webkit-box;
-    -webkit-line-clamp: 3;      /* Оставляем 3 строки */
+    -webkit-line-clamp: 3;      
     -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;    /* Троеточие */
+    text-overflow: ellipsis;    
 }
 
-.row-sessions { width: 320px; min-width: 320px; padding: 32px; background: rgba(15, 23, 42, 0.5); display: flex; flex-direction: column; justify-content: center; }
+/* Сеансы (Правая колонка) */
+.row-sessions { 
+    padding: 32px; 
+    background: rgba(15, 23, 42, 0.5); 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+}
+
 .sessions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; }
 .session-btn {
     background: transparent; border: 1px solid #334155; border-radius: 8px; padding: 10px 5px;
@@ -432,237 +446,48 @@ main.container {
 /* =========================================
    7. СТИЛИ ДЛЯ ПРАВИЛ (АККОРДЕОН)
    ========================================= */
-.rules-container {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
+.rules-container { max-width: 900px; margin: 0 auto; }
 .rules-container details { 
-    background-color: var(--card-bg); 
-    margin-bottom: 20px; 
-    border-radius: 16px; 
-    border: 1px solid var(--border-color); 
-    transition: all 0.3s ease; 
-    overflow: hidden;
+    background-color: var(--card-bg); margin-bottom: 20px; border-radius: 16px; border: 1px solid var(--border-color); transition: all 0.3s ease; overflow: hidden;
 }
-
-.rules-container details:hover {
-    border-color: #334155;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-.rules-container details[open] { 
-    border-color: var(--accent-blue); 
-    background-color: rgba(15, 23, 42, 0.8);
-}
-
+.rules-container details:hover { border-color: #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.rules-container details[open] { border-color: var(--accent-blue); background-color: rgba(15, 23, 42, 0.8); }
 .rules-container summary { 
-    font-weight: 700; 
-    color: #fff; 
-    font-size: 1.2rem; 
-    padding: 25px 30px;
-    cursor: pointer; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    list-style: none; 
-    outline: none; 
+    font-weight: 700; color: #fff; font-size: 1.2rem; padding: 25px 30px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; outline: none; 
 }
-
-.rules-container summary::after { 
-    content: '+'; 
-    color: var(--accent-blue); 
-    font-size: 28px; 
-    font-weight: 300;
-    transition: transform 0.3s ease; 
-}
-
-.rules-container details[open] summary::after { 
-    transform: rotate(45deg); 
-    color: #ef4444; 
-}
-
+.rules-container summary::after { content: '+'; color: var(--accent-blue); font-size: 28px; font-weight: 300; transition: transform 0.3s ease; }
+.rules-container details[open] summary::after { transform: rotate(45deg); color: #ef4444; }
 .rules-content { 
-    padding: 0 30px 30px 30px; 
-    border-top: 1px solid rgba(255,255,255,0.05); 
-    color: var(--text-muted); 
-    font-size: 1rem;
-    line-height: 1.7;
-    animation: fadeIn 0.4s ease;
+    padding: 0 30px 30px 30px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); font-size: 1rem; line-height: 1.7; animation: fadeIn 0.4s ease;
 }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.styled-list {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
-}
-
-.styled-list li {
-    position: relative;
-    padding-left: 25px;
-    margin-bottom: 12px;
-}
-
-.styled-list li::before {
-    content: '•';
-    color: var(--accent-blue);
-    font-size: 1.5em;
-    position: absolute;
-    left: 0;
-    top: -5px;
-}
-
-.styled-list ul {
-    margin-top: 8px;
-    margin-bottom: 8px;
-    padding-left: 10px;
-}
-.styled-list ul li::before {
-    content: '-';
-    color: #64748b;
-    top: -2px;
-}
-
-.warning-list li::before {
-    color: #ef4444;
-}
-
-.legal-note {
-    max-width: 900px;
-    margin: 40px auto 0;
-    font-size: 0.85rem;
-    color: #475569;
-    text-align: center;
-    line-height: 1.5;
-    padding-top: 20px;
-    border-top: 1px solid #1e293b;
-}
-
-.rules-header {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.styled-list { list-style: none; padding: 0; margin-top: 20px; }
+.styled-list li { position: relative; padding-left: 25px; margin-bottom: 12px; }
+.styled-list li::before { content: '•'; color: var(--accent-blue); font-size: 1.5em; position: absolute; left: 0; top: -5px; }
+.styled-list ul { margin-top: 8px; margin-bottom: 8px; padding-left: 10px; }
+.styled-list ul li::before { content: '-'; color: #64748b; top: -2px; }
+.warning-list li::before { color: #ef4444; }
+.legal-note { max-width: 900px; margin: 40px auto 0; font-size: 0.85rem; color: #475569; text-align: center; line-height: 1.5; padding-top: 20px; border-top: 1px solid #1e293b; }
+.rules-header { text-align: center; max-width: 800px; margin: 0 auto; }
 
 /* =========================================
    8. ПОДВАЛ (FOOTER)
    ========================================= */
-footer {
-    background-color: #020617;
-    padding: 40px 0;
-    border-top: 1px solid #1e293b;
-    margin-top: auto;
-}
-
-.footer-container {
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 0 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; /* Чтобы на мобильном переносилось */
-    gap: 20px;
-}
-
-.footer-info {
-    text-align: left;
-}
-
-.footer-info .copyright {
-    color: #fff;
-    font-weight: 700;
-    font-size: 0.95rem;
-    margin-bottom: 4px;
-}
-
-/* Ссылка-адрес (с иконкой и ховером) */
-.address-link {
-    display: inline-flex;       
-    align-items: center;        
-    gap: 8px;                   
-    color: #64748b;             
-    font-size: 0.85rem;
-    text-decoration: none;
-    transition: color 0.3s ease;
-    margin-top: 6px;
-}
-
-.address-link svg {
-    width: 18px;
-    height: 18px;
-    color: var(--accent-blue); 
-    flex-shrink: 0;            
-}
-
-.address-link:hover {
-    color: #fff;               
-    text-decoration: underline; 
-}
-
-.address-link:hover svg {
-    transform: translateY(-2px);
-    transition: transform 0.3s ease;
-}
-
-/* Кнопки соцсетей */
-.footer-socials {
-    display: flex;
-    gap: 12px;
-}
-
-.social-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    background-color: rgba(255, 255, 255, 0.05); /* Прозрачный фон */
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.social-btn svg {
-    width: 24px;  /* Стандартный размер */
-    height: 24px;
-    display: block;
-}
-
-/* ПРАВКА ДЛЯ ВК (Ваши настройки: 40px) */
-.vk-btn svg {
-    width: 40px; 
-    height: 40px;
-    position: relative;
-    top: 1px;
-    left: -2px;
-}
-
-.social-btn svg path {
-    transition: fill 0.3s ease;
-}
-
-/* Ховер для ВК */
-.vk-btn:hover {
-    background-color: #0077FF;
-    border-color: #0077FF;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 119, 255, 0.3);
-}
-
-/* Ховер для Телеграм */
-.tg-btn:hover {
-    background-color: #229ED9;
-    border-color: #229ED9;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(34, 158, 217, 0.3);
-}
-
+footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e293b; margin-top: auto; }
+.footer-container { max-width: 1440px; margin: 0 auto; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+.footer-info { text-align: left; }
+.footer-info .copyright { color: #fff; font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+.address-link { display: inline-flex; align-items: center; gap: 8px; color: #64748b; font-size: 0.85rem; text-decoration: none; transition: color 0.3s ease; margin-top: 6px; }
+.address-link svg { width: 18px; height: 18px; color: var(--accent-blue); flex-shrink: 0; }
+.address-link:hover { color: #fff; text-decoration: underline; }
+.address-link:hover svg { transform: translateY(-2px); transition: transform 0.3s ease; }
+.footer-socials { display: flex; gap: 12px; }
+.social-btn { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background-color: rgba(255, 255, 255, 0.05); border-radius: 50%; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.1); }
+.social-btn svg { width: 24px; height: 24px; display: block; }
+.vk-btn svg { width: 40px; height: 40px; position: relative; top: 1px; left: -2px; }
+.social-btn svg path { transition: fill 0.3s ease; }
+.vk-btn:hover { background-color: #0077FF; border-color: #0077FF; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 119, 255, 0.3); }
+.tg-btn:hover { background-color: #229ED9; border-color: #229ED9; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(34, 158, 217, 0.3); }
 
 /* =========================================
    9. МОДАЛЬНОЕ ОКНО И АДАПТИВ
@@ -678,40 +503,29 @@ footer {
 @media (max-width: 900px) {
     .header-fluid { padding: 0 20px; flex-direction: column; gap: 15px; }
     .page-title { font-size: 2.2rem; }
-    .intro-title { font-size: 3rem; } /* Уменьшаем новый заголовок */
+    .intro-title { font-size: 3rem; }
     .hero-title { font-size: 2.2rem; }
-    .about-hero-grid, .about-grid, .movie-row { flex-direction: column; }
+    .about-hero-grid, .about-grid { flex-direction: column; }
     .row-info { border-right: none; border-bottom: 1px solid var(--border-color); }
     .row-poster { width: 100%; height: 300px; }
     .row-sessions { width: 100%; }
     .sessions-grid { grid-template-columns: repeat(3, 1fr); }
     .stats-container { flex-direction: column; }
     .intro-section { min-height: calc(100vh - 140px); padding: 40px 0 80px; }
+    .date-slider { justify-content: flex-start; }
     
-    .date-slider {
-        justify-content: flex-start; /* На мобилке скролл слева */
-    }
-
-    /* ФИКС: На мобильных сбрасываем фиксированную высоту и ширину */
+    /* ФИКС МОБИЛЬНОГО: Выключаем Grid, включаем столбик */
     .movie-row {
+        display: flex;
+        flex-direction: column;
         height: auto; 
     }
     
     /* На мобильных список фильмов на всю ширину */
-    .schedule-list {
-        width: 100%;
-        max-width: 100%;
-    }
+    .schedule-list { width: 100%; max-width: 100%; }
 }
 
 @media (max-width: 768px) {
-    .footer-container {
-        flex-direction: column;
-        text-align: center;
-        gap: 25px;
-    }
-    
-    .footer-info {
-        text-align: center;
-    }
+    .footer-container { flex-direction: column; text-align: center; gap: 25px; }
+    .footer-info { text-align: center; }
 }
