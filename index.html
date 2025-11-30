@@ -81,7 +81,7 @@
         </div>
     </main>
 
-    <!-- 1. Модальное окно ПОКУПКИ -->
+    <!-- 1. Модальное окно ПОКУПКИ (Схема зала) -->
     <div id="ticketModal" class="modal">
         <div class="modal-content hall-modal-content">
             <span class="close-btn">&times;</span>
@@ -110,7 +110,7 @@
         </div>
     </div>
 
-    <!-- 2. Модальное окно О ФИЛЬМЕ (3 КОЛОНКИ: Постер | Инфо | Трейлер) -->
+    <!-- 2. Модальное окно О ФИЛЬМЕ (3 КОЛОНКИ: Визуал | Инфо | Трейлер) -->
     <div id="movieInfoModal" class="modal">
         <div class="modal-content info-modal-content">
             <span class="close-btn info-close-btn" style="z-index: 20;">&times;</span>
@@ -118,16 +118,15 @@
             <div class="info-modal-body">
                 <div class="info-layout">
                     
-                    <!-- 1. ПОСТЕР (Слева) -->
-                    <div class="info-col-poster">
+                    <!-- 1. ЛЕВАЯ КОЛОНКА: Постер + Название + Жанры -->
+                    <div class="info-col-visual">
                         <img id="infoPoster" src="" alt="Poster">
+                        <h2 id="infoTitle" class="info-main-title"></h2>
+                        <div id="infoTags" class="row-meta centered-meta"></div>
                     </div>
 
-                    <!-- 2. ИНФОРМАЦИЯ (Центр) -->
-                    <div class="info-col-text">
-                        <h2 id="infoTitle" class="info-main-title"></h2>
-                        <div id="infoTags" class="row-meta" style="margin-bottom: 20px; justify-content: flex-start;"></div>
-                        
+                    <!-- 2. ЦЕНТРАЛЬНАЯ КОЛОНКА: Описание и Таблица -->
+                    <div class="info-col-data">
                         <div class="info-specs">
                             <div class="spec-row">
                                 <span class="spec-label">Год:</span>
@@ -158,12 +157,12 @@
                         <p id="infoDesc" class="info-description"></p>
                     </div>
 
-                    <!-- 3. ТРЕЙЛЕР (Справа) -->
+                    <!-- 3. ПРАВАЯ КОЛОНКА: Трейлер (Увеличен) -->
                     <div class="info-col-trailer">
-                        <h3 class="trailer-title">Трейлер</h3>
                         <div class="video-responsive">
                             <iframe id="infoTrailer" width="560" height="315" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                         </div>
+                        <h3 class="trailer-label">Официальный трейлер</h3>
                     </div>
 
                 </div>
