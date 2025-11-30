@@ -1,0 +1,136 @@
+/* =========================================
+   LIBRARY PAGE STYLES
+   ========================================= */
+
+/* Заголовок и поиск в одну линию (на десктопе) */
+.library-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Поле поиска */
+.search-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 15px 20px 15px 50px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-container input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+}
+
+.search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+}
+
+/* СЕТКА ФИЛЬМОВ (Grid) */
+.library-grid {
+    display: grid;
+    /* Адаптивная сетка: колонки мин. 220px */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 30px;
+}
+
+/* Карточка фильма в библиотеке */
+.lib-card {
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.lib-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-blue);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+.lib-poster {
+    width: 100%;
+    aspect-ratio: 2/3; /* Стандартная пропорция постера */
+    object-fit: cover;
+}
+
+.lib-info {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.lib-title {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.lib-meta {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+
+.lib-rating {
+    margin-top: auto;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--accent-blue);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.lib-age {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .library-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .search-container {
+        max-width: 100%;
+    }
+}
