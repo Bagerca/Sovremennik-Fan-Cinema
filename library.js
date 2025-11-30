@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allMoviesLibrary = []; 
     
-    // ИЗМЕНЕНИЕ: Используем Set для хранения множества выбранных жанров
+    // Используем Set для хранения множества выбранных жанров
     let selectedGenres = new Set(); 
 
     // 1. ЗАГРУЗКА ДАННЫХ
@@ -111,25 +111,22 @@ document.addEventListener('DOMContentLoaded', () => {
     function applyFiltersAndSort() {
         let result = [...allMoviesLibrary]; 
 
-        // А. Поиск
+        // А. Поиск (по названию или режиссеру)
         const searchTerm = searchInput.value.toLowerCase().trim();
         if (searchTerm) {
             result = result.filter(movie => {
                 return movie.title.toLowerCase().includes(searchTerm) || 
-                       movie.director.toLowerCase().includes(searchTerm) ||
-                       movie.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                       movie.director.toLowerCase().includes(searchTerm);
             });
         }
 
-        // Б. Мульти-фильтр по жанрам
+        // Б. Мульти-фильтр по жанрам (ЛОГИКА "ИЛИ")
         if (selectedGenres.size > 0) {
             result = result.filter(movie => {
-                // Проверяем: фильм должен содержать ВСЕ выбранные теги (логика AND)
-                // Если хотите логику OR (хотя бы один), замените every на some
                 const movieTags = movie.tags || [];
                 
-                // Превращаем Set выбранных жанров в массив и проверяем
-                return Array.from(selectedGenres).every(selectedGenre => movieTags.includes(selectedGenre));
+                // .some() вернет true, если ХОТЯ БЫ ОДИН выбранный жанр есть в тегах фильма
+                return Array.from(selectedGenres).some(selectedGenre => movieTags.includes(selectedGenre));
             });
         }
 
