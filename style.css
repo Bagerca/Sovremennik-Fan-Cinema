@@ -184,21 +184,23 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
 .age-red { background: rgba(239, 68, 68, 0.9); }
 
 /* Информация (Средняя часть - Резиновая) */
+/* --- UPDATED: Центрирование и поднятие текста вверх --- */
 .row-info { 
     flex: 1; 
-    padding: 20px 25px; /* Уменьшили отступы, чтобы контент влезал */
+    padding: 30px 25px 20px; /* Отступы сверху, чтобы поднять текст */
     display: flex; 
     flex-direction: column; 
-    justify-content: center; 
+    justify-content: flex-start; /* Прижимаем контент к верху */
     min-width: 0; 
     overflow: hidden; 
+    text-align: center; /* Центрируем заголовок и описание */
 }
 
 .row-title { 
-    font-size: 1.8rem; /* Уменьшили шрифт */
+    font-size: 1.8rem; 
     font-weight: 900; 
     color: #fff; 
-    margin-bottom: 10px; 
+    margin-bottom: 12px; 
     text-transform: uppercase; 
     line-height: 1.2; 
     
@@ -211,9 +213,16 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
     padding-bottom: 2px;
 }
 
+/* --- UPDATED: Центрирование жанров --- */
 .row-meta { 
-    display: flex; gap: 10px; font-size: 0.85rem; color: var(--text-muted); 
-    margin-bottom: 15px; align-items: center; font-weight: 600; 
+    display: flex; 
+    gap: 10px; 
+    font-size: 0.85rem; 
+    color: var(--text-muted); 
+    margin-bottom: 20px; 
+    align-items: center; 
+    font-weight: 600;
+    justify-content: center; /* Центрирование тегов */
 }
 .meta-tag { background: rgba(255, 255, 255, 0.1); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
 
