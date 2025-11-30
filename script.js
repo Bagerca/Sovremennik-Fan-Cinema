@@ -192,23 +192,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 7. ЛОГИКА ЗАЛА ---
+// --- 7. ЛОГИКА ЗАЛА (ОБНОВЛЕННАЯ: 16 рядов, 398 мест) ---
     function renderHall() {
         const seatsArea = document.getElementById('seatsArea');
         seatsArea.innerHTML = ''; 
 
-        const rows = 6; 
-        const seatsPerRow = 8; 
+        const totalSeats = 398; // Точное количество мест
+        const rows = 16;        // Количество рядов
+        const seatsPerRow = 25; // Мест в ряду (примерно 398 / 16)
+        
+        let seatsCreated = 0;
 
         for (let i = 0; i < rows; i++) {
             const rowDiv = document.createElement('div');
             rowDiv.className = 'seat-row';
+            
+            // Добавляем номер ряда (опционально, для красоты подсказок)
+            rowDiv.setAttribute('title', `Ряд ${i + 1}`);
 
             for (let j = 0; j < seatsPerRow; j++) {
+                // Если мы уже создали 398 мест, прерываемся
+                if (seatsCreated >= totalSeats) break;
+
                 const seat = document.createElement('div');
                 seat.className = 'seat';
                 
-                // Эмуляция занятых мест (20% вероятность)
+                // Случайная занятость (20% мест уже куплено)
                 if (Math.random() < 0.2) {
                     seat.classList.add('occupied');
                 } else {
@@ -217,7 +226,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         updateSelectedCount();
                     });
                 }
+                
                 rowDiv.appendChild(seat);
+                seatsCreated++;
             }
             seatsArea.appendChild(rowDiv);
         }
