@@ -30,7 +30,9 @@
             <h1 class="page-title">Библиотека фильмов</h1>
         </div>
 
+        <!-- ПАНЕЛЬ ИНСТРУМЕНТОВ -->
         <div class="library-toolbar">
+            
             <!-- Поиск -->
             <div class="search-container">
                 <input type="text" id="searchInput" placeholder="Поиск фильма...">
@@ -50,6 +52,7 @@
                         <option value="horror">Ужасы и Мистика</option>
                     </select>
                 </div>
+
                 <div class="select-wrapper">
                     <select id="sortSelect">
                         <option value="newest">Сначала новые</option>
@@ -61,10 +64,13 @@
             </div>
         </div>
 
-        <div class="library-grid" id="libraryContainer"></div>
+        <!-- СЕТКА ФИЛЬМОВ -->
+        <div class="library-grid" id="libraryContainer">
+            <!-- JS заполнит это -->
+        </div>
     </main>
 
-    <!-- ИСПРАВЛЕННОЕ МОДАЛЬНОЕ ОКНО (3 КОЛОНКИ) -->
+    <!-- МОДАЛЬНОЕ ОКНО О ФИЛЬМЕ (3 КОЛОНКИ) -->
     <div id="movieInfoModal" class="modal">
         <div class="modal-content info-modal-content">
             <span class="close-btn info-close-btn" style="z-index: 20;">&times;</span>
@@ -90,13 +96,32 @@
                     <!-- 3. ПРАВАЯ КОЛОНКА: Информация -->
                     <div class="info-col-data">
                         <div class="info-specs">
-                            <div class="spec-row"><span class="spec-label">Год:</span><span class="spec-value" id="infoYear"></span></div>
-                            <div class="spec-row"><span class="spec-label">Страна:</span><span class="spec-value" id="infoCountry"></span></div>
-                            <div class="spec-row"><span class="spec-label">Жанр:</span><span class="spec-value" id="infoGenre"></span></div>
-                            <div class="spec-row"><span class="spec-label">Режиссер:</span><span class="spec-value" id="infoDirector"></span></div>
-                            <div class="spec-row"><span class="spec-label">Время:</span><span class="spec-value" id="infoDuration"></span></div>
-                            <div class="spec-row"><span class="spec-label">MPAA:</span><span class="spec-value spec-badge" id="infoMpaa"></span></div>
+                            <div class="spec-row">
+                                <span class="spec-label">Год:</span>
+                                <span class="spec-value" id="infoYear"></span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-label">Страна:</span>
+                                <span class="spec-value" id="infoCountry"></span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-label">Жанр:</span>
+                                <span class="spec-value" id="infoGenre"></span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-label">Режиссер:</span>
+                                <span class="spec-value" id="infoDirector"></span>
+                            </div>
+                             <div class="spec-row">
+                                <span class="spec-label">Время:</span>
+                                <span class="spec-value" id="infoDuration"></span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-label">MPAA:</span>
+                                <span class="spec-value spec-badge" id="infoMpaa"></span>
+                            </div>
                         </div>
+
                         <p id="infoDesc" class="info-description"></p>
                     </div>
 
