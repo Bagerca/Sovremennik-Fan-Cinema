@@ -70,24 +70,28 @@ header {
     align-items: center;
     padding: 5px 0;
     text-decoration: none;
-    
-    /* 1. БЕЛЫЙ ЦВЕТ ПО УМОЛЧАНИЮ */
-    color: #ffffff; 
-    
-    transition: color 0.3s ease, transform 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .logo-img {
     height: 45px;
     width: auto;
-    /* transition здесь не нужен, SVG красится через color родителя */
+    
+    /* 1. ПРЕВРАЩАЕМ ЧЕРНЫЙ В БЕЛЫЙ */
+    /* Поскольку svg по умолчанию черный, инверсия делает его белым */
+    filter: invert(1) brightness(100%);
+    
+    transition: filter 0.3s ease;
 }
 
-/* 2. СИНИЙ НЕОН ПРИ НАВЕДЕНИИ */
+/* 2. ПРИ НАВЕДЕНИИ - СИНИЙ НЕОН */
 .logo-link:hover {
-    color: var(--accent-blue);
     transform: scale(1.02);
-    filter: drop-shadow(0 0 8px rgba(14, 165, 233, 0.8));
+}
+
+.logo-link:hover .logo-img {
+    /* Эта магическая формула превращает черный цвет в твой синий #0ea5e9 */
+    filter: invert(61%) sepia(65%) saturate(5451%) hue-rotate(168deg) brightness(95%) contrast(93%) drop-shadow(0 0 5px rgba(14, 165, 233, 0.8));
 }
 
 /* МЕНЮ НАВИГАЦИИ */
