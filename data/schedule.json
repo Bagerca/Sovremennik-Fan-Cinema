@@ -1,0 +1,25 @@
+[
+  {
+    "date": "30.11",
+    "weekday": "Воскресенье",
+    "sessions": [
+      { "movieId": 4, "time": "10:45", "price": 330, "format": "2D" },
+      { "movieId": 3, "time": "14:30", "price": 430, "format": "2D" },
+      { "movieId": 1, "time": "19:35", "price": 480, "format": "2D" },
+      { "movieId": 5, "time": "21:50", "price": 430, "format": "2D" }
+    ]
+  },
+  {
+    "date": "01.12",
+    "weekday": "Понедельник",
+    "sessions": [
+      { "movieId": 4, "time": "11:00", "price": 250, "format": "2D" },
+      { "movieId": 1, "time": "18:00", "price": 350, "format": "2D" }
+    ]
+  },
+  {
+    "date": "02.12",
+    "weekday": "Вторник",
+    "sessions": []
+  }
+]
