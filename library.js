@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoTags = document.getElementById('infoTags');
     const infoTrailer = document.getElementById('infoTrailer');
     
+    // Элементы таблицы информации в модальном окне
     const infoYear = document.getElementById('infoYear');
     const infoCountry = document.getElementById('infoCountry');
     const infoGenre = document.getElementById('infoGenre');
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => console.error('Ошибка:', error));
 
-    // 2. ГЕНЕРАЦИЯ КНОПОК
+    // 2. ГЕНЕРАЦИЯ КНОПОК ЖАНРОВ
     function generateGenreButtons(movies) {
         const allTags = new Set();
         movies.forEach(movie => {
@@ -61,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         genresContainer.appendChild(allBtn);
 
-        // Остальные кнопки
+        // Остальные кнопки жанров
         sortedTags.forEach(tag => {
             const btn = document.createElement('button');
             btn.className = 'genre-btn';
@@ -84,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Функция обновления внешнего вида кнопок
+    // Функция обновления внешнего вида кнопок (подсветка активных)
     function updateButtonsState() {
         const allBtn = genresContainer.querySelector('[data-genre="all"]');
         const genreBtns = genresContainer.querySelectorAll('[data-genre]:not([data-genre="all"])');
@@ -121,11 +122,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Б. Мульти-фильтр по жанрам (ЛОГИКА "ИЛИ")
+        // Если выбран хотя бы один жанр, показываем фильмы, где есть ХОТЯ БЫ ОДИН из выбранных
         if (selectedGenres.size > 0) {
             result = result.filter(movie => {
                 const movieTags = movie.tags || [];
-                
-                // .some() вернет true, если ХОТЯ БЫ ОДИН выбранный жанр есть в тегах фильма
                 return Array.from(selectedGenres).some(selectedGenre => movieTags.includes(selectedGenre));
             });
         }
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderLibrary(result);
     }
 
-    // 4. РЕНДЕР
+    // 4. РЕНДЕР КАРТОЧЕК
     function renderLibrary(movies) {
         libraryContainer.innerHTML = '';
 
@@ -159,7 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
         movies.forEach(movie => {
             const card = document.createElement('div');
             card.className = 'lib-card';
-            const displayTags = movie.tags ? movie.tags.slice(0, 2).join(', ') : '';
+            
+            // Показываем все теги через запятую (без обрезки)
+            const displayTags = movie.tags ? movie.tags.join(', ') : '';
 
             card.innerHTML = `
                 <span class="lib-age ${movie.ageClass}">${movie.age}</span>
@@ -167,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="lib-info">
                     <h3 class="lib-title">${movie.title}</h3>
                     <div class="lib-meta">${movie.year} • ${movie.country}</div>
-                    <div class="lib-meta" style="font-size: 0.85em; color: var(--accent-blue); font-weight: 600;">${displayTags}</div>
+                    <div class="lib-meta lib-tags-text">${displayTags}</div>
                 </div>
             `;
             card.addEventListener('click', () => openInfoModal(movie));
@@ -175,15 +177,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Слушатели
+    // Слушатели событий
     searchInput.addEventListener('input', applyFiltersAndSort);
     sortSelect.addEventListener('change', applyFiltersAndSort);
 
-    // Модалка
+    // 5. МОДАЛЬНОЕ ОКНО
     function openInfoModal(movie) {
         infoPoster.src = movie.poster;
         infoTitle.textContent = movie.title;
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
+        
         infoDesc.textContent = movie.description;
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
