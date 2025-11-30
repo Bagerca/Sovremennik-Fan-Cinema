@@ -2,12 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const moviesContainer = document.getElementById('movies-container');
     const dateSlider = document.getElementById('date-slider');
     
-    // Модалка покупки
+    // Модальные окна
     const ticketModal = document.getElementById('ticketModal');
     const closeTicketBtn = document.querySelector('.close-btn');
     const filmNameSpan = document.getElementById('filmName');
     
-    // Модалка инфо
     const infoModal = document.getElementById('movieInfoModal');
     const closeInfoBtn = document.querySelector('.info-close-btn');
     const infoPoster = document.getElementById('infoPoster');
@@ -18,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let allMovies = []; 
     let selectedDate = new Date(); 
-    let currentPrice = 0; // Для подсчета стоимости
+    let currentPrice = 0; 
 
     // --- 1. ГЕНЕРАЦИЯ ДАТ ---
     function generateDates() {
@@ -64,10 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             allMovies = data.schedule.map(item => {
                 const movieInfo = data.library[item.movieId];
-                return {
-                    ...item,       
-                    ...movieInfo   
-                };
+                return { ...item, ...movieInfo };
             });
 
             generateDates();    
@@ -82,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 3. РЕНДЕР КАРТОЧЕК ---
     function renderMovies(dateToFilter) {
         moviesContainer.innerHTML = '';
-        
         const filteredMovies = allMovies.filter(movie => {
             if (!movie.dates) return true; 
             return movie.dates.includes(dateToFilter);
@@ -94,8 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         filteredMovies.forEach(movie => {
-            const cardHTML = createMovieCard(movie);
-            moviesContainer.insertAdjacentHTML('beforeend', cardHTML);
+            moviesContainer.insertAdjacentHTML('beforeend', createMovieCard(movie));
         });
         
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -135,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span style="font-size: 0.8rem; color: var(--accent-blue); margin-top: 15px; font-weight:700;">ПОДРОБНЕЕ И ТРЕЙЛЕР →</span>
                     </div>
                 </div>
-
                 <div class="row-sessions">
                     <div class="sessions-grid">${sessionsHTML}</div>
                 </div>
@@ -151,21 +144,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 filterButtons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 const filterValue = btn.getAttribute('data-filter');
-                const rows = document.querySelectorAll('.movie-row');
-                rows.forEach(row => {
-                    if (filterValue === 'all' || row.dataset.category === filterValue) {
-                        row.style.display = 'flex'; 
-                    } else {
-                        row.style.display = 'none';
-                    }
+                document.querySelectorAll('.movie-row').forEach(row => {
+                    row.style.display = (filterValue === 'all' || row.dataset.category === filterValue) ? 'flex' : 'none';
                 });
             });
         });
     }
 
-    // --- 6. ОБРАБОТКА КЛИКОВ (ЗАЛ И ИНФО) ---
+    // --- 6. ОБРАБОТКА КЛИКОВ (ОСНОВНАЯ ЛОГИКА) ---
     moviesContainer.addEventListener('click', (e) => {
-        
         // 1. КУПИТЬ БИЛЕТ
         const buyBtn = e.target.closest('.buy-ticket-btn');
         if (buyBtn) {
@@ -175,10 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             filmNameSpan.innerHTML = `${title} <span style="font-weight:400; color:#94a3b8;">(${time})</span>`;
             
-            // Рендерим пустой зал
             renderHall();
-
-            // Сбрасываем счетчики на 0
+            // Явно сбрасываем текст цены
             document.getElementById('count').innerText = '0';
             document.getElementById('total').innerText = '0';
             
@@ -187,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 2. ИНФОРМАЦИЯ О ФИЛЬМЕ
+        // 2. ИНФО О ФИЛЬМЕ
         const infoBlock = e.target.closest('.movie-primary-content');
         if (infoBlock) {
             const id = infoBlock.getAttribute('data-movieid');
@@ -196,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 7. ЛОГИКА ЗАЛА (РОВНО 398 МЕСТ, 16 РЯДОВ) ---
+    // --- 7. ЛОГИКА ЗАЛА (ИСПРАВЛЕНА) ---
     function renderHall() {
         const seatsArea = document.getElementById('seatsArea');
         seatsArea.innerHTML = ''; 
@@ -210,7 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < rows; i++) {
             const rowDiv = document.createElement('div');
             rowDiv.className = 'seat-row';
-            rowDiv.setAttribute('title', `Ряд ${i + 1}`);
 
             for (let j = 0; j < seatsPerRow; j++) {
                 if (seatsCreated >= totalSeats) break;
@@ -218,8 +202,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const seat = document.createElement('div');
                 seat.className = 'seat';
                 
-                // Все места свободны (без рандома)
-                
+                // === НОВОЕ: Добавляем подсказку (Ряд, Место) ===
+                // i + 1 = номер ряда, j + 1 = номер места
+                seat.title = `Ряд ${i + 1}, Место ${j + 1}`;
+
+                // Обработчик клика
                 seat.addEventListener('click', () => {
                     seat.classList.toggle('selected');
                     updateSelectedCount();
@@ -232,10 +219,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // === ИСПРАВЛЕНИЕ БАГА С ПОДСЧЕТОМ ===
     function updateSelectedCount() {
-        const selectedSeats = document.querySelectorAll('.seat.selected');
+        // Ищем .seat.selected ТОЛЬКО внутри #seatsArea, чтобы не считать легенду
+        const selectedSeats = document.querySelectorAll('#seatsArea .seat.selected');
+        
         const count = selectedSeats.length;
         const total = count * currentPrice;
+        
         document.getElementById('count').innerText = count;
         document.getElementById('total').innerText = total;
     }
@@ -251,18 +242,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
-    // --- 8. ФУНКЦИИ МОДАЛОК ---
+    // --- 8. ФУНКЦИИ МОДАЛОК (ОБЩИЕ) ---
     function openInfoModal(movie) {
         infoPoster.src = movie.poster;
         infoTitle.textContent = movie.title;
         infoDesc.textContent = movie.description;
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
-        if(movie.trailer) {
-            infoTrailer.src = `https://www.youtube.com/embed/${movie.trailer}?autoplay=1`;
-        } else {
-            infoTrailer.src = '';
-        }
+        infoTrailer.src = movie.trailer ? `https://www.youtube.com/embed/${movie.trailer}?autoplay=1` : '';
         infoModal.style.display = 'flex';
         document.body.style.overflow = 'hidden'; 
     }
@@ -273,7 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     closeInfoBtn.addEventListener('click', closeInfo);
-
     function closeInfo() {
         infoModal.style.display = 'none';
         infoTrailer.src = ''; 
@@ -285,8 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ticketModal.style.display = 'none';
             document.body.style.overflow = '';
         }
-        if (e.target === infoModal) {
-            closeInfo();
-        }
+        if (e.target === infoModal) closeInfo();
     });
 });
