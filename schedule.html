@@ -1,103 +1,90 @@
-<!-- SCHEDULE SECTION -->
-<section id="schedule" class="py-24 bg-card border-t border-white/5 min-h-screen">
-    <div class="container mx-auto px-4 md:px-6" x-data="scheduleData">
-        
-        <div class="text-center mb-10">
-            <h2 class="text-4xl font-bold mb-2">Расписание сеансов</h2>
-            <p class="text-gray-400">Выберите дату, чтобы увидеть список фильмов</p>
-        </div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- ... ТЕ ЖЕ МЕТА ТЕГИ И СКРИПТЫ ЧТО В INDEX.HTML ... -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание | Современник</title>
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { dark: '#020617', card: '#0f172a', brand: { DEFAULT: '#0ea5e9', red: '#D30018' } }, fontFamily: { sans: ['Inter', 'sans-serif'] } } } }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="script.js"></script>
+</head>
+<body class="bg-dark text-white font-sans antialiased flex flex-col min-h-screen" x-data>
 
-        <!-- 1. ТАБЫ ДАТ (Как на скрине: Черные овалы, активный белый) -->
-        <div class="flex flex-wrap justify-center gap-2 mb-8 select-none">
+    <!-- HEADER (Копия из index.html) -->
+    <header class="fixed top-0 w-full z-50 bg-dark/90 backdrop-blur border-b border-white/10">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <svg class="h-10 w-auto text-white group-hover:text-brand transition" viewBox="0 0 380 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="currentColor" style="font-family: 'Arial Black'; font-weight: 900; font-style: italic;"><text x="0" y="22" font-size="19" letter-spacing="1">КИНОТЕАТР</text><text x="0" y="60" font-size="36" letter-spacing="-1.5">СОВРЕМЕННИК</text></g>
+                    <g transform="translate(295, -2)" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="16" cy="10" r="6"/><circle cx="36" cy="8" r="6"/><rect x="8" y="24" width="36" height="22" rx="2"/><path d="M8 35 L2 35"/><path d="M44 30 L54 24 V46 L44 40"/><path d="M16 50 H36 M18 55 H34 M20 60 H32 M24 65 H28"/></g>
+                </svg>
+            </a>
+            <nav class="hidden lg:flex gap-8 uppercase font-bold text-sm tracking-wider">
+                <a href="about.html" class="hover:text-brand transition">О нас</a>
+                <a href="schedule.html" class="text-brand transition">Расписание</a>
+                <a href="rules.html" class="hover:text-brand transition">Правила</a>
+            </nav>
+            <a href="#" class="hidden lg:block bg-brand-red px-6 py-2 rounded-full font-bold text-sm hover:bg-red-700 transition">Купить билет</a>
+            <button @click="$store.ui.toggleMenu()" class="lg:hidden"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+        </div>
+        <div x-show="$store.ui.mobileMenuOpen" class="lg:hidden bg-card border-t border-white/10 p-6 flex flex-col gap-4 text-center font-bold">
+            <a href="about.html">О нас</a><a href="schedule.html">Расписание</a><a href="rules.html">Правила</a>
+        </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="flex-grow pt-32 pb-20 container mx-auto px-4" x-data="schedulePage">
+        <h1 class="text-4xl font-bold text-center mb-10">Афиша и Билеты</h1>
+
+        <!-- Табы дней -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8">
             <template x-for="(day, index) in days" :key="index">
-                <div 
-                    @click="activeDay = index"
-                    class="cursor-pointer border-2 border-white px-6 py-2 rounded-full text-center min-w-[140px] transition-all duration-200"
-                    :class="activeDay === index ? 'bg-white text-black font-bold scale-105 shadow-[0_0_15px_rgba(255,255,255,0.5)]' : 'bg-black text-white hover:bg-gray-900'"
-                >
-                    <div class="text-xs uppercase opacity-80" x-text="day.weekday"></div>
+                <div @click="selectDay(index)" 
+                     class="cursor-pointer border-2 px-6 py-2 rounded-full text-center min-w-[140px] transition-all"
+                     :class="activeDay === index ? 'bg-white text-black border-white font-bold' : 'border-gray-600 text-gray-400 hover:border-white'">
+                    <div class="text-xs uppercase" x-text="day.weekday"></div>
                     <div class="text-lg font-bold" x-text="day.date"></div>
                 </div>
             </template>
         </div>
 
-        <!-- 2. ТАБЛИЦА РАСПИСАНИЯ (Стиль: Красный хедер, полосатые строки) -->
-        <div class="overflow-hidden rounded-xl shadow-2xl max-w-5xl mx-auto font-sans">
-            
-            <!-- Хедер таблицы (Красный) -->
-            <div class="bg-[#D30018] text-white px-6 py-4 flex justify-between font-bold text-lg uppercase tracking-wider">
-                <div class="w-24">Сеанс</div>
-                <div class="flex-1">Фильм</div>
-                <div class="w-16 text-center">Возр.</div>
-                <div class="w-24 text-right">Цена</div>
+        <!-- Таблица -->
+        <div class="bg-card rounded-xl overflow-hidden shadow-2xl max-w-5xl mx-auto">
+            <div class="bg-brand-red text-white px-6 py-4 flex justify-between font-bold text-lg uppercase">
+                <div class="w-24">Время</div><div class="flex-1">Фильм</div><div class="w-24 text-right">Цена</div>
             </div>
-
-            <!-- Список фильмов для выбранного дня -->
-            <div class="flex flex-col">
-                <template x-for="(movie, idx) in days[activeDay].movies" :key="idx">
-                    <div class="flex flex-col md:flex-row items-start md:items-center px-6 py-5 border-b border-gray-700/50 transition hover:brightness-110 group cursor-pointer"
-                         :class="idx % 2 === 0 ? 'bg-[#222327]' : 'bg-[#2D2E33]'">
-                        
-                        <!-- Время -->
-                        <div class="w-full md:w-24 text-2xl font-bold text-white mb-2 md:mb-0 group-hover:text-[#D30018] transition-colors" x-text="movie.time"></div>
-                        
-                        <!-- Название -->
-                        <div class="flex-1 pr-4">
-                            <div class="text-lg font-bold text-white mb-1" x-text="movie.title"></div>
-                            <div class="text-xs text-gray-400 font-mono uppercase border border-gray-600 rounded px-2 py-0.5 inline-block" x-text="movie.format"></div>
+            
+            <div>
+                <template x-for="movie in days[activeDay].movies">
+                    <div class="flex items-center px-6 py-5 border-b border-white/5 hover:bg-white/5 cursor-pointer transition group">
+                        <div class="w-24 text-2xl font-bold group-hover:text-brand-red" x-text="movie.time"></div>
+                        <div class="flex-1">
+                            <div class="font-bold text-lg" x-text="movie.title"></div>
+                            <div class="flex gap-2 mt-1">
+                                <span class="text-xs border border-gray-600 px-1 rounded text-gray-400" x-text="movie.format"></span>
+                                <span class="text-xs border border-gray-600 px-1 rounded text-gray-400" x-text="movie.age"></span>
+                            </div>
                         </div>
-
-                        <!-- Правая часть (Возраст + Цена + Кнопка моб) -->
-                        <div class="flex w-full md:w-auto justify-between items-center mt-3 md:mt-0 gap-6">
-                            <div class="w-16 text-center text-gray-300 font-bold text-sm" x-text="movie.age"></div>
-                            <div class="w-24 text-right text-xl font-bold text-white" x-text="movie.price"></div>
-                        </div>
+                        <div class="w-24 text-right font-bold text-xl" x-text="movie.price"></div>
                     </div>
                 </template>
-                
-                <!-- Если нет сеансов -->
-                <div x-show="days[activeDay].movies.length === 0" class="p-10 text-center text-gray-500 bg-[#222327]">
-                    На этот день расписание еще формируется
-                </div>
+                <div x-show="days[activeDay].movies.length === 0" class="p-10 text-center text-gray-500">Нет сеансов</div>
             </div>
             
-            <!-- Кнопка "Купить" внизу -->
-            <div class="bg-[#D30018] p-4 text-center hover:bg-[#b00014] transition-colors cursor-pointer">
-                <span class="text-white font-bold uppercase tracking-widest text-lg">Купить билеты онлайн</span>
-            </div>
+            <div class="bg-brand-red p-4 text-center font-bold uppercase cursor-pointer hover:bg-red-700 transition">Купить онлайн</div>
         </div>
-    </div>
+    </main>
 
-    <!-- ДАННЫЕ ДЛЯ РАСПИСАНИЯ (ALPINE.JS) -->
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('scheduleData', () => ({
-                activeDay: 0,
-                days: [
-                    {
-                        weekday: 'Воскресенье',
-                        date: '30 ноября',
-                        movies: [
-                            { time: '10:45', title: 'Стич-Хэд. Хранитель монстров', format: '2D', age: '6+', price: '330₽' },
-                            { time: '12:35', title: 'Яга на нашу голову', format: '2D', age: '6+', price: '430₽' },
-                            { time: '14:30', title: 'Есть только МиГ', format: '2D', age: '12+', price: '430₽' },
-                            { time: '16:40', title: 'Август (финальная версия)', format: '2D', age: '16+', price: '480₽' },
-                            { time: '19:35', title: 'Иллюзия обмана 3', format: '2D', age: '18+', price: '480₽' },
-                            { time: '21:50', title: 'Хищник: Планета смерти', format: '2D (предс. обсл.)', age: '18+', price: '430₽' },
-                        ]
-                    },
-                    {
-                        weekday: 'Понедельник',
-                        date: '1 декабря',
-                        movies: [
-                            { time: '11:00', title: 'Дикий робот', format: '2D', age: '6+', price: '250₽' },
-                            { time: '18:00', title: 'Иллюзия обмана 3', format: '2D', age: '18+', price: '350₽' }
-                        ]
-                    },
-                    { weekday: 'Вторник', date: '2 декабря', movies: [] },
-                    { weekday: 'Среда', date: '3 декабря', movies: [] }
-                ]
-            }))
-        })
-    </script>
-</section>
+    <!-- FOOTER -->
+    <footer class="bg-black py-8 text-center border-t border-gray-900 mt-auto">
+        <p class="text-gray-600 text-sm">© 2025 Современник. Тел: 2-12-32</p>
+    </footer>
+
+</body>
+</html>
