@@ -2,59 +2,112 @@
    LIBRARY PAGE STYLES
    ========================================= */
 
-/* Заголовок и поиск в одну линию (на десктопе) */
 .library-header {
+    margin-bottom: 20px;
+}
+
+/* --- ПАНЕЛЬ ИНСТРУМЕНТОВ --- */
+.library-toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 50px;
-    flex-wrap: wrap;
     gap: 20px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    background: rgba(15, 23, 42, 0.5); /* Подложка */
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
 }
 
-/* Поле поиска */
+/* Поиск */
 .search-container {
     position: relative;
-    width: 100%;
-    max-width: 400px;
+    flex: 1; /* Занимает доступное место */
+    min-width: 250px;
 }
 
 .search-container input {
     width: 100%;
-    padding: 15px 20px 15px 50px;
-    background-color: var(--card-bg);
+    padding: 12px 20px 12px 45px;
+    background-color: var(--bg-color);
     border: 1px solid var(--border-color);
-    border-radius: 50px;
+    border-radius: 8px;
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.95rem;
     outline: none;
     transition: all 0.3s ease;
 }
 
 .search-container input:focus {
     border-color: var(--accent-blue);
-    box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+    box-shadow: 0 0 15px rgba(14, 165, 233, 0.15);
 }
 
 .search-icon {
     position: absolute;
-    left: 20px;
+    left: 15px;
     top: 50%;
     transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     pointer-events: none;
 }
 
-/* СЕТКА ФИЛЬМОВ (Grid) */
+/* Контейнер фильтров (справа) */
+.filters-container {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Стилизация Select */
+.select-wrapper {
+    position: relative;
+}
+
+select {
+    appearance: none; /* Убираем стандартную стрелку */
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 12px 40px 12px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s;
+    font-family: 'Inter', sans-serif;
+    min-width: 180px;
+}
+
+/* Кастомная стрелка для селекта */
+.select-wrapper::after {
+    content: '▼';
+    font-size: 0.7em;
+    color: var(--accent-blue);
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+select:hover {
+    border-color: #475569;
+}
+
+select:focus {
+    border-color: var(--accent-blue);
+}
+
+/* --- СЕТКА ФИЛЬМОВ --- */
 .library-grid {
     display: grid;
-    /* Адаптивная сетка: колонки мин. 220px */
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 30px;
 }
 
-/* Карточка фильма в библиотеке */
 .lib-card {
     background-color: var(--card-bg);
     border-radius: 16px;
@@ -75,7 +128,7 @@
 
 .lib-poster {
     width: 100%;
-    aspect-ratio: 2/3; /* Стандартная пропорция постера */
+    aspect-ratio: 2/3; 
     object-fit: cover;
 }
 
@@ -101,17 +154,6 @@
     margin-bottom: 10px;
 }
 
-.lib-rating {
-    margin-top: auto;
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--accent-blue);
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 700;
-}
-
 .lib-age {
     position: absolute;
     top: 10px;
@@ -122,15 +164,19 @@
     padding: 4px 8px;
     border-radius: 4px;
     backdrop-filter: blur(4px);
+    z-index: 2;
 }
 
-/* Адаптив */
+/* АДАПТИВ */
 @media (max-width: 768px) {
-    .library-header {
+    .library-toolbar {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
     }
-    .search-container {
-        max-width: 100%;
+    .filters-container {
+        flex-direction: column;
+    }
+    select {
+        width: 100%;
     }
 }
