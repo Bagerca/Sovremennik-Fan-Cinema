@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filmNameSpan = document.getElementById('filmName');
     
     // Глобальные переменные
-    let allMovies = []; 
+    let allMovies = []; // Тут будет храниться объединенный массив (Фильм + Расписание)
     let selectedDate = new Date(); 
 
     // --- 1. ГЕНЕРАЦИЯ ДАТ (-3 ... Сегодня ... +3) ---
@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = -3; i <= 3; i++) {
             const date = new Date(today);
             date.setDate(today.getDate() + i);
+            
             const dateString = date.toISOString().split('T')[0];
             const dayNumber = date.getDate();
             const monthName = date.toLocaleDateString('ru-RU', { month: 'short' }).replace('.', '');
@@ -46,7 +47,32 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedDate = today.toISOString().split('T')[0];
     }
 
-    // --- 2. РЕНДЕР ФИЛЬМОВ ---
+    // --- 2. ЗАГРУЗКА ДАННЫХ (БИБЛИОТЕКА + РАСПИСАНИЕ) ---
+    fetch('movies.json')
+        .then(response => response.json())
+        .then(data => {
+            // "Склеиваем" данные из library и schedule
+            allMovies = data.schedule.map(item => {
+                // Находим описание фильма по ID
+                const movieInfo = data.library[item.movieId];
+                
+                // Возвращаем объединенный объект
+                return {
+                    ...item,       // даты, сеансы (из schedule)
+                    ...movieInfo   // название, постер, описание (из library)
+                };
+            });
+
+            generateDates();    
+            renderMovies(selectedDate); 
+            initFilters();      
+        })
+        .catch(error => {
+            console.error(error);
+            moviesContainer.innerHTML = '<p style="color:red; text-align:center;">Ошибка загрузки расписания.</p>';
+        });
+
+    // --- 3. РЕНДЕР КАРТОЧЕК ---
     function renderMovies(dateToFilter) {
         moviesContainer.innerHTML = '';
         
@@ -65,28 +91,16 @@ document.addEventListener('DOMContentLoaded', () => {
             moviesContainer.insertAdjacentHTML('beforeend', cardHTML);
         });
         
+        // Сброс фильтров при смене дня
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
     }
 
-    fetch('movies.json')
-        .then(response => response.json())
-        .then(movies => {
-            allMovies = movies; 
-            generateDates();    
-            renderMovies(selectedDate); 
-            initFilters();      
-        })
-        .catch(error => {
-            console.error(error);
-            moviesContainer.innerHTML = '<p style="color:red; text-align:center;">Ошибка загрузки расписания.</p>';
-        });
-
-    // --- 3. СОЗДАНИЕ КАРТОЧКИ (С ЦЕНОЙ) ---
+    // --- 4. HTML ШАБЛОН КАРТОЧКИ ---
     function createMovieCard(movie) {
         const tagsHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
         
-        // ОБНОВЛЕННАЯ КНОПКА С ЦЕНОЙ
+        // Генерация кнопок с ценой
         const sessionsHTML = movie.sessions.map(session => `
             <button class="session-btn buy-ticket-btn" 
                     data-film="${movie.title}" 
@@ -120,17 +134,21 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
-    // --- 4. ФИЛЬТРЫ ---
+    // --- 5. ФИЛЬТРЫ ---
     function initFilters() {
         const filterButtons = document.querySelectorAll('.filter-btn');
+        
         filterButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 filterButtons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+
                 const filterValue = btn.getAttribute('data-filter');
                 const rows = document.querySelectorAll('.movie-row');
+
                 rows.forEach(row => {
                     if (filterValue === 'all' || row.dataset.category === filterValue) {
+                        // Очищаем display, чтобы CSS сам решил (grid или flex для мобильных)
                         row.style.display = ''; 
                     } else {
                         row.style.display = 'none';
@@ -140,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 5. МОДАЛКА (С ЦЕНОЙ) ---
+    // --- 6. МОДАЛКА ---
     moviesContainer.addEventListener('click', (e) => {
         const btn = e.target.closest('.buy-ticket-btn');
         if (btn) {
@@ -148,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const time = btn.getAttribute('data-time');
             const price = btn.getAttribute('data-price');
             
-            // Выводим: Название (Время) - Цена
+            // Формируем заголовок модалки
             filmNameSpan.innerHTML = `${title}<br><span style="font-size:0.8em; color:var(--accent-blue)">${time} — ${price} ₽</span>`;
             modal.style.display = 'flex';
         }
