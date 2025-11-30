@@ -59,28 +59,36 @@ header {
     align-items: center;
 }
 
-/* Логотип */
+/* --- ЛОГОТИП (ОБНОВЛЕНО) --- */
 .logo-link {
     display: flex;
     align-items: center;
     padding: 5px 0;
     text-decoration: none;
-    color: #ffffff; 
-    transition: color 0.3s ease, transform 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .logo-img { 
     height: 45px; 
     width: auto;
-    /* Делаем логотип белым */
+    /* Состояние покоя: БЕЛЫЙ */
     filter: brightness(0) invert(1);
+    transition: filter 0.3s ease; /* Плавная смена цвета */
 }
 
 .logo-link:hover {
-    color: var(--accent-blue);
     transform: scale(1.02);
-    filter: drop-shadow(0 0 8px rgba(14, 165, 233, 0.8));
+    /* Легкая подсветка вокруг блока */
+    filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.3));
 }
+
+.logo-link:hover .logo-img {
+    /* Состояние ховера: СИНИЙ (#0ea5e9) */
+    /* Этот фильтр превращает картинку в точный оттенок синего */
+    filter: brightness(0) saturate(100%) invert(60%) sepia(93%) saturate(1805%) hue-rotate(164deg) brightness(95%) contrast(93%);
+}
+/* --------------------------- */
+
 
 /* Меню */
 .nav-links { display: flex; gap: 12px; align-items: center; }
@@ -144,9 +152,9 @@ main.container {
     align-items: center;
     justify-content: center;
     text-align: center;
-    /* ВАЖНО: Высота экрана (100vh) минус отступ сверху (140px) */
+    /* Высота экрана (100vh) минус отступ сверху (140px) */
     min-height: calc(100vh - 140px);
-    padding: 0 0 40px; /* Немного места снизу */
+    padding: 0 0 40px;
     position: relative;
 }
 
@@ -217,9 +225,9 @@ main.container {
     grid-template-columns: 1fr 1fr; 
     gap: 100px; 
     align-items: center; 
-    padding-top: 100px; /* Добавил отступ сверху для второго экрана */
+    padding-top: 100px; /* Отступ сверху для второго экрана */
     margin-top: 0;
-    border-top: 1px solid rgba(255,255,255,0.05); /* Легкая линия разделитель */
+    border-top: 1px solid rgba(255,255,255,0.05); /* Разделитель */
 }
 
 .year-badge {
