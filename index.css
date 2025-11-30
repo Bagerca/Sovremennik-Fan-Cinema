@@ -27,10 +27,34 @@
 
 .row-poster { width: 200px; flex-shrink: 0; position: relative; height: 100%; }
 .row-poster img { width: 100%; height: 100%; object-fit: cover; }
-.age-badge { position: absolute; top: 10px; left: 10px; padding: 6px 10px; border-radius: 6px; font-weight: 800; font-size: 12px; color: #fff; z-index: 2; backdrop-filter: blur(4px); }
+
+/* ОБНОВЛЕНО: Бейдж возраста теперь справа */
+.age-badge { position: absolute; top: 10px; right: 10px; padding: 6px 10px; border-radius: 6px; font-weight: 800; font-size: 12px; color: #fff; z-index: 2; backdrop-filter: blur(4px); }
 .age-green { background: rgba(34, 197, 94, 0.9); }
 .age-orange { background: rgba(249, 115, 22, 0.9); }
 .age-red { background: rgba(239, 68, 68, 0.9); }
+
+/* НОВОЕ: Бейдж рейтинга (слева) */
+.rating-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #4ade80; /* Зеленый по умолчанию */
+    font-weight: 800;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.rating-badge::before { content: '★'; font-size: 10px; color: inherit; }
+.rating-mid { color: #facc15; border-color: rgba(250, 204, 21, 0.3); }
+.rating-low { color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
 
 .row-info { flex: 1; padding: 30px 25px 20px; display: flex; flex-direction: column; justify-content: flex-start; min-width: 0; overflow: hidden; text-align: left; }
 .row-title { font-size: 1.8rem; font-weight: 900; color: #fff; margin-bottom: 12px; text-transform: uppercase; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; padding-bottom: 2px; }
