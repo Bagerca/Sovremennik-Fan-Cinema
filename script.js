@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Модалка покупки
     const ticketModal = document.getElementById('ticketModal');
-    const closeTicketBtn = document.querySelector('.close-btn'); // Первая кнопка закрытия
+    const closeTicketBtn = document.querySelector('.close-btn');
     const filmNameSpan = document.getElementById('filmName');
     
-    // Модалка инфо (Новая)
+    // Модалка инфо
     const infoModal = document.getElementById('movieInfoModal');
     const closeInfoBtn = document.querySelector('.info-close-btn');
     const infoPoster = document.getElementById('infoPoster');
@@ -16,14 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoTags = document.getElementById('infoTags');
     const infoTrailer = document.getElementById('infoTrailer');
     
-    // Глобальные переменные
     let allMovies = []; 
     let selectedDate = new Date(); 
+    let currentPrice = 0; // Для подсчета стоимости
 
     // --- 1. ГЕНЕРАЦИЯ ДАТ ---
     function generateDates() {
         dateSlider.innerHTML = '';
-        const today = new Date();
+        const today = new Date(); // Используем текущую дату
         
         for (let i = -3; i <= 3; i++) {
             const date = new Date(today);
@@ -123,9 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return `
             <div class="movie-row" data-category="${movie.category}">
-                
-                <!-- ОБЕРТКА ДЛЯ КЛИКА (ИНФОРМАЦИЯ О ФИЛЬМЕ) -->
-                <!-- Мы добавляем data-атрибут с ID фильма, чтобы найти его потом -->
                 <div class="movie-primary-content" data-movieid="${movie.movieId}">
                     <div class="row-poster">
                         <span class="age-badge ${movie.ageClass}">${movie.age}</span>
@@ -166,74 +163,118 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 6. ОБРАБОТКА КЛИКОВ (ДЕЛЕГИРОВАНИЕ) ---
+    // --- 6. ОБРАБОТКА КЛИКОВ (ЗАЛ И ИНФО) ---
     moviesContainer.addEventListener('click', (e) => {
         
-        // 1. Если клик по кнопке КУПИТЬ БИЛЕТ
+        // 1. КУПИТЬ БИЛЕТ
         const buyBtn = e.target.closest('.buy-ticket-btn');
         if (buyBtn) {
             const title = buyBtn.getAttribute('data-film');
             const time = buyBtn.getAttribute('data-time');
-            const price = buyBtn.getAttribute('data-price');
-            filmNameSpan.innerHTML = `${title}<br><span style="font-size:0.8em; color:var(--accent-blue)">${time} — ${price} ₽</span>`;
+            currentPrice = parseInt(buyBtn.getAttribute('data-price')); 
+            
+            filmNameSpan.innerHTML = `${title} <span style="font-weight:400; color:#94a3b8;">(${time})</span>`;
+            
+            renderHall();
+            updateSelectedCount();
+            
             ticketModal.style.display = 'flex';
-            return; // Выходим, чтобы не сработало условие ниже
+            document.body.style.overflow = 'hidden';
+            return;
         }
 
-        // 2. Если клик по ОПИСАНИЮ (левая часть)
+        // 2. ИНФОРМАЦИЯ О ФИЛЬМЕ
         const infoBlock = e.target.closest('.movie-primary-content');
         if (infoBlock) {
             const id = infoBlock.getAttribute('data-movieid');
-            // Ищем фильм в массиве allMovies по ID (так как allMovies уже склеен)
-            // Но в allMovies могут быть дубли одного и того же фильма для разных дат, 
-            // поэтому просто ищем первый попавшийся с таким movieId
             const movie = allMovies.find(m => m.movieId === id);
-            
-            if (movie) {
-                openInfoModal(movie);
-            }
+            if (movie) openInfoModal(movie);
         }
     });
 
-    // --- 7. ФУНКЦИИ МОДАЛОК ---
+    // --- 7. ЛОГИКА ЗАЛА ---
+    function renderHall() {
+        const seatsArea = document.getElementById('seatsArea');
+        seatsArea.innerHTML = ''; 
 
+        const rows = 6; 
+        const seatsPerRow = 8; 
+
+        for (let i = 0; i < rows; i++) {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'seat-row';
+
+            for (let j = 0; j < seatsPerRow; j++) {
+                const seat = document.createElement('div');
+                seat.className = 'seat';
+                
+                // Эмуляция занятых мест (20% вероятность)
+                if (Math.random() < 0.2) {
+                    seat.classList.add('occupied');
+                } else {
+                    seat.addEventListener('click', () => {
+                        seat.classList.toggle('selected');
+                        updateSelectedCount();
+                    });
+                }
+                rowDiv.appendChild(seat);
+            }
+            seatsArea.appendChild(rowDiv);
+        }
+    }
+
+    function updateSelectedCount() {
+        const selectedSeats = document.querySelectorAll('.seat.selected');
+        const count = selectedSeats.length;
+        const total = count * currentPrice;
+        document.getElementById('count').innerText = count;
+        document.getElementById('total').innerText = total;
+    }
+
+    document.getElementById('confirmBuyBtn').addEventListener('click', () => {
+        const count = document.getElementById('count').innerText;
+        if(count > 0) {
+            alert(`Спасибо за покупку! Выбрано мест: ${count}. Ждем вас в кино!`);
+            ticketModal.style.display = 'none';
+            document.body.style.overflow = '';
+        } else {
+            alert('Пожалуйста, выберите хотя бы одно место.');
+        }
+    });
+
+
+    // --- 8. ФУНКЦИИ МОДАЛОК ---
     function openInfoModal(movie) {
-        // Заполняем данные
         infoPoster.src = movie.poster;
         infoTitle.textContent = movie.title;
         infoDesc.textContent = movie.description;
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
-        
-        // Вставляем ссылку на трейлер
-        // Внимание: используем embed ссылку YouTube
         if(movie.trailer) {
             infoTrailer.src = `https://www.youtube.com/embed/${movie.trailer}?autoplay=1`;
         } else {
             infoTrailer.src = '';
         }
-
         infoModal.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Блокируем скролл фона
+        document.body.style.overflow = 'hidden'; 
     }
 
-    // Закрытие окна ПОКУПКИ
     closeTicketBtn.addEventListener('click', () => {
         ticketModal.style.display = 'none';
+        document.body.style.overflow = '';
     });
 
-    // Закрытие окна ИНФО
     closeInfoBtn.addEventListener('click', closeInfo);
 
     function closeInfo() {
         infoModal.style.display = 'none';
-        infoTrailer.src = ''; // Останавливаем видео (очищаем src)
-        document.body.style.overflow = ''; // Разблокируем скролл
+        infoTrailer.src = ''; 
+        document.body.style.overflow = ''; 
     }
 
-    // Закрытие по клику вне окна
     window.addEventListener('click', (e) => {
         if (e.target === ticketModal) {
             ticketModal.style.display = 'none';
+            document.body.style.overflow = '';
         }
         if (e.target === infoModal) {
             closeInfo();
