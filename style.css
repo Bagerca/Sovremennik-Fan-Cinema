@@ -135,7 +135,7 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
 .day-name { display: block; font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
 .day-number { display: block; font-size: 20px; font-weight: 800; color: #fff; }
 
-/* --- ФИЛЬТРЫ: ПО ЦЕНТРУ --- */
+/* ЦЕНТРИРОВАНИЕ КНОПОК ФИЛЬТРОВ */
 .filters-bar { 
     display: flex; 
     gap: 12px; 
@@ -190,16 +190,16 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
 .age-orange { background: rgba(249, 115, 22, 0.9); }
 .age-red { background: rgba(239, 68, 68, 0.9); }
 
-/* Информация (Средняя часть - ТЕКСТ СЛЕВА, НО ВВЕРХУ) */
+/* Информация (Средняя часть - ВЛЕВО, но ВВЕРХУ) */
 .row-info { 
     flex: 1; 
     padding: 30px 25px 20px; 
     display: flex; 
     flex-direction: column; 
-    justify-content: flex-start; /* Название ВВЕРХУ */
+    justify-content: flex-start; /* ВВЕРХ */
     min-width: 0; 
     overflow: hidden; 
-    text-align: left; /* Текст СЛЕВА */
+    text-align: left; /* ВЛЕВО */
 }
 
 .row-title { 
@@ -217,7 +217,7 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
     padding-bottom: 2px;
 }
 
-/* Жанры внутри карточки (слева) */
+/* Жанры внутри карточки - ВЛЕВО */
 .row-meta { 
     display: flex; 
     gap: 10px; 
@@ -364,14 +364,14 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     padding: 20px;
 }
 
-/* 1. Маленькое окно (Покупка билета - ТЕПЕРЬ ШИРОКОЕ ДЛЯ ЗАЛА) */
+/* 1. Маленькое окно (Покупка билета - БАЗОВЫЙ) */
 .modal-content { 
     background-color: #1e293b; 
     padding: 40px; 
     border-radius: 16px; 
     text-align: center; 
     width: 100%; 
-    max-width: 420px; /* Базовый стиль */
+    max-width: 420px; 
     border: 1px solid #334155; 
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
     position: relative; 
@@ -416,6 +416,7 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 }
 .video-responsive iframe { left: 0; top: 0; height: 100%; width: 100%; position: absolute; }
 
+
 /* =========================================
    9. СХЕМА ЗАЛА (ОБНОВЛЕННАЯ ПОД 398 МЕСТ)
    ========================================= */
@@ -439,36 +440,57 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     display: flex; 
     flex-direction: column; 
     align-items: center; 
-    gap: 6px; /* Отступ между рядами */
+    gap: 6px; 
 }
 
 .seat-row { 
     display: flex; 
-    gap: 4px; /* Отступ между креслами (уменьшили) */
+    gap: 4px; 
     justify-content: center;
 }
 
 /* Компактные кресла */
 .seat { 
     background-color: #334155; 
-    height: 16px; /* Было 20 */
-    width: 18px;  /* Было 24 */
+    height: 16px; 
+    width: 18px; 
     border-top-left-radius: 6px; 
     border-top-right-radius: 6px; 
     cursor: pointer; 
     transition: all 0.2s; 
-    font-size: 0; /* Скрываем текст, если он там будет */
+    font-size: 0; /* Скрываем текст */
 }
 
 .seat:not(.occupied):hover { transform: scale(1.3); background-color: #64748b; z-index: 2; }
 .seat.selected { background-color: var(--accent-blue); box-shadow: 0 0 8px var(--accent-blue); }
 
-/* Занято (Светло-серый, хорошо видно) */
+/* === ЗАНЯТОЕ МЕСТО (Сделали очень заметным) === */
 .seat.occupied {
-    background-color: #64748b; /* Светло-серый цвет */
+    background-color: #94a3b8; /* Светло-серый, отличается от фона */
     cursor: not-allowed;
-    opacity: 1; /* Убрали прозрачность */
+    opacity: 0.6;
     position: relative;
+    box-shadow: none;
+}
+
+/* Крестик внутри для стиля */
+.seat.occupied::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 60%; height: 60%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background: rgba(0,0,0,0.3);
+    height: 1px; width: 80%;
+}
+.seat.occupied::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 60%; height: 60%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    background: rgba(0,0,0,0.3);
+    height: 1px; width: 80%;
 }
 
 .ticket-footer { margin-top: 30px; border-top: 1px solid #334155; padding-top: 20px; }
