@@ -14,9 +14,8 @@
     --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
 }
 
-/* ФИКС ДЕРГАНЬЯ ЭКРАНА (Скроллбар всегда есть) */
 html {
-    overflow-y: scroll;
+    scrollbar-gutter: stable; 
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
