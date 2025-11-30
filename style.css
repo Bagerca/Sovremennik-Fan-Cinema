@@ -285,82 +285,6 @@ main.container {
 .game-info h3 { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 5px; }
 .game-info p { font-size: 0.95rem; color: #94a3b8; line-height: 1.4; }
 
-/* =========================================
-   6. ЭЛЕМЕНТЫ РАСПИСАНИЯ
-   ========================================= */
-.schedule-header {
-    display: flex; flex-direction: column; align-items: flex-start;
-    margin-bottom: 40px; gap: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 30px;
-}
-
-.date-slider { display: flex; gap: 12px; overflow-x: auto; width: 100%; padding-bottom: 5px; }
-.date-card {
-    background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
-    padding: 12px 24px; border-radius: 12px; cursor: pointer; text-align: center; min-width: 85px;
-    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-.date-card:hover { border-color: var(--accent-blue); background: rgba(14, 165, 233, 0.1); transform: translateY(-3px); }
-.date-card.active { background: var(--accent-blue); border-color: var(--accent-blue); box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); }
-.date-card.active .day-name, .date-card.active .day-number { color: #fff; }
-.day-name { display: block; font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
-.day-number { display: block; font-size: 20px; font-weight: 800; color: #fff; }
-
-.filters-bar { display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
-.filter-btn {
-    background: transparent; border: 1px solid var(--border-color); color: var(--text-muted);
-    padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 700;
-    transition: 0.3s; text-transform: uppercase;
-}
-.filter-btn:hover { border-color: var(--accent-blue); color: #fff; }
-.filter-btn.active { background: #fff; color: #020617; border-color: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
-
-/* Список фильмов */
-.schedule-list { display: flex; flex-direction: column; gap: 24px; }
-.movie-row {
-    display: flex; background-color: var(--card-bg); border: 1px solid var(--border-color);
-    border-radius: 16px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.movie-row:hover { transform: translateY(-5px); border-color: #334155; box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5); }
-.row-poster { width: 180px; min-width: 180px; position: relative; }
-.row-poster img { width: 100%; height: 100%; object-fit: cover; }
-.age-badge {
-    position: absolute; top: 10px; left: 10px; padding: 6px 10px; border-radius: 6px;
-    font-weight: 800; font-size: 12px; color: #fff; z-index: 2; backdrop-filter: blur(4px);
-}
-.age-green { background: rgba(34, 197, 94, 0.9); }
-.age-orange { background: rgba(249, 115, 22, 0.9); }
-.age-red { background: rgba(239, 68, 68, 0.9); }
-.row-info { flex: 1; padding: 32px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--border-color); }
-.row-title { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 12px; text-transform: uppercase; line-height: 1.1; }
-.row-meta { display: flex; gap: 12px; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; align-items: center; font-weight: 600; }
-.meta-tag { background: rgba(255, 255, 255, 0.1); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
-.row-desc { font-size: 1rem; color: var(--text-muted); line-height: 1.6; max-width: 650px; }
-.row-sessions { width: 320px; min-width: 320px; padding: 32px; background: rgba(15, 23, 42, 0.5); display: flex; flex-direction: column; justify-content: center; }
-.sessions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; }
-.session-btn {
-    background: transparent; border: 1px solid #334155; border-radius: 8px; padding: 10px 5px;
-    text-align: center; cursor: pointer; transition: all 0.2s ease; color: #fff;
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-}
-.session-time { font-size: 18px; font-weight: 700; color: #fff; }
-.session-format { font-size: 10px; color: var(--accent-blue); font-weight: bold; text-transform: uppercase; }
-.session-btn:hover { background: var(--accent-blue); border-color: var(--accent-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); }
-
-/* Акции */
-.promotions-section { margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--border-color); }
-.promo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-.promo-card {
-    background-color: var(--card-bg); border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; display: flex; flex-direction: column;
-}
-.promo-card:hover { transform: translateY(-5px); border-color: var(--accent-blue); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-.promo-image { height: 180px; background-size: cover; background-position: center; position: relative; }
-.promo-image::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(0deg, rgba(15, 23, 42, 0.8) 0%, transparent 100%); }
-.promo-badge { position: absolute; top: 15px; left: 15px; background: var(--accent-blue); color: #fff; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; text-transform: uppercase; z-index: 2; }
-.promo-content { padding: 25px; flex: 1; }
-.promo-content h3 { font-size: 1.2rem; color: #fff; margin-bottom: 10px; font-weight: 800; }
-.promo-content p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
-
 
 /* =========================================
    7. СТИЛИ ДЛЯ ПРАВИЛ (АККОРДЕОН)
@@ -538,9 +462,15 @@ footer {
 }
 
 .social-btn svg {
-    width: 24px;   /* Размер иконки (УВЕЛИЧЕНО) */
-    height: 24px;  /* Размер иконки (УВЕЛИЧЕНО) */
+    width: 24px;  /* Стандартный размер для иконки */
+    height: 24px;
     display: block;
+}
+
+/* ИСПРАВЛЕНИЕ: Увеличиваем только ВК, чтобы было оптически ровно */
+.vk-btn svg {
+    width: 28px;
+    height: 28px;
 }
 
 .social-btn svg path {
