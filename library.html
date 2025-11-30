@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Библиотека | Современник</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="library.css"> <!-- Новый CSS -->
+    <link rel="stylesheet" href="library.css">
     <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 </head>
@@ -28,14 +28,41 @@
     <main class="container">
         <div class="library-header">
             <h1 class="page-title">Библиотека фильмов</h1>
+        </div>
+
+        <!-- ПАНЕЛЬ ИНСТРУМЕНТОВ (Поиск + Фильтры) -->
+        <div class="library-toolbar">
             
             <!-- Поиск -->
             <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Поиск по названию, режиссеру или жанру...">
+                <input type="text" id="searchInput" placeholder="Поиск фильма...">
                 <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M21 21L16.65 16.65" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
+            </div>
+
+            <!-- Фильтры -->
+            <div class="filters-container">
+                <!-- Выбор жанра -->
+                <div class="select-wrapper">
+                    <select id="genreSelect">
+                        <option value="all">Все жанры</option>
+                        <option value="family">Детям и семье</option>
+                        <option value="action">Экшн и Фантастика</option>
+                        <option value="horror">Ужасы и Мистика</option>
+                    </select>
+                </div>
+
+                <!-- Сортировка -->
+                <div class="select-wrapper">
+                    <select id="sortSelect">
+                        <option value="newest">Сначала новые</option>
+                        <option value="oldest">Сначала старые</option>
+                        <option value="az">По названию (А-Я)</option>
+                        <option value="za">По названию (Я-А)</option>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -45,7 +72,7 @@
         </div>
     </main>
 
-    <!-- Модальное окно О ФИЛЬМЕ (Копия из index.html) -->
+    <!-- Модальное окно О ФИЛЬМЕ -->
     <div id="movieInfoModal" class="modal">
         <div class="modal-content info-modal-content">
             <span class="close-btn info-close-btn" style="z-index: 20;">&times;</span>
