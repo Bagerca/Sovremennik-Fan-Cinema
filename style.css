@@ -94,9 +94,17 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
 .day-name { display: block; font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
 .day-number { display: block; font-size: 20px; font-weight: 800; color: #fff; }
 
-.filters-bar { display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; justify-content: center; }
+/* ФИЛЬТРЫ (ИСПРАВЛЕНИЕ: PADDING TOP) */
+.filters-bar { 
+    display: flex; 
+    gap: 12px; 
+    margin-bottom: 30px; 
+    flex-wrap: wrap; 
+    justify-content: center;
+    padding-top: 10px; /* <--- ЭТО ВАЖНО: Место для "подпрыгивания" */
+}
 .filter-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 700; transition: 0.3s; text-transform: uppercase; }
-.filter-btn:hover { border-color: var(--accent-blue); color: #fff; }
+.filter-btn:hover { border-color: var(--accent-blue); color: #fff; transform: translateY(-3px); /* <--- Эффект подъема */ }
 .filter-btn.active { background: #fff; color: #020617; border-color: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
 
 .schedule-list { display: flex; flex-direction: column; gap: 24px; width: 1200px; max-width: 95%; margin: 0 auto; min-height: 600px; }
@@ -189,18 +197,12 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .buy-btn:hover { background-color: var(--accent-dark); }
 
 /* ИНФО О ФИЛЬМЕ (FINAL LAYOUT: POSTER | TRAILER | INFO) */
-.info-modal-content { 
-    max-width: 1400px !important; /* Еще шире, чтобы влез жирный трейлер */
-    text-align: left !important; 
-    padding: 0 !important; 
-    overflow: hidden; 
-}
+.info-modal-content { max-width: 1400px !important; text-align: left !important; padding: 0 !important; overflow: hidden; }
 .info-modal-body { padding: 50px; }
 
 /* Сетка: 3 колонки (ТРЕЙЛЕР В ЦЕНТРЕ) */
 .info-layout {
     display: grid;
-    /* Poster (230px фикс) | Trailer (Резиновый центр) | Info (340px фикс) */
     grid-template-columns: 230px 1fr 340px;
     gap: 30px;
     align-items: center; 
