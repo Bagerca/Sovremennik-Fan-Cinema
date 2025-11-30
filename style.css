@@ -69,7 +69,12 @@ header {
     transition: color 0.3s ease, transform 0.3s ease;
 }
 
-.logo-img { height: 45px; width: auto; }
+.logo-img { 
+    height: 45px; 
+    width: auto;
+    /* ИСПРАВЛЕНИЕ 1: Делаем логотип полностью белым */
+    filter: brightness(0) invert(1);
+}
 
 .logo-link:hover {
     color: var(--accent-blue);
@@ -107,13 +112,20 @@ header {
    3. ОБЩИЕ ЭЛЕМЕНТЫ (CONTAINER)
    ========================================= */
 .container {
-    max-width: 1440px; /* РАСШИРИЛИ КОНТЕЙНЕР */
+    max-width: 1440px; 
     margin: 0 auto;
     padding: 0 40px;
 }
 
-/* Отступ сверху увеличен, чтобы контент не лип к шапке */
-main { flex: 1; padding: 140px 0 80px 0; }
+/* ИСПРАВЛЕНИЕ 2: Используем main.container для повышения приоритета */
+/* Теперь отступы main перекрывают отступы .container */
+main.container { 
+    flex: 1; 
+    /* 140px сверху чтобы выйти из-под шапки */
+    /* 40px по бокам для отступов */
+    /* 80px снизу для красоты */
+    padding: 140px 40px 80px 40px; 
+}
 
 .page-title {
     font-size: 3.5rem; font-weight: 900; text-transform: uppercase; line-height: 1; margin: 0;
