@@ -515,9 +515,33 @@ footer {
     margin-bottom: 4px;
 }
 
-.footer-info .address {
-    color: #64748b;
+/* Ссылка-адрес (с иконкой и ховером) */
+.address-link {
+    display: inline-flex;       
+    align-items: center;        
+    gap: 8px;                   
+    color: #64748b;             
     font-size: 0.85rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    margin-top: 6px;
+}
+
+.address-link svg {
+    width: 18px;
+    height: 18px;
+    color: var(--accent-blue); 
+    flex-shrink: 0;            
+}
+
+.address-link:hover {
+    color: #fff;               
+    text-decoration: underline; 
+}
+
+.address-link:hover svg {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
 }
 
 /* Кнопки соцсетей */
@@ -539,12 +563,12 @@ footer {
 }
 
 .social-btn svg {
-    width: 24px; /* Стандартный размер */
+    width: 24px;  /* Стандартный размер */
     height: 24px;
     display: block;
 }
 
-/* ПРАВКА ДЛЯ ВК: Крупнее и со сдвигом, чтобы было ровно */
+/* ПРАВКА ДЛЯ ВК (Ваши настройки: 40px) */
 .vk-btn svg {
     width: 40px; 
     height: 40px;
