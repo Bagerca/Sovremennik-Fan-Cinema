@@ -1,0 +1,14 @@
+<svg width="260" height="55" viewBox="0 -5 260 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g>
+        <text x="0" y="24" fill="currentColor" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="26" textLength="175" lengthAdjust="spacing">КИНОТЕАТР</text>
+        <text x="0" y="46" fill="currentColor" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-style="italic" font-size="13.5" textLength="175" lengthAdjust="spacing">СОВРЕМЕННИК</text>
+    </g>
+    <g transform="translate(185, -3) scale(1.1)">
+        <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="3"/>
+        <circle cx="22" cy="8" r="5" stroke="currentColor" stroke-width="3"/>
+        <rect x="0" y="14" width="30" height="18" rx="3" fill="currentColor"/>
+        <path d="M30 18 L42 12 V34 L30 28 Z" fill="currentColor"/>
+        <rect x="4" y="36" width="22" height="3" fill="currentColor"/>
+        <rect x="8" y="41" width="14" height="3" fill="currentColor"/>
+    </g>
+</svg>
