@@ -1,50 +1,30 @@
 [
-  {
-    "id": 1,
-    "title": "Иллюзия обмана 3",
-    "poster": "assets/images/Иллюзия обмана 3 (2025).jpg",
-    "genre": "Триллер / Магия",
-    "year": 2025,
-    "age": "18+"
-  },
-  {
-    "id": 2,
-    "title": "Человек-бензопила: История Резе",
-    "poster": "assets/images/Человек-бензопила. Фильм: История Резе (2025).png",
-    "genre": "Аниме / Экшн",
-    "year": 2025,
-    "age": "18+"
-  },
-  {
-    "id": 3,
-    "title": "Есть только МиГ",
-    "poster": "assets/images/Есть только МиГ (2025).jpg",
-    "genre": "Драма / История",
-    "year": 2025,
-    "age": "12+"
-  },
-  {
-    "id": 4,
-    "title": "Дикий робот",
-    "poster": "assets/images/Дикий робот (2024).jpg",
-    "genre": "Мультфильм",
-    "year": 2024,
-    "age": "6+"
-  },
-  {
-    "id": 5,
-    "title": "Kingsman: Секретная служба",
-    "poster": "assets/images/Kingsman Секретная служба (2015).jpg",
-    "genre": "Боевик",
-    "year": 2015,
-    "age": "18+"
-  },
-  {
-    "id": 6,
-    "title": "Пять ночей с Фредди",
-    "poster": "assets/images/Пять ночей с Фредди (2023).jpg",
-    "genre": "Хоррор",
-    "year": 2023,
-    "age": "16+"
-  }
+    {
+        "id": 1,
+        "title": "Дикий робот",
+        "poster": "assets/images/wild-robot.jpg",
+        "age": "6+",
+        "ageColor": "age-green", 
+        "category": "family", 
+        "tags": ["Анимация", "3D", "IMDb 8.5"],
+        "description": "Эпическое приключение робота ROZZUM 7134, который терпит кораблекрушение...",
+        "sessions": [
+            { "time": "10:00", "format": "2D", "price": 250 },
+            { "time": "12:30", "format": "3D", "price": 350 }
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Иллюзия обмана 3",
+        "poster": "assets/images/nysm3.jpg",
+        "age": "16+",
+        "ageColor": "age-orange",
+        "category": "action",
+        "tags": ["Триллер", "2ч 10мин"],
+        "description": "Четыре Всадника возвращаются для своего самого опасного ограбления...",
+        "sessions": [
+            { "time": "18:00", "format": "2D", "price": 400 },
+            { "time": "20:30", "format": "Atmos", "price": 500 }
+        ]
+    }
 ]
