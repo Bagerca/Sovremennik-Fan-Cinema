@@ -14,6 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoDesc = document.getElementById('infoDesc');
     const infoTags = document.getElementById('infoTags');
     const infoTrailer = document.getElementById('infoTrailer');
+
+    // Новые элементы для инфо-модалки
+    const infoRating = document.getElementById('infoRating');
+    const infoYear = document.getElementById('infoYear');
+    const infoCountry = document.getElementById('infoCountry');
+    const infoGenre = document.getElementById('infoGenre');
+    const infoDirector = document.getElementById('infoDirector');
+    const infoDuration = document.getElementById('infoDuration');
+    const infoMpaa = document.getElementById('infoMpaa');
     
     let allMovies = []; 
     let selectedDate = new Date(); 
@@ -100,6 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function createMovieCard(movie) {
         const tagsHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
         
+        // Определяем цвет и класс рейтинга
+        const rating = movie.rating || 0;
+        let ratingClass = '';
+        if (rating < 5) ratingClass = 'rating-low';
+        else if (rating < 7) ratingClass = 'rating-mid';
+
         const sessionsHTML = movie.sessions.map(session => `
             <button class="session-btn buy-ticket-btn" 
                     data-film="${movie.title}" 
@@ -119,6 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="movie-row" data-category="${movie.category}">
                 <div class="movie-primary-content" data-movieid="${movie.movieId}">
                     <div class="row-poster">
+                        <!-- Рейтинг слева -->
+                        <span class="rating-badge ${ratingClass}">${movie.rating || '-'}</span>
+                        <!-- Возраст теперь справа (стиль в CSS) -->
                         <span class="age-badge ${movie.ageClass}">${movie.age}</span>
                         <img src="${movie.poster}" alt="${movie.title}">
                     </div>
@@ -246,14 +264,19 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('infoDesc').textContent = movie.description;
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
 
+        // Рейтинг
+        infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
+        if(movie.rating >= 7) infoRating.style.color = '#4ade80';
+        else if(movie.rating >= 5) infoRating.style.color = '#facc15';
+        else infoRating.style.color = '#ef4444';
+
         // Заполняем таблицу
-        document.getElementById('infoYear').textContent = movie.year || '-';
-        document.getElementById('infoCountry').textContent = movie.country || '-';
-        document.getElementById('infoGenre').textContent = movie.tags.join(', ');
-        document.getElementById('infoDirector').textContent = movie.director || '-';
-        // Без актеров
-        document.getElementById('infoDuration').textContent = movie.duration || '-';
-        document.getElementById('infoMpaa').textContent = movie.mpaa || 'N/A';
+        infoYear.textContent = movie.year || '-';
+        infoCountry.textContent = movie.country || '-';
+        infoGenre.textContent = movie.tags.join(', ');
+        infoDirector.textContent = movie.director || '-';
+        infoDuration.textContent = movie.duration || '-';
+        infoMpaa.textContent = movie.mpaa || 'N/A';
 
         // Трейлер
         if(movie.trailer) {
