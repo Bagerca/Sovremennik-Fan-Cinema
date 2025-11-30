@@ -72,7 +72,7 @@ header {
 .logo-img { 
     height: 45px; 
     width: auto;
-    /* ФИКС ЛОГОТИПА: Делаем его белым */
+    /* Делаем логотип белым */
     filter: brightness(0) invert(1);
 }
 
@@ -117,7 +117,7 @@ header {
     padding: 0 40px;
 }
 
-/* ФИКС ОТСТУПОВ: main.container перебивает обычный .container */
+/* ОТСТУПЫ: main.container перебивает обычный .container */
 main.container { 
     flex: 1; 
     padding: 140px 40px 80px 40px; 
@@ -136,7 +136,7 @@ main.container {
 }
 
 /* =========================================
-   4. НОВАЯ HERO-СЕКЦИЯ (ДЛЯ СТРАНИЦЫ "О НАС")
+   4. НОВАЯ HERO-СЕКЦИЯ (НА ВЕСЬ ЭКРАН)
    ========================================= */
 .intro-section {
     display: flex;
@@ -144,8 +144,9 @@ main.container {
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-height: 75vh; /* Высота блока */
-    padding: 0 0 80px;
+    /* ВАЖНО: Высота экрана (100vh) минус отступ сверху (140px) */
+    min-height: calc(100vh - 140px);
+    padding: 0 0 40px; /* Немного места снизу */
     position: relative;
 }
 
@@ -216,7 +217,9 @@ main.container {
     grid-template-columns: 1fr 1fr; 
     gap: 100px; 
     align-items: center; 
-    margin-top: 50px; /* Отступ от нового блока */
+    padding-top: 100px; /* Добавил отступ сверху для второго экрана */
+    margin-top: 0;
+    border-top: 1px solid rgba(255,255,255,0.05); /* Легкая линия разделитель */
 }
 
 .year-badge {
@@ -380,5 +383,5 @@ footer { background-color: #020617; padding: 30px 0; text-align: center; font-si
     .row-sessions { width: 100%; }
     .sessions-grid { grid-template-columns: repeat(3, 1fr); }
     .stats-container { flex-direction: column; }
-    .intro-section { min-height: auto; padding: 40px 0 80px; }
+    .intro-section { min-height: calc(100vh - 140px); padding: 40px 0 80px; }
 }
