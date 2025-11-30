@@ -3,40 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Правила посещения | Современник</title>
+    <title>Правила | Современник</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header>
         <div class="container nav-bar">
-            <div class="logo">Современник</div>
+            <a href="index.html" class="logo-link">
+                <img src="assets/images/logo.svg" alt="Кинотеатр Современник" class="logo-img">
+            </a>
             <nav class="nav-links">
-                <a href="index.html">Расписание</a>
                 <a href="about.html">О нас</a>
+                <a href="index.html">Расписание</a>
                 <a href="rules.html" class="active">Правила</a>
             </nav>
         </div>
     </header>
 
     <main class="container">
-        <h1 class="section-title">Правила кинотеатра</h1>
+        <h1 class="page-title" style="margin-bottom: 40px;">Правила посещения</h1>
         
         <div class="rules-container">
-            <p style="margin-bottom: 30px; color: var(--text-muted); text-align: center;">
-                Мы стараемся сделать ваш отдых комфортным. Пожалуйста, ознакомьтесь с основными положениями.
-            </p>
-
             <details>
                 <summary>1. Покупка и возврат билетов</summary>
                 <div class="rules-content">
                     <ul>
                         <li>Продажа билетов начинается за 30 минут до первого сеанса.</li>
                         <li>Бронь снимается автоматически за 30 минут до начала фильма.</li>
-                        <li>Вход в зал разрешается только на тот сеанс, на который куплен билет.</li>
-                        <li>Билет необходимо сохранять до конца сеанса.</li>
-                        <li>Возврат денег возможен при отмене фильма, некачественном показе или отказе зрителя до начала сеанса (согласно ГК РФ).</li>
+                        <li>Возврат денег возможен при отмене фильма или некачественном показе.</li>
                     </ul>
                 </div>
             </details>
@@ -45,9 +42,9 @@
                 <summary>2. Возрастные ограничения</summary>
                 <div class="rules-content">
                     <ul>
-                        <li>Дети до 3 лет: бесплатно на 2D сеансы (0+) без отдельного места.</li>
+                        <li>Дети до 3 лет: бесплатно на 2D сеансы (0+) без места.</li>
                         <li>Фильмы "12+": дети младше допускаются только с родителями.</li>
-                        <li>Фильмы "16+" и "18+": строгий контроль. Сотрудник вправе потребовать паспорт.</li>
+                        <li>Фильмы "18+": строгий контроль по паспорту.</li>
                     </ul>
                 </div>
             </details>
@@ -56,10 +53,9 @@
                 <summary>3. Что запрещено проносить</summary>
                 <div class="rules-content">
                     <ul>
-                        <li>Оружие, колюще-режущие предметы, газовые баллончики.</li>
-                        <li>Взрывчатые, ядовитые и пачкающие вещества.</li>
-                        <li>Свой алкоголь и еду в стеклянной таре.</li>
-                        <li>Крупные сумки (более 120 см в сумме измерений).</li>
+                        <li>Оружие, колюще-режущие предметы.</li>
+                        <li>Свой алкоголь и еду в стекле.</li>
+                        <li>Крупные сумки (более 120 см).</li>
                         <li>Животных.</li>
                     </ul>
                 </div>
@@ -69,24 +65,17 @@
                 <summary>4. Поведение в зале</summary>
                 <div class="rules-content">
                     <ul>
-                        <li>Запрещена фото- и видеосъемка экрана (строго!).</li>
-                        <li>Запрещено курить (в т.ч. электронные сигареты/вейпы).</li>
-                        <li>Соблюдайте тишину и переводите телефоны в беззвучный режим.</li>
+                        <li>Запрещена съемка экрана (строго!).</li>
+                        <li>Запрещено курить (в т.ч. вейпы).</li>
+                        <li>Соблюдайте тишину.</li>
                     </ul>
-                </div>
-            </details>
-
-            <details>
-                <summary>5. Права администрации</summary>
-                <div class="rules-content">
-                    <p>Администрация вправе отказать в обслуживании лицам в состоянии сильного алкогольного опьянения или нарушающим общественный порядок.</p>
                 </div>
             </details>
         </div>
     </main>
 
     <footer>
-        <p>© 2023 Кинотеатр «Современник».</p>
+        <p>© 2023 Кинотеатр «Современник». г. Ковров, ул. Социалистическая, д. 2</p>
     </footer>
 
 </body>
