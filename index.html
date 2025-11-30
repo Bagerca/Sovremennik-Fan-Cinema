@@ -33,10 +33,8 @@
                 <span class="subtitle">Выберите удобное время</span>
             </h1>
             
-            <!-- Слайдер дат (генерируется через JS: -3 дня ... Сегодня ... +3 дня) -->
-            <div class="date-slider" id="date-slider">
-                <!-- Сюда скрипт вставит даты -->
-            </div>
+            <!-- Слайдер дат -->
+            <div class="date-slider" id="date-slider"></div>
         </div>
 
         <!-- Фильтры -->
@@ -48,7 +46,6 @@
         </div>
         
         <!-- СПИСОК ФИЛЬМОВ -->
-        <!-- JS сам наполнит этот блок данными из movies.json -->
         <div class="schedule-list" id="movies-container">
             <p style="color: #64748b; font-size: 1.2rem; text-align: center; margin-top: 50px;">Загрузка расписания...</p>
         </div>
@@ -88,7 +85,7 @@
         </div>
     </main>
 
-    <!-- Модальное окно покупки -->
+    <!-- 1. Модальное окно ПОКУПКИ -->
     <div id="ticketModal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
@@ -102,15 +99,40 @@
         </div>
     </div>
 
+    <!-- 2. Модальное окно О ФИЛЬМЕ (Новое) -->
+    <div id="movieInfoModal" class="modal">
+        <div class="modal-content info-modal-content">
+            <span class="close-btn info-close-btn">&times;</span>
+            
+            <div class="info-modal-grid">
+                <!-- Постер -->
+                <div class="info-poster">
+                    <img id="infoPoster" src="" alt="">
+                </div>
+                
+                <!-- Описание -->
+                <div class="info-text">
+                    <h2 id="infoTitle" style="color:#fff; font-size: 2rem; margin-bottom: 10px; line-height: 1.1;"></h2>
+                    <div id="infoTags" class="row-meta" style="margin-bottom: 20px;"></div>
+                    <p id="infoDesc" style="color: #cbd5e1; font-size: 1rem; line-height: 1.6;"></p>
+                </div>
+            </div>
+
+            <!-- Плеер YouTube -->
+            <div class="trailer-container">
+                <h3 style="color: #fff; margin-bottom: 15px;">Трейлер</h3>
+                <div class="video-responsive">
+                    <iframe id="infoTrailer" width="560" height="315" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Подвал -->
     <footer>
         <div class="footer-container">
-            
-            <!-- Левая часть: Информация -->
             <div class="footer-info">
                 <p class="copyright">© 2005 — 2025, Кинотеатр «Современник»</p>
-                
-                <!-- Кликабельный адрес с иконкой -->
                 <a href="about.html#location-map" class="address-link">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
@@ -119,16 +141,12 @@
                 </a>
             </div>
 
-            <!-- Правая часть: Соцсети -->
             <div class="footer-socials">
-                <!-- ВКонтакте -->
                 <a href="https://vk.com/sushikinno" target="_blank" class="social-btn vk-btn" title="Мы ВКонтакте">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15.0729 15.6001C14.4927 15.6001 13.9186 15.4246 12.3995 14.5442C10.7441 13.5684 8.78311 11.2323 7.02796 7.44H9.42236C9.91921 9.47192 10.9575 11.2403 11.5367 11.2403C11.724 11.2403 12.0163 10.9892 12.0163 10.1504V7.44H14.1953V9.38708C14.1953 9.69708 15.1189 9.60877 15.4542 9.27138C16.4883 8.30754 17.2015 7.44 17.2015 7.44H19.3333C19.3333 7.44 18.9959 8.75077 17.728 9.94754C16.6346 11.054 16.5146 11.3552 17.653 12.5694C18.9631 14.0454 19.5398 15.6001 19.5398 15.6001H17.2015C16.6214 15.6001 16.1264 15.2577 15.5463 14.5442C15.2238 14.1205 14.8143 13.7937 14.5822 13.7937C14.2834 13.7937 14.1953 13.9032 14.1953 14.3983V15.6001H15.0729Z" fill="white"/>
                     </svg>
                 </a>
-                
-                <!-- Telegram -->
                 <a href="https://t.me/sushikinno" target="_blank" class="social-btn tg-btn" title="Наш Telegram">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M20.665 3.33332L3.33331 10C3.33331 10 0.666645 11.1111 2.88887 12.2222L7.33331 13.7778L17.5555 6.88887L9.55553 14.4444L9.33331 18.6667L12.8889 15.3333L16.6666 18.2222C16.6666 18.2222 19.1111 19.5555 19.7778 14L21.3333 4.22221C21.3333 4.22221 21.5555 2.88887 20.665 3.33332Z" fill="white"/>
