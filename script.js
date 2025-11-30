@@ -1,15 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
     const moviesContainer = document.getElementById('movies-container');
     const dateSlider = document.getElementById('date-slider');
-    const modal = document.getElementById('ticketModal');
-    const closeBtn = document.querySelector('.close-btn');
+    
+    // Модалка покупки
+    const ticketModal = document.getElementById('ticketModal');
+    const closeTicketBtn = document.querySelector('.close-btn'); // Первая кнопка закрытия
     const filmNameSpan = document.getElementById('filmName');
+    
+    // Модалка инфо (Новая)
+    const infoModal = document.getElementById('movieInfoModal');
+    const closeInfoBtn = document.querySelector('.info-close-btn');
+    const infoPoster = document.getElementById('infoPoster');
+    const infoTitle = document.getElementById('infoTitle');
+    const infoDesc = document.getElementById('infoDesc');
+    const infoTags = document.getElementById('infoTags');
+    const infoTrailer = document.getElementById('infoTrailer');
     
     // Глобальные переменные
     let allMovies = []; 
     let selectedDate = new Date(); 
 
-    // --- 1. ГЕНЕРАЦИЯ ДАТ (-3 ... Сегодня ... +3) ---
+    // --- 1. ГЕНЕРАЦИЯ ДАТ ---
     function generateDates() {
         dateSlider.innerHTML = '';
         const today = new Date();
@@ -112,15 +123,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return `
             <div class="movie-row" data-category="${movie.category}">
-                <div class="row-poster">
-                    <span class="age-badge ${movie.ageClass}">${movie.age}</span>
-                    <img src="${movie.poster}" alt="${movie.title}">
+                
+                <!-- ОБЕРТКА ДЛЯ КЛИКА (ИНФОРМАЦИЯ О ФИЛЬМЕ) -->
+                <!-- Мы добавляем data-атрибут с ID фильма, чтобы найти его потом -->
+                <div class="movie-primary-content" data-movieid="${movie.movieId}">
+                    <div class="row-poster">
+                        <span class="age-badge ${movie.ageClass}">${movie.age}</span>
+                        <img src="${movie.poster}" alt="${movie.title}">
+                    </div>
+                    <div class="row-info">
+                        <h2 class="row-title">${movie.title}</h2>
+                        <div class="row-meta">${tagsHTML}</div>
+                        <p class="row-desc">${movie.description}</p>
+                        <span style="font-size: 0.8rem; color: var(--accent-blue); margin-top: 15px; font-weight:700;">ПОДРОБНЕЕ И ТРЕЙЛЕР →</span>
+                    </div>
                 </div>
-                <div class="row-info">
-                    <h2 class="row-title">${movie.title}</h2>
-                    <div class="row-meta">${tagsHTML}</div>
-                    <p class="row-desc">${movie.description}</p>
-                </div>
+
                 <div class="row-sessions">
                     <div class="sessions-grid">${sessionsHTML}</div>
                 </div>
@@ -139,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const rows = document.querySelectorAll('.movie-row');
                 rows.forEach(row => {
                     if (filterValue === 'all' || row.dataset.category === filterValue) {
-                        row.style.display = 'flex'; // ТУТ ВАЖНО: flex, так как мы сменили grid на flex в CSS
+                        row.style.display = 'flex'; 
                     } else {
                         row.style.display = 'none';
                     }
@@ -148,20 +166,77 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 6. МОДАЛКА ---
+    // --- 6. ОБРАБОТКА КЛИКОВ (ДЕЛЕГИРОВАНИЕ) ---
     moviesContainer.addEventListener('click', (e) => {
-        const btn = e.target.closest('.buy-ticket-btn');
-        if (btn) {
-            const title = btn.getAttribute('data-film');
-            const time = btn.getAttribute('data-time');
-            const price = btn.getAttribute('data-price');
+        
+        // 1. Если клик по кнопке КУПИТЬ БИЛЕТ
+        const buyBtn = e.target.closest('.buy-ticket-btn');
+        if (buyBtn) {
+            const title = buyBtn.getAttribute('data-film');
+            const time = buyBtn.getAttribute('data-time');
+            const price = buyBtn.getAttribute('data-price');
             filmNameSpan.innerHTML = `${title}<br><span style="font-size:0.8em; color:var(--accent-blue)">${time} — ${price} ₽</span>`;
-            modal.style.display = 'flex';
+            ticketModal.style.display = 'flex';
+            return; // Выходим, чтобы не сработало условие ниже
+        }
+
+        // 2. Если клик по ОПИСАНИЮ (левая часть)
+        const infoBlock = e.target.closest('.movie-primary-content');
+        if (infoBlock) {
+            const id = infoBlock.getAttribute('data-movieid');
+            // Ищем фильм в массиве allMovies по ID (так как allMovies уже склеен)
+            // Но в allMovies могут быть дубли одного и того же фильма для разных дат, 
+            // поэтому просто ищем первый попавшийся с таким movieId
+            const movie = allMovies.find(m => m.movieId === id);
+            
+            if (movie) {
+                openInfoModal(movie);
+            }
         }
     });
 
-    closeBtn.addEventListener('click', () => modal.style.display = 'none');
+    // --- 7. ФУНКЦИИ МОДАЛОК ---
+
+    function openInfoModal(movie) {
+        // Заполняем данные
+        infoPoster.src = movie.poster;
+        infoTitle.textContent = movie.title;
+        infoDesc.textContent = movie.description;
+        infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
+        
+        // Вставляем ссылку на трейлер
+        // Внимание: используем embed ссылку YouTube
+        if(movie.trailer) {
+            infoTrailer.src = `https://www.youtube.com/embed/${movie.trailer}?autoplay=1`;
+        } else {
+            infoTrailer.src = '';
+        }
+
+        infoModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Блокируем скролл фона
+    }
+
+    // Закрытие окна ПОКУПКИ
+    closeTicketBtn.addEventListener('click', () => {
+        ticketModal.style.display = 'none';
+    });
+
+    // Закрытие окна ИНФО
+    closeInfoBtn.addEventListener('click', closeInfo);
+
+    function closeInfo() {
+        infoModal.style.display = 'none';
+        infoTrailer.src = ''; // Останавливаем видео (очищаем src)
+        document.body.style.overflow = ''; // Разблокируем скролл
+    }
+
+    // Закрытие по клику вне окна
     window.addEventListener('click', (e) => {
-        if (e.target === modal) modal.style.display = 'none';
+        if (e.target === ticketModal) {
+            ticketModal.style.display = 'none';
+        }
+        if (e.target === infoModal) {
+            closeInfo();
+        }
     });
 });
