@@ -19,7 +19,7 @@
 body {
     background-color: var(--bg-color);
     
-    /* ФОН: Радиальный градиент (свет сверху по центру) */
+    /* ФОН: Радиальный градиент (пятно света сверху по центру) */
     background-image: radial-gradient(circle at 50% 0%, #0f172a 0%, #020617 100%);
     
     color: var(--text-main);
@@ -85,7 +85,7 @@ header {
 }
 
 .logo-link:hover .logo-img {
-    /* При наведении становится СИНИМ (#0ea5e9) */
+    /* При наведении становится СИНИМ (#0ea5e9) с помощью фильтров */
     filter: brightness(0) saturate(100%) invert(60%) sepia(93%) saturate(1805%) hue-rotate(164deg) brightness(95%) contrast(93%);
 }
 /* ---------------------------------- */
@@ -535,6 +535,12 @@ footer {
     border-radius: 50%;
     transition: all 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-btn svg {
+    width: 20px;   /* ФИКС: Размер иконки */
+    height: 20px;  /* ФИКС: Размер иконки */
+    display: block;
 }
 
 .social-btn svg path {
