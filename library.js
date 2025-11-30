@@ -13,23 +13,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoTags = document.getElementById('infoTags');
     const infoTrailer = document.getElementById('infoTrailer');
 
-    let allMoviesLibrary = []; // Оригинальный список фильмов
+    let allMoviesLibrary = []; 
 
     // 1. ЗАГРУЗКА ДАННЫХ
     fetch('movies.json')
         .then(response => response.json())
         .then(data => {
             allMoviesLibrary = Object.values(data.library);
-            // Сразу применяем сортировку по умолчанию (Новые)
             applyFiltersAndSort();
         })
         .catch(error => console.error('Ошибка:', error));
 
-    // 2. ГЛАВНАЯ ФУНКЦИЯ ФИЛЬТРАЦИИ И СОРТИРОВКИ
+    // 2. ФИЛЬТРАЦИЯ И СОРТИРОВКА
     function applyFiltersAndSort() {
-        let result = [...allMoviesLibrary]; // Копируем массив
+        let result = [...allMoviesLibrary]; 
 
-        // А. Фильтрация по Поиску
+        // Поиск
         const searchTerm = searchInput.value.toLowerCase();
         if (searchTerm) {
             result = result.filter(movie => {
@@ -39,31 +38,30 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Б. Фильтрация по Жанру
+        // Жанр
         const selectedGenre = genreSelect.value;
         if (selectedGenre !== 'all') {
             result = result.filter(movie => movie.category === selectedGenre);
         }
 
-        // В. Сортировка
+        // Сортировка
         const sortType = sortSelect.value;
         result.sort((a, b) => {
             if (sortType === 'newest') {
-                return parseInt(b.year) - parseInt(a.year); // Свежие сначала
+                return parseInt(b.year) - parseInt(a.year); 
             } else if (sortType === 'oldest') {
-                return parseInt(a.year) - parseInt(b.year); // Старые сначала
+                return parseInt(a.year) - parseInt(b.year);
             } else if (sortType === 'az') {
-                return a.title.localeCompare(b.title); // А-Я
+                return a.title.localeCompare(b.title);
             } else if (sortType === 'za') {
-                return b.title.localeCompare(a.title); // Я-А
+                return b.title.localeCompare(a.title);
             }
         });
 
-        // Г. Рендер
         renderLibrary(result);
     }
 
-    // 3. РЕНДЕР КАРТОЧЕК
+    // 3. РЕНДЕР
     function renderLibrary(movies) {
         libraryContainer.innerHTML = '';
 
@@ -90,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. СЛУШАТЕЛИ СОБЫТИЙ (При изменении любого фильтра запускаем applyFiltersAndSort)
+    // 4. СЛУШАТЕЛИ
     searchInput.addEventListener('input', applyFiltersAndSort);
     genreSelect.addEventListener('change', applyFiltersAndSort);
     sortSelect.addEventListener('change', applyFiltersAndSort);
@@ -102,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('infoDesc').textContent = movie.description;
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
 
+        // Таблица
         document.getElementById('infoYear').textContent = movie.year || '-';
         document.getElementById('infoCountry').textContent = movie.country || '-';
         document.getElementById('infoGenre').textContent = movie.tags.join(', ');
@@ -109,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('infoDuration').textContent = movie.duration || '-';
         document.getElementById('infoMpaa').textContent = movie.mpaa || 'N/A';
 
+        // Трейлер
         if(movie.trailer) {
             infoTrailer.src = `https://www.youtube.com/embed/${movie.trailer}?autoplay=1`;
         } else {
