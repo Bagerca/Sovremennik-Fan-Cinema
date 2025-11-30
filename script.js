@@ -140,7 +140,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 rows.forEach(row => {
                     if (filterValue === 'all' || row.dataset.category === filterValue) {
-                        row.style.display = 'flex';
+                        // ФИКС БАГА С РАСТЯНУТОЙ КАРТИНКОЙ:
+                        // Мы просто очищаем display, чтобы CSS файл сам решил:
+                        // на десктопе это будет GRID, а на мобильном FLEX.
+                        row.style.display = ''; 
                     } else {
                         row.style.display = 'none';
                     }
