@@ -18,7 +18,10 @@
 
 body {
     background-color: var(--bg-color);
-    background-image: linear-gradient(180deg, #0b1120 0%, #020617 100%);
+    
+    /* ОБНОВЛЕННЫЙ ФОН: Радиальный градиент (свет сверху по центру) */
+    background-image: radial-gradient(circle at 50% 0%, #0f172a 0%, #020617 100%);
+    
     color: var(--text-main);
     font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6;
@@ -59,7 +62,7 @@ header {
     align-items: center;
 }
 
-/* --- ЛОГОТИП (ОБНОВЛЕНО) --- */
+/* --- ЛОГОТИП С ЦВЕТНЫМ ХОВЕРОМ --- */
 .logo-link {
     display: flex;
     align-items: center;
@@ -71,23 +74,21 @@ header {
 .logo-img { 
     height: 45px; 
     width: auto;
-    /* Состояние покоя: БЕЛЫЙ */
+    /* По умолчанию белый */
     filter: brightness(0) invert(1);
-    transition: filter 0.3s ease; /* Плавная смена цвета */
+    transition: filter 0.3s ease; 
 }
 
 .logo-link:hover {
     transform: scale(1.02);
-    /* Легкая подсветка вокруг блока */
     filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.3));
 }
 
 .logo-link:hover .logo-img {
-    /* Состояние ховера: СИНИЙ (#0ea5e9) */
-    /* Этот фильтр превращает картинку в точный оттенок синего */
+    /* При наведении становится СИНИМ (#0ea5e9) */
     filter: brightness(0) saturate(100%) invert(60%) sepia(93%) saturate(1805%) hue-rotate(164deg) brightness(95%) contrast(93%);
 }
-/* --------------------------- */
+/* ---------------------------------- */
 
 
 /* Меню */
