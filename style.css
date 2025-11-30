@@ -323,9 +323,9 @@ main.container {
     flex-direction: column; 
     gap: 24px;
     
-    /* --- ФИКС ДЕРГАНЬЯ: ФИКСИРОВАННАЯ ШИРИНА --- */
+    /* ФИКС ДЕРГАНЬЯ: ЖЕСТКАЯ ШИРИНА */
     width: 1200px;
-    max-width: 95%; /* Чтобы не вылезало на экранах от 900px до 1200px */
+    max-width: 95%; 
     
     margin: 0 auto; 
     min-height: 600px; 
@@ -335,9 +335,8 @@ main.container {
 .movie-row {
     display: grid;
     
-    /* --- ФИКС ДЕРГАНЬЯ: ЖЕСТКИЕ КОЛОНКИ --- */
-    /* 180px + 700px + 320px = 1200px (ширина контейнера) */
-    grid-template-columns: 180px 700px 320px; 
+    /* ФИКС ВЕРСТКИ: 180 (картинка) + 650 (текст) + 370 (время) = 1200 */
+    grid-template-columns: 180px 650px 370px; 
     
     background-color: var(--card-bg); 
     border: 1px solid var(--border-color);
@@ -398,14 +397,22 @@ main.container {
 
 /* Сеансы */
 .row-sessions { 
-    padding: 32px; 
+    /* ФИКС: Уменьшили отступ, чтобы кнопки влезали */
+    padding: 25px; 
+    
     background: rgba(15, 23, 42, 0.5); 
     display: flex; 
     flex-direction: column; 
     justify-content: center; 
 }
 
-.sessions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; }
+/* ФИКС: Строгая сетка 2 колонки */
+.sessions-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 12px; 
+}
+
 .session-btn {
     background: transparent; border: 1px solid #334155; border-radius: 8px; padding: 10px 5px;
     text-align: center; cursor: pointer; transition: all 0.2s ease; color: #fff;
@@ -500,7 +507,7 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     .intro-section { min-height: calc(100vh - 140px); padding: 40px 0 80px; }
     .date-slider { justify-content: flex-start; }
     
-    /* ФИКС: Сбрасываем ширину на мобильных, чтобы не было гориз. скролла */
+    /* ФИКС: Сбрасываем ширину на мобильных */
     .movie-row { display: flex; flex-direction: column; height: auto; }
     .schedule-list { width: 100%; max-width: 100%; min-height: auto; }
 }
