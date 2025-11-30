@@ -1,18 +1,17 @@
 /* =========================================
-   1. ГЛОБАЛЬНЫЕ НАСТРОЙКИ (PREMIUM NAVY PALETTE)
+   1. ГЛОБАЛЬНЫЕ НАСТРОЙКИ (CLEAN DARK NAVY)
    ========================================= */
 :root {
     /* Палитра */
     --bg-color: #020617;       /* Глубокий темно-синий */
-    --card-bg: #0f172a;        /* Темно-синий сланец */
+    --card-bg: #0f172a;        /* Темно-синий сланец (фон карточек) */
     --accent-blue: #0ea5e9;    /* Яркий голубой (Sky Blue) */
     --accent-dark: #0284c7;    /* Темно-голубой (Hover) */
     --text-main: #f8fafc;      /* Белоснежный текст */
     --text-muted: #94a3b8;     /* Серо-голубой текст */
-    --border-color: #1e293b;   /* Границы */
+    --border-color: #1e293b;   /* Еле заметные границы */
     
     --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-    --shadow-glow: 0 0 15px rgba(14, 165, 233, 0.15);
 }
 
 * {
@@ -23,14 +22,31 @@
 
 body {
     background-color: var(--bg-color);
+    /* ИСПРАВЛЕНО: Убрали пятно (radial-gradient). 
+       Теперь это мягкий переход сверху вниз. */
+    background-image: linear-gradient(180deg, #0b1120 0%, #020617 100%); 
     color: var(--text-main);
     font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-image: radial-gradient(circle at top center, #1e293b 0%, #020617 60%);
-    background-attachment: fixed;
+    background-attachment: fixed; /* Фон стоит на месте при прокрутке */
+}
+
+/* Красивый темный скроллбар (для Chrome/Edge/Safari) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #020617; 
+}
+::-webkit-scrollbar-thumb {
+    background: #334155; 
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #475569; 
 }
 
 a {
@@ -47,13 +63,13 @@ ul {
    2. ШАПКА САЙТА (HEADER)
    ========================================= */
 header {
-    background-color: rgba(2, 6, 23, 0.85);
+    background-color: rgba(2, 6, 23, 0.9); /* Чуть плотнее фон */
     padding: 20px 0;
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(10px);
 }
 
 .container {
@@ -99,14 +115,13 @@ header {
 }
 
 /* =========================================
-   3. УПРАВЛЕНИЕ РАСПИСАНИЕМ (ДАТЫ И ФИЛЬТРЫ)
+   3. УПРАВЛЕНИЕ РАСПИСАНИЕМ
    ========================================= */
 main {
     flex: 1;
     padding: 50px 0;
 }
 
-/* Блок заголовка и дат */
 .schedule-header {
     display: flex;
     justify-content: space-between;
@@ -133,14 +148,8 @@ main {
     overflow-x: auto;
     padding-bottom: 5px;
 }
-
-.date-slider::-webkit-scrollbar {
-    height: 4px;
-}
-.date-slider::-webkit-scrollbar-thumb {
-    background: #334155;
-    border-radius: 4px;
-}
+.date-slider::-webkit-scrollbar { height: 4px; }
+.date-slider::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
 
 .date-card {
     background: var(--card-bg);
@@ -216,7 +225,7 @@ main {
 }
 
 /* =========================================
-   4. СПИСОК ФИЛЬМОВ (PREMIUM LIST)
+   4. СПИСОК ФИЛЬМОВ
    ========================================= */
 .schedule-list {
     display: flex;
@@ -252,7 +261,7 @@ main {
     object-fit: cover;
 }
 
-/* Бейджи возраста */
+/* Бейджи */
 .age-badge {
     position: absolute;
     top: 10px;
@@ -270,7 +279,7 @@ main {
 .age-orange { background: rgba(249, 115, 22, 0.9); }
 .age-red { background: rgba(239, 68, 68, 0.9); }
 
-/* Информация */
+/* Инфо */
 .row-info {
     flex: 1;
     padding: 32px;
@@ -316,7 +325,7 @@ main {
     max-width: 650px;
 }
 
-/* Блок сеансов */
+/* Сеансы */
 .row-sessions {
     width: 320px;
     min-width: 320px;
@@ -333,7 +342,6 @@ main {
     gap: 12px;
 }
 
-/* Кнопка-Билет */
 .session-btn {
     background: transparent;
     border: 1px solid #334155;
@@ -377,8 +385,6 @@ main {
 /* =========================================
    5. СТИЛИ "О НАС" И "ПРАВИЛА"
    ========================================= */
-
-/* О нас */
 .about-grid {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
@@ -386,117 +392,25 @@ main {
     align-items: start;
 }
 
-.text-block {
-    background: transparent;
-}
+.text-block { background: transparent; }
+.text-block h3 { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 20px; text-transform: uppercase; }
+.text-block p { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 24px; }
 
-.text-block h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-}
+.stats-container { display: flex; gap: 20px; margin-top: 40px; }
+.stat-box { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 24px; border-radius: 12px; flex: 1; }
+.stat-number { display: block; font-size: 48px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 8px; }
+.stat-label { font-size: 12px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 1px; }
 
-.text-block p {
-    color: var(--text-muted);
-    font-size: 1.05rem;
-    margin-bottom: 24px;
-}
+.map-wrapper { border-radius: 16px; overflow: hidden; height: 450px; background: #1e293b; border: 1px solid var(--border-color); box-shadow: var(--shadow-soft); }
 
-.stats-container {
-    display: flex;
-    gap: 20px;
-    margin-top: 40px;
-}
-
-.stat-box {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    padding: 24px;
-    border-radius: 12px;
-    flex: 1;
-}
-
-.stat-number {
-    display: block;
-    font-size: 48px;
-    font-weight: 900;
-    color: #fff;
-    line-height: 1;
-    margin-bottom: 8px;
-}
-
-.stat-label {
-    font-size: 12px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-.map-wrapper {
-    border-radius: 16px;
-    overflow: hidden;
-    height: 450px;
-    background: #1e293b;
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-soft);
-}
-
-/* Правила */
-.rules-container details {
-    background-color: var(--card-bg);
-    margin-bottom: 16px;
-    padding: 24px;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    transition: 0.3s;
-}
-
-.rules-container details[open] {
-    border-color: #334155;
-    background-color: #162032;
-}
-
-.rules-container summary {
-    font-weight: 700;
-    color: #fff;
-    font-size: 1.1rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    list-style: none;
-    outline: none;
-}
-
-.rules-container summary::after {
-    content: '+';
-    color: var(--accent-blue);
-    font-size: 24px;
-    transition: transform 0.3s;
-}
-
-.rules-container details[open] summary::after {
-    transform: rotate(45deg);
-}
-
-.rules-content {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #334155;
-    color: var(--text-muted);
-}
-
-.rules-content ul {
-    list-style-type: disc;
-    padding-left: 20px;
-}
-
-.rules-content li {
-    margin-bottom: 10px;
-}
+.rules-container details { background-color: var(--card-bg); margin-bottom: 16px; padding: 24px; border-radius: 12px; border: 1px solid var(--border-color); transition: 0.3s; }
+.rules-container details[open] { border-color: #334155; background-color: #162032; }
+.rules-container summary { font-weight: 700; color: #fff; font-size: 1.1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; outline: none; }
+.rules-container summary::after { content: '+'; color: var(--accent-blue); font-size: 24px; transition: transform 0.3s; }
+.rules-container details[open] summary::after { transform: rotate(45deg); }
+.rules-content { margin-top: 20px; padding-top: 20px; border-top: 1px solid #334155; color: var(--text-muted); }
+.rules-content ul { list-style-type: disc; padding-left: 20px; }
+.rules-content li { margin-bottom: 10px; }
 
 /* =========================================
    6. МОДАЛЬНОЕ ОКНО
@@ -535,7 +449,6 @@ main {
     color: var(--text-muted);
     cursor: pointer;
 }
-
 .close-btn:hover { color: #fff; }
 
 .buy-btn {
@@ -551,10 +464,7 @@ main {
     margin-top: 20px;
     transition: 0.3s;
 }
-
-.buy-btn:hover {
-    background-color: var(--accent-dark);
-}
+.buy-btn:hover { background-color: var(--accent-dark); }
 
 /* =========================================
    7. ПОДВАЛ И АДАПТИВ
@@ -571,12 +481,9 @@ footer {
 
 @media (max-width: 900px) {
     .nav-bar { flex-direction: column; gap: 20px; }
-    
     .schedule-header { flex-direction: column; align-items: flex-start; }
     .date-slider { width: 100%; }
-
     .about-grid, .movie-row { flex-direction: column; }
-    
     .row-info { border-right: none; border-bottom: 1px solid var(--border-color); }
     .row-poster { width: 100%; height: 300px; }
     .row-sessions { width: 100%; }
