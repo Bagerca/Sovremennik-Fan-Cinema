@@ -85,11 +85,9 @@ header {
 }
 
 .logo-link:hover .logo-img {
-    /* При наведении становится СИНИМ (#0ea5e9) с помощью фильтров */
+    /* При наведении становится СИНИМ (#0ea5e9) */
     filter: brightness(0) saturate(100%) invert(60%) sepia(93%) saturate(1805%) hue-rotate(164deg) brightness(95%) contrast(93%);
 }
-/* ---------------------------------- */
-
 
 /* Меню */
 .nav-links { display: flex; gap: 12px; align-items: center; }
@@ -153,7 +151,6 @@ main.container {
     align-items: center;
     justify-content: center;
     text-align: center;
-    /* Высота экрана (100vh) минус отступ сверху (140px) */
     min-height: calc(100vh - 140px);
     padding: 0 0 40px;
     position: relative;
@@ -285,8 +282,9 @@ main.container {
 .game-info h3 { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 5px; }
 .game-info p { font-size: 0.95rem; color: #94a3b8; line-height: 1.4; }
 
+
 /* =========================================
-   6. ЭЛЕМЕНТЫ РАСПИСАНИЯ
+   6. ЭЛЕМЕНТЫ РАСПИСАНИЯ (ВОССТАНОВЛЕНО)
    ========================================= */
 .schedule-header {
     display: flex; flex-direction: column; align-items: flex-start;
@@ -538,9 +536,15 @@ footer {
 }
 
 .social-btn svg {
-    width: 24px;   /* Размер иконки (УВЕЛИЧЕНО) */
-    height: 24px;  /* Размер иконки (УВЕЛИЧЕНО) */
+    width: 24px;  /* Стандартный размер */
+    height: 24px;
     display: block;
+}
+
+/* Увеличиваем ВК, чтобы было ровно с Телеграмом */
+.vk-btn svg {
+    width: 28px;
+    height: 28px;
 }
 
 .social-btn svg path {
