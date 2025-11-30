@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             filmNameSpan.innerHTML = `${title} <span style="font-weight:400; color:#94a3b8;">(${time})</span>`;
             
             renderHall();
-            // Сбрасываем текст цены
+            // Сброс цены
             document.getElementById('count').innerText = '0';
             document.getElementById('total').innerText = '0';
             
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const seat = document.createElement('div');
                 seat.className = 'seat';
-                seat.title = `Ряд ${i + 1}, Место ${j + 1}`; // Подсказка
+                seat.title = `Ряд ${i + 1}, Место ${j + 1}`; 
 
                 seat.addEventListener('click', () => {
                     seat.classList.toggle('selected');
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateSelectedCount() {
-        // Считаем только внутри зоны зала, чтобы не цеплять легенду
+        // Считаем только внутри зоны зала
         const selectedSeats = document.querySelectorAll('#seatsArea .seat.selected');
         const count = selectedSeats.length;
         const total = count * currentPrice;
@@ -238,7 +238,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 8. ФУНКЦИИ МОДАЛОК ---
     function openInfoModal(movie) {
+        // Заполняем постер
         infoPoster.src = movie.poster;
+
+        // Заполняем текстовые данные
         document.getElementById('infoTitle').textContent = movie.title;
         document.getElementById('infoDesc').textContent = movie.description;
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
@@ -248,10 +251,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('infoCountry').textContent = movie.country || '-';
         document.getElementById('infoGenre').textContent = movie.tags.join(', ');
         document.getElementById('infoDirector').textContent = movie.director || '-';
-        document.getElementById('infoActors').textContent = movie.actors || '-';
+        // Без актеров
         document.getElementById('infoDuration').textContent = movie.duration || '-';
         document.getElementById('infoMpaa').textContent = movie.mpaa || 'N/A';
 
+        // Трейлер
         if(movie.trailer) {
             infoTrailer.src = `https://www.youtube.com/embed/${movie.trailer}?autoplay=1`;
         } else {
