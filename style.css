@@ -1,20 +1,135 @@
-/* ---- Глобальные стили ---- */
+/* =========================================
+   1. ГЛОБАЛЬНЫЕ НАСТРОЙКИ И ПЕРЕМЕННЫЕ
+   ========================================= */
 :root {
-    --bg-color: #0f1014; /* Глубокий черный */
-    --card-bg: #1b1e24;
-    --accent-blue: #00f2ff; /* Неоновый голубой */
-    --accent-glow: rgba(0, 242, 255, 0.5);
-    --text-main: #ffffff;
-    --text-muted: #a0a0a0;
+    --bg-color: #0f1014;       /* Глубокий черный фон */
+    --card-bg: #1b1e24;        /* Фон карточек */
+    --accent-blue: #00f2ff;    /* Неоновый голубой (основной акцент) */
+    --accent-glow: rgba(0, 242, 255, 0.5); /* Свечение */
+    --text-main: #ffffff;      /* Белый текст */
+    --text-muted: #a0a0a0;     /* Серый текст */
+    --border-color: #2a2e35;   /* Цвет границ */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-/* ---- Улучшенная сетка фильмов ---- */
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: 0.3s;
+}
+
+ul {
+    list-style: none;
+}
+
+/* =========================================
+   2. ШАПКА САЙТА (HEADER)
+   ========================================= */
+header {
+    background-color: rgba(27, 30, 36, 0.95);
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-muted);
+    position: relative;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--text-main);
+}
+
+/* Линия подчеркивания при наведении */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: var(--accent-blue);
+    transition: width 0.3s;
+    box-shadow: 0 0 8px var(--accent-blue);
+}
+
+.nav-links a:hover::after, .nav-links a.active::after {
+    width: 100%;
+}
+
+/* =========================================
+   3. ОСНОВНОЙ КОНТЕНТ
+   ========================================= */
+main {
+    flex: 1;
+    padding: 40px 0;
+}
+
+/* Заголовки страниц */
+.section-title {
+    font-size: 2.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 40px;
+    color: transparent;
+    background: linear-gradient(90deg, #fff, var(--accent-blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+}
+
+/* =========================================
+   4. КАРТОЧКИ ФИЛЬМОВ (GRID)
+   ========================================= */
 .movies-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -28,16 +143,16 @@ body {
     overflow: hidden;
     position: relative;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27), box-shadow 0.4s;
-    border: 1px solid #2a2e35;
+    border: 1px solid var(--border-color);
 }
 
 .movie-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 10px 30px rgba(0, 242, 255, 0.15); /* Неоновое свечение */
+    box-shadow: 0 10px 30px rgba(0, 242, 255, 0.15);
     border-color: var(--accent-blue);
 }
 
-/* Постер с зумом */
+/* Постер */
 .poster-wrapper {
     width: 100%;
     height: 400px;
@@ -56,7 +171,7 @@ body {
     transform: scale(1.05);
 }
 
-/* Бейдж возраста */
+/* Бейджи (Возраст) */
 .age-badge {
     position: absolute;
     top: 10px;
@@ -68,14 +183,17 @@ body {
     z-index: 2;
     backdrop-filter: blur(5px);
 }
-.age-green { background: rgba(46, 204, 113, 0.8); color: white; }
-.age-orange { background: rgba(243, 156, 18, 0.8); color: white; }
-.age-red { background: rgba(231, 76, 60, 0.8); color: white; }
+.age-green { background: rgba(46, 204, 113, 0.9); color: white; }
+.age-orange { background: rgba(243, 156, 18, 0.9); color: white; }
+.age-red { background: rgba(231, 76, 60, 0.9); color: white; }
 
 /* Информация о фильме */
 .movie-info {
     padding: 20px;
     background: linear-gradient(180deg, var(--card-bg) 0%, #15171c 100%);
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 400px); /* Чтобы кнопки были внизу */
 }
 
 .movie-title {
@@ -94,20 +212,21 @@ body {
     margin-bottom: 15px;
 }
 
-/* Расписание (Плашки времени) */
+/* Время сеансов */
 .schedule-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
     margin-bottom: 20px;
+    flex-grow: 1;
 }
 
 .time-slot {
     background: #2c313a;
     color: #fff;
-    padding: 6px 12px;
+    padding: 6px 10px;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 13px;
     cursor: default;
     border: 1px solid transparent;
     transition: 0.3s;
@@ -119,7 +238,7 @@ body {
     box-shadow: 0 0 8px var(--accent-glow);
 }
 
-/* Неоновая кнопка */
+/* Кнопка купить */
 .buy-btn {
     width: 100%;
     padding: 12px;
@@ -132,8 +251,6 @@ body {
     cursor: pointer;
     border-radius: 6px;
     transition: 0.3s;
-    position: relative;
-    overflow: hidden;
 }
 
 .buy-btn:hover {
@@ -142,16 +259,169 @@ body {
     box-shadow: 0 0 20px var(--accent-glow);
 }
 
-/* Адаптивность для заголовков */
-h1.section-title {
-    font-size: 2.5rem;
+/* =========================================
+   5. СТИЛИ СТРАНИЦЫ "О НАС"
+   ========================================= */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.text-block {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.text-block h3 {
+    color: var(--accent-blue);
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+.map-wrapper {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--accent-blue);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+    height: 400px;
+    background: #222;
+}
+
+/* =========================================
+   6. СТИЛИ СТРАНИЦЫ "ПРАВИЛА"
+   ========================================= */
+.rules-container details {
+    background-color: var(--card-bg);
+    margin-bottom: 15px;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.rules-container details[open] {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+}
+
+.rules-container summary {
+    font-weight: bold;
+    color: var(--accent-blue);
+    font-size: 1.1rem;
+    outline: none;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rules-container summary::after {
+    content: '+';
+    font-size: 24px;
+    font-weight: 300;
+    transition: transform 0.3s;
+}
+
+.rules-container details[open] summary::after {
+    transform: rotate(45deg);
+}
+
+.rules-content {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #333;
+    color: #ccc;
+}
+
+.rules-content ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.rules-content li {
+    margin-bottom: 8px;
+}
+
+/* =========================================
+   7. МОДАЛЬНОЕ ОКНО
+   ========================================= */
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.85);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    padding: 40px;
+    border-radius: 12px;
     text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 40px;
-    color: transparent;
-    background: linear-gradient(90deg, #fff, var(--accent-blue));
-    -webkit-background-clip: text;
-    background-clip: text;
-    text-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+    width: 90%;
+    max-width: 400px;
+    border: 1px solid var(--accent-blue);
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: 0.3s;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+/* =========================================
+   8. ПОДВАЛ (FOOTER)
+   ========================================= */
+footer {
+    background-color: #0b0c0f;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    margin-top: auto;
+    border-top: 1px solid #1a1a1a;
+}
+
+/* =========================================
+   9. АДАПТИВ (MOBILE)
+   ========================================= */
+@media (max-width: 768px) {
+    .nav-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .poster-wrapper {
+        height: 350px;
+    }
 }
