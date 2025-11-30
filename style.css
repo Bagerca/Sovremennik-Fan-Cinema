@@ -14,10 +14,8 @@
     --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
 }
 
-/* --- ФИКС ДЕРГАНЬЯ (САМЫЙ ВАЖНЫЙ БЛОК) --- */
 html {
-    /* Принудительно показываем полосу прокрутки всегда.
-       Это предотвращает скачки ширины при переключении дней. */
+    /* Оставляем скролл, чтобы избежать сдвига центра при исчезновении полосы */
     overflow-y: scroll !important; 
 }
 
@@ -324,17 +322,23 @@ main.container {
     display: flex; 
     flex-direction: column; 
     gap: 24px;
-    width: 80%;         
-    max-width: 1400px;
+    
+    /* --- ФИКС ДЕРГАНЬЯ: ФИКСИРОВАННАЯ ШИРИНА --- */
+    width: 1200px;
+    max-width: 95%; /* Чтобы не вылезало на экранах от 900px до 1200px */
+    
     margin: 0 auto; 
-    /* ФИКС ДЕРГАНЬЯ №2: Минимальная высота, чтобы страница не "прыгала" при загрузке */
     min-height: 600px; 
 }
 
 /* КАРТОЧКА ФИЛЬМА (GRID) */
 .movie-row {
     display: grid;
-    grid-template-columns: 180px 1fr 320px; /* Жесткая сетка */
+    
+    /* --- ФИКС ДЕРГАНЬЯ: ЖЕСТКИЕ КОЛОНКИ --- */
+    /* 180px + 700px + 320px = 1200px (ширина контейнера) */
+    grid-template-columns: 180px 700px 320px; 
+    
     background-color: var(--card-bg); 
     border: 1px solid var(--border-color);
     border-radius: 16px; 
@@ -496,7 +500,7 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     .intro-section { min-height: calc(100vh - 140px); padding: 40px 0 80px; }
     .date-slider { justify-content: flex-start; }
     
-    /* ФИКС: На мобильных сбрасываем фиксированную высоту и ширину */
+    /* ФИКС: Сбрасываем ширину на мобильных, чтобы не было гориз. скролла */
     .movie-row { display: flex; flex-direction: column; height: auto; }
     .schedule-list { width: 100%; max-width: 100%; min-height: auto; }
 }
