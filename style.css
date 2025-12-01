@@ -169,20 +169,15 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .modal-backdrop-blur { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-size: cover; background-position: center top; filter: blur(80px) brightness(0.4) saturate(1.2); z-index: 0; transform: scale(1.2); transition: background-image 0.5s ease; }
 .modal-gradient-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.8) 60%, #0f172a 100%); z-index: 1; }
 
-/* Основная сетка и внутренние отступы */
-.info-modal-body { 
-    position: relative; 
-    z-index: 2; 
-    /* FIX: Уменьшен нижний отступ, чтобы убрать "днище" */
-    padding: 40px 40px 20px 40px; 
-}
+/* Основная сетка */
+.info-modal-body { position: relative; z-index: 2; padding: 50px; }
 
 /* FIX: Выравнивание колонок */
 .info-layout { 
     display: grid; 
     grid-template-columns: 280px 1fr 280px; 
-    gap: 25px;  /* Чуть меньше, чтобы было плотнее */
-    align-items: start;
+    gap: 30px; 
+    align-items: start; /* Выравнивание по верху для симметрии */
 }
 
 /* Левая колонка (Постер) */
@@ -305,12 +300,100 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     background: rgba(255, 255, 255, 0.05);
 }
 
-/* MINI TICKETS */
-.mini-schedule-list { display: flex; flex-direction: column; gap: 10px; }
-.mini-ticket-btn { display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 12px 15px; cursor: pointer; transition: all 0.2s ease; text-align: left; position: relative; overflow: hidden; width: 100%; }
-.mini-ticket-btn:hover { background: var(--accent-blue); border-color: var(--accent-blue); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(14, 165, 233, 0.3); }
-.mini-ticket-btn::before { content: ''; position: absolute; left: -5px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: #0f172a; border-radius: 50%; border-right: 1px solid rgba(255,255,255,0.1); }
-.mini-ticket-btn:hover::before { border-color: var(--accent-blue); }
+/* =========================================
+   MINI TICKETS (СТИЛЬ БИЛЕТИКА С ОТРЫВОМ)
+   ========================================= */
+
+.mini-schedule-list { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px; 
+}
+
+/* Контейнер билета */
+.mini-ticket-btn { 
+    display: flex; 
+    align-items: stretch; /* Важно: растягиваем колонки по высоте */
+    justify-content: space-between; 
+    background: rgba(255, 255, 255, 0.03); 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    border-radius: 10px; 
+    padding: 0; /* Убираем паддинг у родителя, он будет внутри колонок */
+    cursor: pointer; 
+    transition: all 0.2s ease; 
+    text-align: left; 
+    position: relative; 
+    overflow: hidden; 
+    width: 100%; 
+    min-height: 64px;
+}
+
+.mini-ticket-btn:hover { 
+    background: rgba(14, 165, 233, 0.1); /* Легкий синий фон */
+    border-color: var(--accent-blue); 
+    transform: translateY(-2px); 
+    box-shadow: 0 5px 15px rgba(14, 165, 233, 0.2); 
+}
+
+/* Левая часть (Время) */
+.ticket-time-col {
+    flex: 1;
+    padding: 12px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Правая часть (Цена) + ЛИНИЯ ОТРЫВА */
+.ticket-price-col {
+    width: 95px; /* Фиксируем ширину для ровной линии */
+    flex-shrink: 0;
+    padding: 12px 15px;
+    
+    /* ПУНКТИРНАЯ ЛИНИЯ СЛЕВА */
+    border-left: 2px dashed rgba(255, 255, 255, 0.15); 
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.mini-ticket-btn:hover .ticket-price-col {
+    border-left-color: var(--accent-blue); /* Красим линию при наведении */
+}
+
+/* --- ВЫРЕЗЫ (ПОЛУКРУГИ) СВЕРХУ И СНИЗУ --- */
+.mini-ticket-btn::before,
+.mini-ticket-btn::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #0f172a; /* Цвет фона модального окна (создает эффект дырки) */
+    border-radius: 50%;
+    right: 89px; /* Позиция выреза точно на линии (95px ширина - 6px половина круга) */
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Рамка для реализма */
+}
+
+/* Верхний вырез */
+.mini-ticket-btn::before {
+    top: -7px;
+}
+
+/* Нижний вырез */
+.mini-ticket-btn::after {
+    bottom: -7px;
+}
+
+/* Красим рамки вырезов при наведении */
+.mini-ticket-btn:hover::before,
+.mini-ticket-btn:hover::after {
+    border-color: var(--accent-blue);
+}
+
+/* Текстовые стили */
 .ticket-time { font-size: 1.2rem; font-weight: 800; color: #fff; line-height: 1; display: block; }
 .ticket-date { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; text-transform: uppercase; font-weight: 600; display: block; }
 .mini-ticket-btn:hover .ticket-date, .mini-ticket-btn:hover .ticket-price { color: #fff; }
