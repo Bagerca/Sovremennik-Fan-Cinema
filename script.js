@@ -220,11 +220,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const rowDiv = document.createElement('div');
             rowDiv.className = 'seat-row';
 
+            // НОВОЕ: Добавляем номер ряда слева
+            const rowNum = document.createElement('div');
+            rowNum.className = 'row-number';
+            rowNum.innerText = i + 1; // Нумерация с 1
+            rowDiv.appendChild(rowNum);
+
             for (let j = 0; j < seatsPerRow; j++) {
                 if (seatsCreated >= totalSeats) break;
 
                 const seat = document.createElement('div');
                 seat.className = 'seat';
+                // Подсказка при наведении: Ряд X, Место Y
                 seat.title = `Ряд ${i + 1}, Место ${j + 1}`; 
 
                 seat.addEventListener('click', () => {
