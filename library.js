@@ -11,10 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoTitle = document.getElementById('infoTitle');
     const infoDesc = document.getElementById('infoDesc');
     const infoTags = document.getElementById('infoTags');
-    const infoTrailer = document.getElementById('infoTrailer');
+    
+    // Элементы слайдера
+    const mediaContainer = document.getElementById('mediaContainer');
+    const prevMediaBtn = document.getElementById('prevMediaBtn');
+    const nextMediaBtn = document.getElementById('nextMediaBtn');
+    const mediaCounter = document.getElementById('mediaCounter');
     
     // Элементы таблицы информации
-    const infoRating = document.getElementById('infoRating'); // <-- НОВОЕ
+    const infoRating = document.getElementById('infoRating');
     const infoYear = document.getElementById('infoYear');
     const infoCountry = document.getElementById('infoCountry');
     const infoGenre = document.getElementById('infoGenre');
@@ -24,6 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allMoviesLibrary = []; 
     let selectedGenres = new Set(); 
+    
+    // Переменные для слайдера
+    let currentMediaList = [];
+    let currentMediaIndex = 0;
 
     // 1. ЗАГРУЗКА ДАННЫХ
     fetch('movies.json')
@@ -146,16 +155,13 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'lib-card';
             const displayTags = movie.tags ? movie.tags.join(', ') : '';
             
-            // Определяем цвет рейтинга
             const rating = movie.rating || 0;
             let ratingClass = '';
             if (rating < 5) ratingClass = 'rating-low';
             else if (rating < 7) ratingClass = 'rating-mid';
 
             card.innerHTML = `
-                <!-- НОВОЕ: Бейдж рейтинга -->
                 <span class="lib-rating-badge ${ratingClass}">${movie.rating || '-'}</span>
-                
                 <span class="lib-age ${movie.ageClass}">${movie.age}</span>
                 <img src="${movie.poster}" alt="${movie.title}" class="lib-poster">
                 <div class="lib-info">
@@ -173,16 +179,54 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('input', applyFiltersAndSort);
     sortSelect.addEventListener('change', applyFiltersAndSort);
 
+    // --- ЛОГИКА СЛАЙДЕРА ---
+    function updateMediaSlider() {
+        mediaContainer.innerHTML = '';
+        const item = currentMediaList[currentMediaIndex];
+        
+        if (!item) return;
+
+        let element;
+        if (item.type === 'video') {
+            element = document.createElement('iframe');
+            element.className = 'media-content active';
+            element.src = `https://www.youtube.com/embed/${item.src}?autoplay=0`; // Autoplay off при переключении
+            element.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            element.allowFullscreen = true;
+        } else {
+            element = document.createElement('img');
+            element.className = 'media-content active';
+            element.src = item.src;
+        }
+
+        mediaContainer.appendChild(element);
+
+        // Обновляем текст счетчика
+        const typeText = item.type === 'video' ? 'Трейлер' : 'Кадр';
+        mediaCounter.textContent = `${typeText} ${currentMediaIndex + 1} / ${currentMediaList.length}`;
+    }
+
+    prevMediaBtn.addEventListener('click', () => {
+        if (currentMediaList.length <= 1) return;
+        currentMediaIndex--;
+        if (currentMediaIndex < 0) currentMediaIndex = currentMediaList.length - 1;
+        updateMediaSlider();
+    });
+
+    nextMediaBtn.addEventListener('click', () => {
+        if (currentMediaList.length <= 1) return;
+        currentMediaIndex++;
+        if (currentMediaIndex >= currentMediaList.length) currentMediaIndex = 0;
+        updateMediaSlider();
+    });
+
     // 5. МОДАЛЬНОЕ ОКНО
     function openInfoModal(movie) {
         infoPoster.src = movie.poster;
         infoTitle.textContent = movie.title;
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
         
-        // НОВОЕ: Заполняем рейтинг в модалке
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
-        
-        // Красим цвет оценки в модалке
         if(movie.rating >= 7) infoRating.style.color = '#4ade80';
         else if(movie.rating >= 5) infoRating.style.color = '#facc15';
         else infoRating.style.color = '#ef4444';
@@ -195,18 +239,34 @@ document.addEventListener('DOMContentLoaded', () => {
         infoDuration.textContent = movie.duration || '-';
         infoMpaa.textContent = movie.mpaa || 'N/A';
 
-        if(movie.trailer) {
-            infoTrailer.src = `https://www.youtube.com/embed/${movie.trailer}?autoplay=1`;
-        } else {
-            infoTrailer.src = '';
+        // Инициализация слайдера
+        currentMediaList = movie.media || [];
+        // Если медиа нет, но есть старое поле trailer (для совместимости)
+        if (currentMediaList.length === 0 && movie.trailer) {
+            currentMediaList.push({ type: 'video', src: movie.trailer });
         }
+        
+        currentMediaIndex = 0;
+        
+        if (currentMediaList.length > 0) {
+            updateMediaSlider();
+            // Показываем стрелки только если больше 1 элемента
+            prevMediaBtn.style.display = currentMediaList.length > 1 ? 'flex' : 'none';
+            nextMediaBtn.style.display = currentMediaList.length > 1 ? 'flex' : 'none';
+        } else {
+            mediaContainer.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;">Нет материалов</div>';
+            mediaCounter.textContent = '';
+            prevMediaBtn.style.display = 'none';
+            nextMediaBtn.style.display = 'none';
+        }
+
         infoModal.style.display = 'flex';
         document.body.style.overflow = 'hidden'; 
     }
 
     function closeInfo() {
         infoModal.style.display = 'none';
-        infoTrailer.src = ''; 
+        mediaContainer.innerHTML = ''; // Очищаем iframe чтобы остановить звук
         document.body.style.overflow = ''; 
     }
 
