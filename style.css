@@ -146,18 +146,20 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .info-modal-body { position: relative; z-index: 2; padding: 50px; }
 .info-layout { 
     display: grid; 
-    /* FIX: Увеличили левую колонку для большого постера */
-    grid-template-columns: 320px 1fr 280px; 
-    gap: 40px; 
-    /* Растягиваем колонки (Центр и Право), чтобы таблица росла с трейлером */
-    align-items: stretch; 
+    /* FIX: Увеличили левую колонку (360px), чтобы постер был БОЛЬШИМ */
+    grid-template-columns: 360px 1fr 300px; 
+    gap: 30px; 
+    /* Выравниваем по верху, чтобы постер и трейлер начинались с одной линии */
+    align-items: start; 
 }
 
 /* Левая колонка (Постер) */
 .info-col-visual { 
     text-align: center; 
-    /* FIX: Прижимаем постер к верху, чтобы он не растягивался */
+    /* Липкий постер - скользит при скролле правой части */
     align-self: start; 
+    position: sticky;
+    top: 0;
 }
 .info-main-title { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; margin: 20px 0 10px; line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
 
@@ -165,7 +167,6 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .info-col-data { 
     display: flex; 
     flex-direction: column; 
-    /* Заполняем высоту родителя */
     height: 100%; 
 }
 
@@ -179,9 +180,8 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     margin-bottom: 20px; 
 }
 
-/* Первая панель (Таблица) растягивается и центрирует контент */
+/* Первая панель (Таблица) растягивается если нужно */
 .info-col-data .glass-panel:first-child {
-    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center; 
@@ -227,14 +227,20 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 /* MEDIA QUERIES */
 @media (max-width: 900px) { .header-fluid { padding: 0 20px; flex-direction: column; gap: 15px; } .page-title { font-size: 2.2rem; } }
 @media (max-width: 768px) { .footer-container { flex-direction: column; text-align: center; gap: 25px; } .footer-info { text-align: center; } }
+
+/* FIX: Новый адаптив для ноутбуков (1400px), так как колонки стали широкими */
+@media (max-width: 1400px) {
+    .info-layout { grid-template-columns: 280px 1fr 280px; }
+}
+
 @media (max-width: 1100px) { 
     .info-layout { grid-template-columns: 1fr; gap: 30px; } 
-    .info-col-visual img { width: 220px; margin: 0 auto; } 
+    .info-col-visual img { width: 240px; margin: 0 auto; } 
     .info-col-trailer { order: -1; } 
     .info-modal-content { height: auto; overflow-y: auto; max-width: 95% !important;} 
     
-    /* Сброс сетки */
-    .info-layout .info-col-visual { grid-row: auto; align-self: center; }
+    /* Сброс сетки и липкости */
+    .info-layout .info-col-visual { grid-row: auto; align-self: center; position: static; }
     .info-layout > #infoDesc { grid-column: auto; }
     .info-col-data { height: auto; }
 }
