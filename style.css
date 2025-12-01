@@ -74,21 +74,11 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
     text-transform: uppercase; 
     line-height: 1; 
     margin: 0;
-    
-    /* Анимированный градиент */
-    background: linear-gradient(
-        90deg,
-        #ffffff 0%,
-        #94a3b8 40%,
-        #0ea5e9 50%,
-        #94a3b8 60%,
-        #ffffff 100%
-    );
+    background: linear-gradient(90deg, #ffffff 0%, #94a3b8 40%, #0ea5e9 50%, #94a3b8 60%, #ffffff 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    
     animation: gradientMove 5s linear infinite;
     filter: drop-shadow(0 0 20px rgba(14, 165, 233, 0.15));
 }
@@ -128,7 +118,7 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .buy-btn { background-color: var(--accent-blue); color: #fff; padding: 12px 30px; border: none; border-radius: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 20px; transition: 0.3s; width: 100%; }
 .buy-btn:hover { background-color: var(--accent-dark); }
 
-/* --- MEDIA SLIDER STYLES --- */
+/* --- MEDIA SLIDER --- */
 .info-col-trailer { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; }
 .media-container { width: 100%; position: relative; overflow: hidden; padding-bottom: 56.25%; background: #000; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
 .media-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
@@ -145,18 +135,73 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
    NEW MODAL STYLES (NETFLIX STYLE)
    ========================================= */
 
+/* Контейнер окна */
 .info-modal-content { max-width: 1300px !important; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 50px 100px -20px rgba(0,0,0,0.9); position: relative; overflow: hidden; padding: 0 !important; }
+
+/* Фон и наложение */
 .modal-backdrop-blur { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-size: cover; background-position: center top; filter: blur(80px) brightness(0.4) saturate(1.2); z-index: 0; transform: scale(1.2); transition: background-image 0.5s ease; }
 .modal-gradient-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.8) 60%, #0f172a 100%); z-index: 1; }
+
+/* Основная сетка */
 .info-modal-body { position: relative; z-index: 2; padding: 50px; }
-.info-layout { display: grid; grid-template-columns: 240px 1fr 260px; gap: 40px; align-items: start; }
-.info-col-visual { text-align: center; }
+.info-layout { 
+    display: grid; 
+    grid-template-columns: 240px 1fr 260px; 
+    gap: 40px; 
+    /* FIX: Растягиваем колонки по высоте */
+    align-items: stretch; 
+}
+
+/* Левая колонка (Постер) */
+.info-col-visual { 
+    text-align: center; 
+    /* FIX: Прижимаем постер к верху, чтобы не растягивало картинку */
+    align-self: start; 
+}
 .info-main-title { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; margin: 20px 0 10px; line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-.glass-panel { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 25px; margin-bottom: 20px; }
+
+/* Правая колонка (Характеристики + Билеты) */
+.info-col-data { 
+    display: flex; 
+    flex-direction: column; 
+    /* Заполняем высоту родителя */
+    height: 100%; 
+}
+
+/* Стеклянные панели */
+.glass-panel { 
+    background: rgba(0, 0, 0, 0.4); 
+    backdrop-filter: blur(12px); 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    border-radius: 16px; 
+    padding: 25px; 
+    margin-bottom: 20px; 
+}
+
+/* FIX: Если панель внутри info-col-data, растягиваем её на всю высоту */
+.info-col-data .glass-panel:first-child {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Центрируем строки таблицы по вертикали */
+    gap: 12px;
+}
+
 .glass-panel:last-child { margin-bottom: 0; }
+
 .panel-title { font-size: 0.85rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 15px; letter-spacing: 1px; font-weight: 700; }
 .description-text { font-size: 1rem; line-height: 1.6; color: #e2e8f0; text-shadow: 0 1px 2px rgba(0,0,0,0.5); text-align: left; }
-.spec-row { display: flex; justify-content: space-between; font-size: 0.9rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; margin-bottom: 10px; }
+
+/* Таблица характеристик */
+.spec-row { 
+    display: flex; 
+    justify-content: space-between; 
+    font-size: 0.9rem; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+    padding-bottom: 10px; 
+    /* Убираем margin, т.к. теперь используем gap в родителе */
+    margin-bottom: 0; 
+}
 .spec-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 .spec-label { color: #94a3b8; font-weight: 600; text-align: left; }
 .spec-value { color: #fff; font-weight: 500; text-align: right; }
@@ -175,6 +220,21 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .ticket-format { font-size: 0.7rem; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; color: #cbd5e1; margin-top: 3px; display: inline-block; }
 .no-sessions-stub { border: 2px dashed #334155; border-radius: 12px; padding: 20px; text-align: center; color: #64748b; font-size: 0.9rem; }
 
+/* FIX FOR SCHEDULE MODAL (Grid spans) */
+.info-layout .info-col-visual { grid-row: 1 / 3; }
+.info-layout > #infoDesc { grid-column: 2 / -1; margin-top: 0; align-self: start; }
+
+/* MEDIA QUERIES */
 @media (max-width: 900px) { .header-fluid { padding: 0 20px; flex-direction: column; gap: 15px; } .page-title { font-size: 2.2rem; } }
 @media (max-width: 768px) { .footer-container { flex-direction: column; text-align: center; gap: 25px; } .footer-info { text-align: center; } }
-@media (max-width: 1100px) { .info-layout { grid-template-columns: 1fr; gap: 30px; } .info-col-visual img { width: 220px; margin: 0 auto; } .info-col-trailer { order: -1; } .info-modal-content { height: auto; overflow-y: auto; max-width: 95% !important;} }
+@media (max-width: 1100px) { 
+    .info-layout { grid-template-columns: 1fr; gap: 30px; } 
+    .info-col-visual img { width: 220px; margin: 0 auto; } 
+    .info-col-trailer { order: -1; } 
+    .info-modal-content { height: auto; overflow-y: auto; max-width: 95% !important;} 
+    
+    /* Сброс сетки */
+    .info-layout .info-col-visual { grid-row: auto; }
+    .info-layout > #infoDesc { grid-column: auto; }
+    .info-col-data { height: auto; }
+}
