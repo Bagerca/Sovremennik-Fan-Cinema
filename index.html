@@ -114,7 +114,7 @@
         </div>
     </div>
 
-    <!-- 2. Модальное окно О ФИЛЬМЕ (3 КОЛОНКИ: Визуал | Трейлер | Инфо) -->
+    <!-- 2. Модальное окно О ФИЛЬМЕ (3 КОЛОНКИ С ГАЛЕРЕЕЙ) -->
     <div id="movieInfoModal" class="modal">
         <div class="modal-content info-modal-content">
             <span class="close-btn info-close-btn" style="z-index: 20;">&times;</span>
@@ -129,12 +129,18 @@
                         <div id="infoTags" class="row-meta centered-meta"></div>
                     </div>
 
-                    <!-- 2. ЦЕНТРАЛЬНАЯ КОЛОНКА: Трейлер -->
+                    <!-- 2. ЦЕНТРАЛЬНАЯ КОЛОНКА: Слайдер -->
                     <div class="info-col-trailer">
-                        <div class="video-responsive">
-                            <iframe id="infoTrailer" width="560" height="315" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <div class="media-container" id="mediaContainer">
+                            <!-- Сюда JS будет вставлять iframe или img -->
                         </div>
-                        <h3 class="trailer-label">Официальный трейлер</h3>
+                        
+                        <!-- Кнопки навигации -->
+                        <button class="slider-arrow prev" id="prevMediaBtn">❮</button>
+                        <button class="slider-arrow next" id="nextMediaBtn">❯</button>
+
+                        <!-- Подпись -->
+                        <div class="media-counter" id="mediaCounter"></div>
                     </div>
 
                     <!-- 3. ПРАВАЯ КОЛОНКА: Информация -->
