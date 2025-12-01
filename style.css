@@ -142,10 +142,10 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .slider-arrow.prev { left: -20px; }
 .slider-arrow.next { right: -20px; }
 
-/* FIX: Увеличен отступ снизу для разделения текста */
+/* FIX: Уменьшенный отступ снизу */
 .media-counter { 
     margin-top: 15px;
-    margin-bottom: 25px; /* <--- Больше воздуха между трейлером и текстом */
+    margin-bottom: 12px; /* <--- Оптимальный отступ */
     font-size: 0.85rem; 
     color: #64748b; 
     text-transform: uppercase; 
@@ -169,15 +169,20 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .modal-backdrop-blur { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-size: cover; background-position: center top; filter: blur(80px) brightness(0.4) saturate(1.2); z-index: 0; transform: scale(1.2); transition: background-image 0.5s ease; }
 .modal-gradient-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.8) 60%, #0f172a 100%); z-index: 1; }
 
-/* Основная сетка */
-.info-modal-body { position: relative; z-index: 2; padding: 50px; }
+/* Основная сетка и внутренние отступы */
+.info-modal-body { 
+    position: relative; 
+    z-index: 2; 
+    /* FIX: Уменьшен нижний отступ, чтобы убрать "днище" */
+    padding: 40px 40px 20px 40px; 
+}
 
 /* FIX: Выравнивание колонок */
 .info-layout { 
     display: grid; 
     grid-template-columns: 280px 1fr 280px; 
-    gap: 30px; 
-    align-items: start; /* Выравнивание по верху для симметрии */
+    gap: 25px;  /* Чуть меньше, чтобы было плотнее */
+    align-items: start;
 }
 
 /* Левая колонка (Постер) */
