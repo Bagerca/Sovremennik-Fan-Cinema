@@ -34,11 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentMediaList = [];
     let currentMediaIndex = 0;
 
-    // 1. ЗАГРУЗКА ДАННЫХ
-    fetch('movies.json')
+    // 1. ЗАГРУЗКА ДАННЫХ (ИЗМЕНЕНО: Загружаем только library.json)
+    fetch('library.json')
         .then(response => response.json())
         .then(data => {
-            allMoviesLibrary = Object.values(data.library);
+            // Данные теперь приходят сразу как объект, без обертки "library"
+            allMoviesLibrary = Object.values(data);
             generateGenreButtons(allMoviesLibrary);
             applyFiltersAndSort();
         })
