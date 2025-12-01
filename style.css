@@ -112,3 +112,99 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     .footer-container { flex-direction: column; text-align: center; gap: 25px; }
     .footer-info { text-align: center; }
 }
+
+/* =========================================
+   MEDIA SLIDER STYLES (Gallery in Modal)
+   ========================================= */
+
+.info-col-trailer {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Контейнер для медиа (видео или фото) */
+.media-container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    background: #000;
+    border-radius: 16px;
+    border: 1px solid #334155;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+}
+
+/* Элементы внутри контейнера (iframe или img) */
+.media-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Для картинок */
+    display: none; /* Скрываем все по умолчанию */
+}
+
+.media-content.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Стрелки навигации */
+.slider-arrow {
+    position: absolute;
+    top: 50%; /* Центр по высоте контейнера */
+    transform: translateY(-50%);
+    background: rgba(15, 23, 42, 0.6);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+    user-select: none;
+    font-size: 18px;
+}
+
+.slider-arrow:hover {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Позиция стрелок */
+.slider-arrow.prev { left: -20px; }
+.slider-arrow.next { right: -20px; }
+
+/* Текст снизу (Трейлер 1/3) */
+.media-counter {
+    margin-top: 15px;
+    font-size: 0.85rem;
+    color: #64748b;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: rgba(255,255,255,0.05);
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+/* Адаптив стрелок */
+@media (max-width: 1200px) {
+    .slider-arrow.prev { left: 10px; }
+    .slider-arrow.next { right: 10px; }
+}
