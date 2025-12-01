@@ -13,9 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoTitle = document.getElementById('infoTitle');
     const infoDesc = document.getElementById('infoDesc');
     const infoTags = document.getElementById('infoTags');
-    const infoTrailer = document.getElementById('infoTrailer');
+    
+    // Элементы слайдера
+    const mediaContainer = document.getElementById('mediaContainer');
+    const prevMediaBtn = document.getElementById('prevMediaBtn');
+    const nextMediaBtn = document.getElementById('nextMediaBtn');
+    const mediaCounter = document.getElementById('mediaCounter');
 
-    // Новые элементы для инфо-модалки
+    // Элементы таблицы информации
     const infoRating = document.getElementById('infoRating');
     const infoYear = document.getElementById('infoYear');
     const infoCountry = document.getElementById('infoCountry');
@@ -27,6 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let allMovies = []; 
     let selectedDate = new Date(); 
     let currentPrice = 0; 
+    
+    // Переменные для слайдера
+    let currentMediaList = [];
+    let currentMediaIndex = 0;
 
     // --- 1. ГЕНЕРАЦИЯ ДАТ ---
     function generateDates() {
@@ -109,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function createMovieCard(movie) {
         const tagsHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
         
-        // Определяем цвет и класс рейтинга
         const rating = movie.rating || 0;
         let ratingClass = '';
         if (rating < 5) ratingClass = 'rating-low';
@@ -134,9 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="movie-row" data-category="${movie.category}">
                 <div class="movie-primary-content" data-movieid="${movie.movieId}">
                     <div class="row-poster">
-                        <!-- Рейтинг слева -->
                         <span class="rating-badge ${ratingClass}">${movie.rating || '-'}</span>
-                        <!-- Возраст теперь справа (стиль в CSS) -->
                         <span class="age-badge ${movie.ageClass}">${movie.age}</span>
                         <img src="${movie.poster}" alt="${movie.title}">
                     </div>
@@ -254,23 +260,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 8. ФУНКЦИИ МОДАЛОК ---
-    function openInfoModal(movie) {
-        // Заполняем постер
-        infoPoster.src = movie.poster;
+    // --- 8. ФУНКЦИИ СЛАЙДЕРА ---
+    function updateMediaSlider() {
+        mediaContainer.innerHTML = '';
+        const item = currentMediaList[currentMediaIndex];
+        
+        if (!item) return;
 
-        // Заполняем текстовые данные
-        document.getElementById('infoTitle').textContent = movie.title;
-        document.getElementById('infoDesc').textContent = movie.description;
+        let element;
+        if (item.type === 'video') {
+            element = document.createElement('iframe');
+            element.className = 'media-content active';
+            element.src = `https://www.youtube.com/embed/${item.src}?autoplay=0`;
+            element.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            element.allowFullscreen = true;
+        } else {
+            element = document.createElement('img');
+            element.className = 'media-content active';
+            element.src = item.src;
+        }
+
+        mediaContainer.appendChild(element);
+
+        const typeText = item.type === 'video' ? 'Трейлер' : 'Кадр';
+        mediaCounter.textContent = `${typeText} ${currentMediaIndex + 1} / ${currentMediaList.length}`;
+    }
+
+    prevMediaBtn.addEventListener('click', () => {
+        if (currentMediaList.length <= 1) return;
+        currentMediaIndex--;
+        if (currentMediaIndex < 0) currentMediaIndex = currentMediaList.length - 1;
+        updateMediaSlider();
+    });
+
+    nextMediaBtn.addEventListener('click', () => {
+        if (currentMediaList.length <= 1) return;
+        currentMediaIndex++;
+        if (currentMediaIndex >= currentMediaList.length) currentMediaIndex = 0;
+        updateMediaSlider();
+    });
+
+    // --- 9. ОТКРЫТИЕ ИНФО ---
+    function openInfoModal(movie) {
+        infoPoster.src = movie.poster;
+        infoTitle.textContent = movie.title;
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
 
-        // Рейтинг
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
         if(movie.rating >= 7) infoRating.style.color = '#4ade80';
         else if(movie.rating >= 5) infoRating.style.color = '#facc15';
         else infoRating.style.color = '#ef4444';
 
-        // Заполняем таблицу
+        infoDesc.textContent = movie.description;
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
         infoGenre.textContent = movie.tags.join(', ');
@@ -278,11 +319,23 @@ document.addEventListener('DOMContentLoaded', () => {
         infoDuration.textContent = movie.duration || '-';
         infoMpaa.textContent = movie.mpaa || 'N/A';
 
-        // Трейлер
-        if(movie.trailer) {
-            infoTrailer.src = `https://www.youtube.com/embed/${movie.trailer}?autoplay=1`;
+        // Инициализация слайдера
+        currentMediaList = movie.media || [];
+        if (currentMediaList.length === 0 && movie.trailer) {
+            currentMediaList.push({ type: 'video', src: movie.trailer });
+        }
+        
+        currentMediaIndex = 0;
+        
+        if (currentMediaList.length > 0) {
+            updateMediaSlider();
+            prevMediaBtn.style.display = currentMediaList.length > 1 ? 'flex' : 'none';
+            nextMediaBtn.style.display = currentMediaList.length > 1 ? 'flex' : 'none';
         } else {
-            infoTrailer.src = '';
+            mediaContainer.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;">Нет материалов</div>';
+            mediaCounter.textContent = '';
+            prevMediaBtn.style.display = 'none';
+            nextMediaBtn.style.display = 'none';
         }
 
         infoModal.style.display = 'flex';
@@ -297,7 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
     closeInfoBtn.addEventListener('click', closeInfo);
     function closeInfo() {
         infoModal.style.display = 'none';
-        infoTrailer.src = ''; 
+        mediaContainer.innerHTML = ''; 
         document.body.style.overflow = ''; 
     }
 
