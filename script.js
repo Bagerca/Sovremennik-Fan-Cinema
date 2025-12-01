@@ -108,18 +108,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const rating = movie.rating || 0;
         let ratingClass = rating < 5 ? 'rating-low' : (rating < 7 ? 'rating-mid' : '');
 
-        const sessionsHTML = movie.sessions.map(session => `
-            <button class="session-btn buy-ticket-btn" 
-                    data-film="${movie.title}" 
-                    data-time="${session.time}"
-                    data-price="${session.price}">
-                <div class="btn-top"><span class="session-time">${session.time}</span></div>
-                <div class="btn-bottom">
-                    <span class="session-price">${session.price} ₽</span>
-                    <span class="session-format" style="${session.isSpecial ? 'color: #f59e0b;' : ''}">${session.format}</span>
-                </div>
-            </button>
-        `).join('');
+        // --- ЛОГИКА ВРЕМЕНИ (ОБНОВЛЕНИЕ) ---
+        const now = new Date(); // Текущее время пользователя
+
+        const sessionsHTML = movie.sessions.map(session => {
+            // 1. Собираем дату и время сеанса
+            const sessionDateTime = new Date(`${selectedDate}T${session.time}`);
+            
+            // 2. Проверяем, прошел ли сеанс
+            const isPast = sessionDateTime < now;
+            
+            // 3. Добавляем класс disabled
+            const disabledClass = isPast ? 'disabled' : '';
+
+            return `
+                <button class="session-btn buy-ticket-btn ${disabledClass}" 
+                        data-film="${movie.title}" 
+                        data-time="${session.time}"
+                        data-price="${session.price}">
+                    <div class="btn-top"><span class="session-time">${session.time}</span></div>
+                    <div class="btn-bottom">
+                        <span class="session-price">${session.price} ₽</span>
+                        <span class="session-format" style="${session.isSpecial ? 'color: #f59e0b;' : ''}">${session.format}</span>
+                    </div>
+                </button>
+            `;
+        }).join('');
+        // ----------------------------------
 
         return `
             <div class="movie-row" data-category="${movie.category}">
@@ -159,7 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5. CLICKS DELEGATION
     moviesContainer.addEventListener('click', (e) => {
         const buyBtn = e.target.closest('.buy-ticket-btn');
-        if (buyBtn) {
+        // Проверяем, не заблокирована ли кнопка
+        if (buyBtn && !buyBtn.classList.contains('disabled')) {
             const title = buyBtn.getAttribute('data-film');
             const time = buyBtn.getAttribute('data-time');
             currentPrice = parseInt(buyBtn.getAttribute('data-price')); 
@@ -287,7 +303,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const containerWidth = infoDesc.clientWidth || Math.min(600, window.innerWidth - 60);
         const charsPerLine = Math.floor(containerWidth / 9); 
         
-        // !!! ДЛЯ РАСПИСАНИЯ: 5 СТРОК !!!
         const dynamicLimit = (charsPerLine * 5) - 40; 
 
         if (movie.description && movie.description.length > dynamicLimit) {
