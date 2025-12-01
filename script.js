@@ -179,12 +179,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 6. HALL (ОБНОВЛЕННАЯ ГЕНЕРАЦИЯ ЗАЛА)
+    // 6. HALL (ОБНОВЛЕННАЯ ФУНКЦИЯ С НОМЕРАМИ С ДВУХ СТОРОН)
     function renderHall() {
         const seatsArea = document.getElementById('seatsArea');
         seatsArea.innerHTML = ''; 
 
-        // Настройки рядов согласно схеме
+        // Ряды с 2 по 16
         const startRow = 2;
         const endRow = 16;
 
@@ -192,19 +192,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const rowDiv = document.createElement('div');
             rowDiv.className = 'seat-row';
 
-            // Номер ряда
-            const rowLabel = document.createElement('div');
-            rowLabel.className = 'row-number';
-            rowLabel.innerText = rowNum;
-            rowDiv.appendChild(rowLabel);
+            // --- ЛЕВЫЙ НОМЕР РЯДА ---
+            const rowLabelLeft = document.createElement('div');
+            rowLabelLeft.className = 'row-number row-left';
+            rowLabelLeft.innerText = rowNum;
+            rowDiv.appendChild(rowLabelLeft);
 
             // Количество мест
-            let seatsInRow = 24; // Основной блок (3-15 ряды)
-            
+            let seatsInRow = 24; 
             if (rowNum === 2) {
-                seatsInRow = 22; // Верхний ряд короче
+                seatsInRow = 22; // Верхний ряд
             } else if (rowNum === 16) {
-                seatsInRow = 29; // Нижний ряд длиннее (проход)
+                seatsInRow = 29; // Нижний ряд
             }
 
             // Генерация мест
@@ -214,12 +213,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 seat.title = `Ряд ${rowNum}, Место ${j + 1}`; 
                 
                 seat.addEventListener('click', () => {
-                    // Простая логика выбора
                     seat.classList.toggle('selected');
                     updateSelectedCount();
                 });
                 rowDiv.appendChild(seat);
             }
+
+            // --- ПРАВЫЙ НОМЕР РЯДА ---
+            const rowLabelRight = document.createElement('div');
+            rowLabelRight.className = 'row-number row-right';
+            rowLabelRight.innerText = rowNum;
+            rowDiv.appendChild(rowLabelRight);
+
             seatsArea.appendChild(rowDiv);
         }
     }
