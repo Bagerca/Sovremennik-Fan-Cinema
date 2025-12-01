@@ -28,30 +28,13 @@
 .row-poster { width: 200px; flex-shrink: 0; position: relative; height: 100%; }
 .row-poster img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ОБНОВЛЕНО: Бейдж возраста теперь справа */
+/* Бейджи */
 .age-badge { position: absolute; top: 10px; right: 10px; padding: 6px 10px; border-radius: 6px; font-weight: 800; font-size: 12px; color: #fff; z-index: 2; backdrop-filter: blur(4px); }
 .age-green { background: rgba(34, 197, 94, 0.9); }
 .age-orange { background: rgba(249, 115, 22, 0.9); }
 .age-red { background: rgba(239, 68, 68, 0.9); }
 
-/* НОВОЕ: Бейдж рейтинга (слева) */
-.rating-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    color: #4ade80; /* Зеленый по умолчанию */
-    font-weight: 800;
-    font-size: 12px;
-    padding: 6px 10px;
-    border-radius: 6px;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(74, 222, 128, 0.3);
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
+.rating-badge { position: absolute; top: 10px; left: 10px; background: rgba(0, 0, 0, 0.7); color: #4ade80; font-weight: 800; font-size: 12px; padding: 6px 10px; border-radius: 6px; backdrop-filter: blur(4px); border: 1px solid rgba(74, 222, 128, 0.3); z-index: 2; display: flex; align-items: center; gap: 4px; }
 .rating-badge::before { content: '★'; font-size: 10px; color: inherit; }
 .rating-mid { color: #facc15; border-color: rgba(250, 204, 21, 0.3); }
 .rating-low { color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
@@ -99,11 +82,8 @@
 .info-main-title { color: #fff; font-size: 1.6rem; line-height: 1.2; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
 .centered-meta { justify-content: center !important; margin-bottom: 0 !important; }
 
-/* Col 2 */
+/* Col 2 (Теперь используется для слайдера, стили в style.css, здесь только адаптив) */
 .info-col-trailer { display: flex; flex-direction: column; align-items: center; width: 100%; }
-.video-responsive { width: 100%; overflow: hidden; padding-bottom: 56.25%; position: relative; height: 0; border-radius: 16px; background: #000; border: 1px solid #334155; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
-.video-responsive iframe { left: 0; top: 0; height: 100%; width: 100%; position: absolute; }
-.trailer-label { margin-top: 15px; font-size: 0.9rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
 
 /* Col 3 */
 .info-col-data { display: flex; flex-direction: column; justify-content: center; }
@@ -123,7 +103,13 @@
 .showcase li { display: flex; align-items: center; gap: 6px; font-size: 12px; }
 .screen { background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%); height: 40px; width: 100%; margin: 10px 0 25px; transform: perspective(400px) rotateX(-10deg); box-shadow: 0 15px 20px -10px rgba(255, 255, 255, 0.2); border-radius: 8px; color: rgba(255,255,255,0.3); font-size: 10px; display: flex; align-items: center; justify-content: center; letter-spacing: 5px; }
 .seats-area { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.seat-row { display: flex; gap: 4px; justify-content: center; }
+
+/* Ряд кресел */
+.seat-row { display: flex; gap: 4px; justify-content: center; align-items: center; }
+
+/* Номер ряда */
+.row-number { color: #64748b; font-size: 12px; font-weight: 700; width: 25px; text-align: right; margin-right: 10px; user-select: none; }
+
 .seat { background-color: #334155; height: 16px; width: 18px; border-top-left-radius: 6px; border-top-right-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 0; }
 .seat:not(.occupied):hover { transform: scale(1.3); background-color: #64748b; z-index: 2; }
 .seat.selected { background-color: var(--accent-blue); box-shadow: 0 0 8px var(--accent-blue); }
