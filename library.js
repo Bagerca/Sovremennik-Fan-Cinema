@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- УМНАЯ АДАПТИВНАЯ ОБРЕЗКА ТЕКСТА ---
         infoDesc.innerHTML = ''; 
         
-        // 1. Пытаемся взять реальную ширину. Если 0 (скрыто), берем ширину экрана (за вычетом отступов) или фикс. значение для ПК
+        // 1. Берем реальную ширину или fallback (600px для ПК, ширина экрана для моб)
         const containerWidth = infoDesc.clientWidth || Math.min(600, window.innerWidth - 60);
         
         // 2. Считаем лимит: (Ширина / 8.5px) * 2 строки - место под кнопку
@@ -229,6 +229,10 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.textContent = 'ЧИТАТЬ ДАЛЕЕ';
             
             btn.onclick = () => {
+                // Сбрасываем анимацию (чтобы перезапустить)
+                textSpan.classList.remove('anim-text-reveal');
+                void textSpan.offsetWidth; // Хак для перезапуска
+
                 if (btn.textContent === 'ЧИТАТЬ ДАЛЕЕ') {
                     textSpan.innerHTML = fullText;
                     btn.textContent = 'СВЕРНУТЬ';
@@ -236,6 +240,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     textSpan.innerHTML = shortText;
                     btn.textContent = 'ЧИТАТЬ ДАЛЕЕ';
                 }
+
+                // Запускаем анимацию
+                textSpan.classList.add('anim-text-reveal');
             };
 
             infoDesc.appendChild(textSpan);
@@ -270,37 +277,39 @@ document.addEventListener('DOMContentLoaded', () => {
             nextMediaBtn.style.display = 'none';
         }
 
-        // --- ГЕНЕРАЦИЯ БИЛЕТОВ (Только для Library) ---
-        miniContainer.innerHTML = '';
-        const scheduleEntry = allSchedule.find(s => s.movieId === movie.id);
+        // --- ГЕНЕРАЦИЯ БИЛЕТОВ ---
+        if (typeof miniContainer !== 'undefined' && miniContainer) {
+            miniContainer.innerHTML = '';
+            const scheduleEntry = allSchedule.find(s => s.movieId === movie.id || s.movieId === movie.movieId);
 
-        if (scheduleEntry && scheduleEntry.sessions) {
-            const dates = scheduleEntry.dates.slice(0, 2);
-            dates.forEach(date => {
-                const dateObj = new Date(date);
-                const day = dateObj.getDate();
-                const month = dateObj.toLocaleDateString('ru-RU', { month: 'short' });
-                
-                scheduleEntry.sessions.slice(0, 2).forEach(session => {
-                     const btn = document.createElement('button');
-                     btn.className = 'mini-ticket-btn';
-                     btn.onclick = () => window.location.href = 'schedule.html'; 
-                     btn.innerHTML = `
-                        <div class="ticket-time-col">
-                            <span class="ticket-time">${session.time}</span>
-                            <span class="ticket-date">${day} ${month}</span>
-                        </div>
-                        <div class="ticket-price-col">
-                            <div class="ticket-price">${session.price} ₽</div>
-                            <span class="ticket-format">${session.format}</span>
-                        </div>
-                     `;
-                     miniContainer.appendChild(btn);
+            if (scheduleEntry && scheduleEntry.sessions) {
+                const dates = scheduleEntry.dates.slice(0, 2);
+                dates.forEach(date => {
+                    const dateObj = new Date(date);
+                    const day = dateObj.getDate();
+                    const month = dateObj.toLocaleDateString('ru-RU', { month: 'short' });
+                    
+                    scheduleEntry.sessions.slice(0, 2).forEach(session => {
+                        const btn = document.createElement('button');
+                        btn.className = 'mini-ticket-btn';
+                        btn.onclick = () => window.location.href = 'schedule.html'; 
+                        btn.innerHTML = `
+                            <div class="ticket-time-col">
+                                <span class="ticket-time">${session.time}</span>
+                                <span class="ticket-date">${day} ${month}</span>
+                            </div>
+                            <div class="ticket-price-col">
+                                <div class="ticket-price">${session.price} ₽</div>
+                                <span class="ticket-format">${session.format}</span>
+                            </div>
+                        `;
+                        miniContainer.appendChild(btn);
+                    });
                 });
-            });
-        } 
-        if (miniContainer.children.length === 0) {
-            miniContainer.innerHTML = `<div class="no-sessions-stub"><span>Сеансов пока нет</span></div>`;
+            } 
+            if (miniContainer.children.length === 0) {
+                miniContainer.innerHTML = `<div class="no-sessions-stub"><span>Сеансов пока нет</span></div>`;
+            }
         }
 
         infoModal.style.display = 'flex';
