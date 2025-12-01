@@ -299,7 +299,16 @@
 .info-col-visual img { width: 100%; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: block; margin-bottom: 20px; transition: transform 0.3s; }
 .info-col-visual img:hover { transform: scale(1.02); }
 .info-main-title { color: #fff; font-size: 1.6rem; line-height: 1.2; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
-.centered-meta { justify-content: center !important; margin-bottom: 0 !important; display: flex; gap: 10px; }
+
+/* FIX: Добавлен flex-wrap для переноса тегов */
+.centered-meta { 
+    justify-content: center !important; 
+    margin-bottom: 0 !important; 
+    display: flex; 
+    gap: 10px; 
+    flex-wrap: wrap; /* Исправление переноса строк */
+}
+
 .meta-tag { background: rgba(255, 255, 255, 0.1); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
 
 /* Колонка 2: Трейлер */
