@@ -83,7 +83,13 @@
 .info-col-visual img { width: 100%; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: block; margin-bottom: 20px; transition: transform 0.3s; }
 .info-col-visual img:hover { transform: scale(1.02); }
 .info-main-title { color: #fff; font-size: 1.6rem; line-height: 1.2; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
-.centered-meta { justify-content: center !important; margin-bottom: 0 !important; }
+
+/* FIX: Добавлен flex-wrap для переноса тегов */
+.centered-meta { 
+    justify-content: center !important; 
+    margin-bottom: 0 !important; 
+    flex-wrap: wrap; /* Исправление переноса строк */
+}
 
 /* Col 2 (Теперь используется для слайдера, стили в style.css, здесь только адаптив) */
 .info-col-trailer { display: flex; flex-direction: column; align-items: center; width: 100%; }
