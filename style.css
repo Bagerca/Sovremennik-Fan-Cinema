@@ -146,16 +146,17 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .info-modal-body { position: relative; z-index: 2; padding: 50px; }
 .info-layout { 
     display: grid; 
-    grid-template-columns: 240px 1fr 260px; 
+    /* FIX: Увеличили левую колонку для большого постера */
+    grid-template-columns: 320px 1fr 280px; 
     gap: 40px; 
-    /* FIX: Растягиваем колонки по высоте */
+    /* Растягиваем колонки (Центр и Право), чтобы таблица росла с трейлером */
     align-items: stretch; 
 }
 
 /* Левая колонка (Постер) */
 .info-col-visual { 
     text-align: center; 
-    /* FIX: Прижимаем постер к верху, чтобы не растягивало картинку */
+    /* FIX: Прижимаем постер к верху, чтобы он не растягивался */
     align-self: start; 
 }
 .info-main-title { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; margin: 20px 0 10px; line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
@@ -178,12 +179,12 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     margin-bottom: 20px; 
 }
 
-/* FIX: Если панель внутри info-col-data, растягиваем её на всю высоту */
+/* Первая панель (Таблица) растягивается и центрирует контент */
 .info-col-data .glass-panel:first-child {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Центрируем строки таблицы по вертикали */
+    justify-content: center; 
     gap: 12px;
 }
 
@@ -199,7 +200,6 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     font-size: 0.9rem; 
     border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
     padding-bottom: 10px; 
-    /* Убираем margin, т.к. теперь используем gap в родителе */
     margin-bottom: 0; 
 }
 .spec-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
@@ -234,7 +234,7 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     .info-modal-content { height: auto; overflow-y: auto; max-width: 95% !important;} 
     
     /* Сброс сетки */
-    .info-layout .info-col-visual { grid-row: auto; }
+    .info-layout .info-col-visual { grid-row: auto; align-self: center; }
     .info-layout > #infoDesc { grid-column: auto; }
     .info-col-data { height: auto; }
 }
