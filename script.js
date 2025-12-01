@@ -75,23 +75,35 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedDate = today.toISOString().split('T')[0];
     }
 
-    // --- 2. ЗАГРУЗКА ДАННЫХ ---
-    fetch('movies.json')
-        .then(response => response.json())
-        .then(data => {
-            allMovies = data.schedule.map(item => {
-                const movieInfo = data.library[item.movieId];
-                return { ...item, ...movieInfo };
-            });
+    // --- 2. ЗАГРУЗКА ДАННЫХ (ИЗМЕНЕНО: Загрузка двух файлов параллельно) ---
+    Promise.all([
+        fetch('library.json').then(res => res.json()),
+        fetch('schedule.json').then(res => res.json())
+    ])
+    .then(([libraryData, scheduleData]) => {
+        // libraryData — это объект фильмов { "1": {...}, "2": {...} }
+        // scheduleData — это массив расписания [ {...}, {...} ]
 
-            generateDates();    
-            renderMovies(selectedDate); 
-            initFilters();      
-        })
-        .catch(error => {
-            console.error(error);
-            moviesContainer.innerHTML = '<p style="color:red; text-align:center;">Ошибка загрузки расписания.</p>';
+        allMovies = scheduleData.map(item => {
+            const movieInfo = libraryData[item.movieId];
+            
+            // Если вдруг в расписании есть ID, которого нет в библиотеке
+            if (!movieInfo) {
+                console.warn(`Фильм с ID ${item.movieId} не найден в библиотеке`);
+                return item; 
+            }
+
+            return { ...item, ...movieInfo };
         });
+
+        generateDates();    
+        renderMovies(selectedDate); 
+        initFilters();      
+    })
+    .catch(error => {
+        console.error(error);
+        moviesContainer.innerHTML = '<p style="color:red; text-align:center;">Ошибка загрузки расписания.</p>';
+    });
 
     // --- 3. РЕНДЕР КАРТОЧЕК ---
     function renderMovies(dateToFilter) {
