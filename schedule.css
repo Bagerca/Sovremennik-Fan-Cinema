@@ -3,21 +3,26 @@
    ========================================= */
 
 /* --- SCHEDULE HEADER --- */
-/* FIX: Центрирование заголовка и подзаголовка */
 .schedule-header { 
     display: flex; 
     flex-direction: column; 
-    align-items: center; /* Выравнивание блоков по центру */
-    text-align: center;  /* Выравнивание текста по центру */
+    align-items: center; /* Центрируем блоки */
+    text-align: center;  /* Центрируем текст */
     margin-bottom: 40px; 
     gap: 25px; 
     border-bottom: 1px solid var(--border-color); 
     padding-bottom: 30px; 
 }
 
-/* FIX: Отступ сверху, чтобы карточки не обрезались при ховере */
-.date-slider { display: flex; gap: 12px; overflow-x: auto; width: 100%; padding-bottom: 10px; padding-top: 20px; justify-content: center; }
+/* Поправка отступов заголовка */
+.schedule-header .subtitle {
+    margin-top: 0;
+    margin-bottom: 15px;
+    display: block;
+}
 
+/* Даты */
+.date-slider { display: flex; gap: 12px; overflow-x: auto; width: 100%; padding-bottom: 10px; padding-top: 20px; justify-content: center; }
 .date-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 12px 24px; border-radius: 12px; cursor: pointer; text-align: center; min-width: 85px; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); }
 .date-card:hover { border-color: var(--accent-blue); background: rgba(14, 165, 233, 0.1); transform: translateY(-3px); }
 .date-card.active { background: var(--accent-blue); border-color: var(--accent-blue); box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); }
@@ -25,13 +30,13 @@
 .day-name { display: block; font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
 .day-number { display: block; font-size: 20px; font-weight: 800; color: #fff; }
 
-/* --- FILTERS --- */
+/* Фильтры */
 .filters-bar { display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; justify-content: center; padding-top: 10px; }
 .filter-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 700; transition: 0.3s; text-transform: uppercase; }
 .filter-btn:hover { border-color: var(--accent-blue); color: #fff; transform: translateY(-3px); }
 .filter-btn.active { background: #fff; color: #020617; border-color: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
 
-/* --- MOVIES LIST --- */
+/* Список фильмов */
 .schedule-list { display: flex; flex-direction: column; gap: 24px; width: 1200px; max-width: 95%; margin: 0 auto; min-height: 600px; }
 .movie-row { display: flex; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; height: 280px; position: relative; }
 .movie-row:hover { transform: translateY(-5px); border-color: #334155; box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5); }
@@ -54,7 +59,7 @@
 
 .row-info { flex: 1; padding: 30px 25px 20px; display: flex; flex-direction: column; justify-content: flex-start; min-width: 0; overflow: hidden; text-align: left; }
 .row-title { font-size: 1.8rem; font-weight: 900; color: #fff; margin-bottom: 12px; text-transform: uppercase; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; padding-bottom: 2px; }
-.row-meta { display: flex; gap: 10px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; align-items: center; font-weight: 600; justify-content: flex-start; }
+.row-meta { display: flex; gap: 10px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; align-items: center; font-weight: 600; justify-content: flex-start; flex-wrap: wrap; }
 .meta-tag { background: rgba(255, 255, 255, 0.1); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
 .row-desc { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
 
@@ -83,37 +88,6 @@
 .promo-content h3 { font-size: 1.2rem; color: #fff; margin-bottom: 10px; font-weight: 800; }
 .promo-content p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
 
-/* --- MOVIE INFO MODAL --- */
-.info-modal-content { max-width: 1400px !important; text-align: left !important; padding: 0 !important; overflow: hidden; }
-.info-modal-body { padding: 50px; }
-.info-layout { display: grid; grid-template-columns: 230px 1fr 340px; gap: 30px; align-items: center; }
-
-/* Col 1 */
-.info-col-visual { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.info-col-visual img { width: 100%; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: block; margin-bottom: 20px; transition: transform 0.3s; }
-.info-col-visual img:hover { transform: scale(1.02); }
-.info-main-title { color: #fff; font-size: 1.6rem; line-height: 1.2; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
-
-/* FIX: flex-wrap добавлен, чтобы теги переносились */
-.centered-meta { 
-    justify-content: center !important; 
-    margin-bottom: 0 !important; 
-    flex-wrap: wrap; /* Исправление переноса строк */
-}
-
-/* Col 2 (Теперь используется для слайдера, стили в style.css, здесь только адаптив) */
-.info-col-trailer { display: flex; flex-direction: column; align-items: center; width: 100%; }
-
-/* Col 3 */
-.info-col-data { display: flex; flex-direction: column; justify-content: center; }
-.info-specs { display: flex; flex-direction: column; gap: 10px; background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 20px; }
-.spec-row { display: flex; font-size: 0.9rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 8px; margin-bottom: 2px; }
-.spec-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.spec-label { width: 100px; flex-shrink: 0; color: #94a3b8; font-weight: 600; }
-.spec-value { color: #f1f5f9; font-weight: 500; }
-.spec-badge { display: inline-block; border: 1px solid #64748b; padding: 0 6px; border-radius: 4px; font-size: 0.8em; color: #cbd5e1; }
-.info-description { color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; }
-
 /* --- HALL MODAL --- */
 .hall-modal-content { max-width: 750px; padding: 30px; }
 .hall-title { color: var(--accent-blue); margin-bottom: 5px; }
@@ -122,13 +96,8 @@
 .showcase li { display: flex; align-items: center; gap: 6px; font-size: 12px; }
 .screen { background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%); height: 40px; width: 100%; margin: 10px 0 25px; transform: perspective(400px) rotateX(-10deg); box-shadow: 0 15px 20px -10px rgba(255, 255, 255, 0.2); border-radius: 8px; color: rgba(255,255,255,0.3); font-size: 10px; display: flex; align-items: center; justify-content: center; letter-spacing: 5px; }
 .seats-area { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-
-/* Ряд кресел */
 .seat-row { display: flex; gap: 4px; justify-content: center; align-items: center; }
-
-/* Номер ряда */
 .row-number { color: #64748b; font-size: 12px; font-weight: 700; width: 25px; text-align: right; margin-right: 10px; user-select: none; }
-
 .seat { background-color: #334155; height: 16px; width: 18px; border-top-left-radius: 6px; border-top-right-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 0; }
 .seat:not(.occupied):hover { transform: scale(1.3); background-color: #64748b; z-index: 2; }
 .seat.selected { background-color: var(--accent-blue); box-shadow: 0 0 8px var(--accent-blue); }
@@ -139,13 +108,30 @@
 .ticket-info { display: flex; justify-content: space-between; margin-bottom: 15px; color: #fff; font-weight: 700; font-size: 1.1em; }
 .ticket-info span { color: var(--accent-blue); }
 
-/* --- MEDIA QUERIES --- */
+/* --- FIX FOR SCHEDULE MODAL GRID --- */
+/* Растягиваем постер по вертикали на 2 ряда */
+.info-layout .info-col-visual {
+    grid-row: 1 / 3;
+}
+
+/* Растягиваем описание по горизонтали на 2 колонки */
+.info-layout > #infoDesc {
+    grid-column: 2 / -1; 
+    margin-top: 0;
+    align-self: start;
+}
+
+/* MEDIA QUERIES */
 @media (max-width: 1100px) {
     .info-layout { grid-template-columns: 1fr; gap: 30px; }
     .info-col-visual img { width: 200px; margin: 0 auto 20px; }
     .info-col-trailer { order: -1; }
     .info-modal-content { text-align: center !important; }
     .spec-row { justify-content: space-between; text-align: left; }
+    
+    /* Сброс сетки для мобильных */
+    .info-layout .info-col-visual { grid-row: auto; }
+    .info-layout > #infoDesc { grid-column: auto; }
 }
 @media (max-width: 900px) {
     .row-sessions { width: 100%; flex-shrink: 1; border-left: none; border-top: 2px dashed #334155; }
