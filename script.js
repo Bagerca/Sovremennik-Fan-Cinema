@@ -281,9 +281,10 @@ document.addEventListener('DOMContentLoaded', () => {
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
         infoRating.style.color = movie.rating >= 7 ? '#4ade80' : (movie.rating >= 5 ? '#facc15' : '#ef4444');
         
-        // --- ОБРЕЗКА ТЕКСТА JS (90 символов для 2 строк) ---
+        // --- ОБРЕЗКА ТЕКСТА JS ---
         infoDesc.innerHTML = ''; 
-        const charLimit = 90; // Уменьшенный лимит
+        // Ставим лимит 80, чтобы кнопка точно влезла на 2-ю строку
+        const charLimit = 80; 
 
         if (movie.description && movie.description.length > charLimit) {
             const cutIndex = movie.description.lastIndexOf(' ', charLimit);
