@@ -350,20 +350,32 @@
 }
 
 /* =========================================================
-   СТИЛИ ДЛЯ МОДАЛЬНОГО ОКНА "О ФИЛЬМЕ"
+   СТИЛИ ДЛЯ МОДАЛЬНОГО ОКНА "О ФИЛЬМЕ" (Коррекция для Library)
    ========================================================= */
 
-.info-modal-content { max-width: 1400px !important; text-align: left !important; padding: 0 !important; overflow: hidden; }
-.info-modal-body { padding: 50px; }
-.info-layout { display: grid; grid-template-columns: 230px 1fr 340px; gap: 30px; align-items: center; }
+/* 
+   ВАЖНО: В style.css мы уже задали основные стили для модального окна.
+   Здесь мы только добавляем дублирующую страховку для постера, 
+   на случай если library.css перебивает настройки.
+*/
 
-/* Колонка 1: Постер */
-.info-col-visual { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.info-col-visual img { width: 100%; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: block; margin-bottom: 20px; transition: transform 0.3s; }
-.info-col-visual img:hover { transform: scale(1.02); }
-.info-main-title { color: #fff; font-size: 1.6rem; line-height: 1.2; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
+#infoPoster {
+    width: 100%;
+    height: 360px !important;    /* Фикс высоты */
+    object-fit: cover !important; /* Обрезка */
+    object-position: top center;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    display: block;
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+}
 
-/* FIX: flex-wrap добавлен, чтобы теги переносились на новую строку */
+#infoPoster:hover {
+    transform: scale(1.02);
+}
+
+/* FIX: Теги переносятся на новую строку */
 .centered-meta { 
     justify-content: center !important; 
     margin-bottom: 0 !important; 
@@ -374,26 +386,16 @@
 
 .meta-tag { background: rgba(255, 255, 255, 0.1); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
 
-/* Колонка 2: Трейлер */
-.info-col-trailer { display: flex; flex-direction: column; align-items: center; width: 100%; }
-.video-responsive { width: 100%; overflow: hidden; padding-bottom: 56.25%; position: relative; height: 0; border-radius: 16px; background: #000; border: 1px solid #334155; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
-.video-responsive iframe { left: 0; top: 0; height: 100%; width: 100%; position: absolute; }
-.trailer-label { margin-top: 15px; font-size: 0.9rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+/* Адаптив для модального окна в Library */
+@media (max-width: 1200px) {
+    #infoPoster {
+        height: 300px !important;
+    }
+}
 
-/* Колонка 3: Данные */
-.info-col-data { display: flex; flex-direction: column; justify-content: center; }
-.info-specs { display: flex; flex-direction: column; gap: 10px; background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 20px; }
-.spec-row { display: flex; font-size: 0.9rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 8px; margin-bottom: 2px; }
-.spec-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.spec-label { width: 100px; flex-shrink: 0; color: #94a3b8; font-weight: 600; }
-.spec-value { color: #f1f5f9; font-weight: 500; }
-.spec-badge { display: inline-block; border: 1px solid #64748b; padding: 0 6px; border-radius: 4px; font-size: 0.8em; color: #cbd5e1; }
-.info-description { color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; }
-
-/* Адаптив для модального окна */
 @media (max-width: 1100px) {
     .info-layout { grid-template-columns: 1fr; gap: 30px; }
-    .info-col-visual img { width: 200px; margin: 0 auto 20px; }
+    #infoPoster { width: 240px; height: auto !important; margin: 0 auto 20px; }
     .info-col-trailer { order: -1; }
     .info-modal-content { text-align: center !important; }
     .spec-row { justify-content: space-between; text-align: left; }
