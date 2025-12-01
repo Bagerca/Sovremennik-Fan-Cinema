@@ -142,7 +142,7 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .slider-arrow.prev { left: -20px; }
 .slider-arrow.next { right: -20px; }
 
-/* FIX: Увеличен отступ снизу */
+/* FIX: Увеличен отступ снизу для разделения текста */
 .media-counter { 
     margin-top: 15px;
     margin-bottom: 25px; /* <--- Больше воздуха между трейлером и текстом */
