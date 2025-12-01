@@ -26,7 +26,6 @@
     </header>
 
     <main class="container">
-        <!-- Заголовок и Даты -->
         <div class="schedule-header">
             <h1 class="page-title">
                 <span class="subtitle">Выберите удобное время</span>
@@ -35,7 +34,6 @@
             <div class="date-slider" id="date-slider"></div>
         </div>
 
-        <!-- Фильтры -->
         <div class="filters-bar">
             <button class="filter-btn active" data-filter="all">Все фильмы</button>
             <button class="filter-btn" data-filter="family">Детям и семье</button>
@@ -43,12 +41,10 @@
             <button class="filter-btn" data-filter="horror">Ужасы 18+</button>
         </div>
         
-        <!-- Список фильмов -->
         <div class="schedule-list" id="movies-container">
             <p style="color: #64748b; font-size: 1.2rem; text-align: center; margin-top: 50px;">Загрузка расписания...</p>
         </div>
 
-        <!-- Акции -->
         <div class="promotions-section">
             <h2 class="page-title" style="font-size: 2rem; margin-bottom: 30px;">Акции и предложения</h2>
             <div class="promo-grid">
@@ -83,7 +79,6 @@
         </div>
     </main>
 
-    <!-- Модальное окно покупки билета -->
     <div id="ticketModal" class="modal">
         <div class="modal-content hall-modal-content">
             <span class="close-btn">&times;</span>
@@ -108,10 +103,9 @@
         </div>
     </div>
 
-    <!-- Модальное окно О ФИЛЬМЕ (Для расписания) -->
+    <!-- Модальное окно О ФИЛЬМЕ -->
     <div id="movieInfoModal" class="modal">
         <div class="modal-content info-modal-content">
-            
             <div class="modal-backdrop-blur"></div>
             <div class="modal-gradient-overlay"></div>
             <span class="close-btn info-close-btn" style="z-index: 20;">&times;</span>
@@ -119,26 +113,23 @@
             <div class="info-modal-body">
                 <div class="info-layout">
                     
-                    <!-- 1. Постер -->
+                    <!-- 1. Постер (Слева, высокий) -->
                     <div class="info-col-visual">
                         <img id="infoPoster" src="" alt="Poster">
                         <h2 id="infoTitle" class="info-main-title"></h2>
                         <div id="infoTags" class="row-meta centered-meta" style="justify-content: center; flex-wrap: wrap; display:flex; gap:10px;"></div>
                     </div>
 
-                    <!-- 2. Трейлер + Описание (теперь вместе для правильных отступов) -->
+                    <!-- 2. Трейлер (Центр) -->
                     <div class="info-col-trailer">
                         <div class="media-container" id="mediaContainer"></div>
                         <div class="media-counter" id="mediaCounter"></div>
                         
                         <button class="slider-arrow prev" id="prevMediaBtn" style="position:absolute; top:30%; left:20px; z-index:10;">❮</button>
                         <button class="slider-arrow next" id="nextMediaBtn" style="position:absolute; top:30%; right:20px; z-index:10;">❯</button>
-
-                        <!-- Описание перенесено сюда -->
-                        <div id="infoDesc" class="glass-panel description-text"></div>
                     </div>
 
-                    <!-- 3. Инфо таблица -->
+                    <!-- 3. Инфо таблица (Справа) -->
                     <div class="info-col-data">
                         <div class="glass-panel">
                             <div class="spec-row"><span class="spec-label">Рейтинг:</span><span class="spec-value rating-val" id="infoRating"></span></div>
@@ -149,6 +140,9 @@
                             <div class="spec-row"><span class="spec-label">MPAA:</span><span class="spec-value spec-badge" id="infoMpaa"></span></div>
                         </div>
                     </div>
+
+                    <!-- 4. Описание (Внизу, растянуто на ширину трейлера и таблицы) -->
+                    <div id="infoDesc" class="glass-panel description-text"></div>
 
                 </div>
             </div>
