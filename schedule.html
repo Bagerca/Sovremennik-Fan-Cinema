@@ -121,17 +121,21 @@
                     
                     <!-- 1. Постер -->
                     <div class="info-col-visual">
-                        <img id="infoPoster" src="" alt="Poster" style="width: 100%; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);">
+                        <img id="infoPoster" src="" alt="Poster">
                         <h2 id="infoTitle" class="info-main-title"></h2>
                         <div id="infoTags" class="row-meta centered-meta" style="justify-content: center; flex-wrap: wrap; display:flex; gap:10px;"></div>
                     </div>
 
-                    <!-- 2. Трейлер -->
+                    <!-- 2. Трейлер + ОПИСАНИЕ (Теперь вместе!) -->
                     <div class="info-col-trailer">
                         <div class="media-container" id="mediaContainer"></div>
                         <div class="media-counter" id="mediaCounter"></div>
+                        
                         <button class="slider-arrow prev" id="prevMediaBtn" style="position:absolute; top:30%; left:20px; z-index:10;">❮</button>
                         <button class="slider-arrow next" id="nextMediaBtn" style="position:absolute; top:30%; right:20px; z-index:10;">❯</button>
+
+                        <!-- ВАЖНО: Описание перенесено сюда, внутрь info-col-trailer -->
+                        <div id="infoDesc" class="glass-panel description-text"></div>
                     </div>
 
                     <!-- 3. Инфо таблица -->
