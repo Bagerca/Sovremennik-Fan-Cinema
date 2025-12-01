@@ -281,12 +281,15 @@ document.addEventListener('DOMContentLoaded', () => {
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
         infoRating.style.color = movie.rating >= 7 ? '#4ade80' : (movie.rating >= 5 ? '#facc15' : '#ef4444');
         
-        // --- АДАПТИВНАЯ ОБРЕЗКА ТЕКСТА ---
+        // --- УМНАЯ АДАПТИВНАЯ ОБРЕЗКА ТЕКСТА ---
         infoDesc.innerHTML = ''; 
         
-        const containerWidth = infoDesc.clientWidth || (infoModal.querySelector('.info-modal-content').clientWidth - 100);
+        // 1. Берем реальную ширину или fallback (600px для ПК, ширина экрана для моб)
+        const containerWidth = infoDesc.clientWidth || Math.min(600, window.innerWidth - 60);
+        
+        // 2. Считаем лимит
         const charsPerLine = Math.floor(containerWidth / 8.5);
-        const dynamicLimit = (charsPerLine * 2) - 25;
+        const dynamicLimit = (charsPerLine * 2) - 20;
 
         if (movie.description && movie.description.length > dynamicLimit) {
             let cutIndex = movie.description.lastIndexOf(' ', dynamicLimit);
@@ -322,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
             p.style.margin = '0';
             infoDesc.appendChild(p);
         }
-        // ---------------------------------
+        // ----------------------------------------
 
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
