@@ -281,12 +281,14 @@ document.addEventListener('DOMContentLoaded', () => {
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
         infoRating.style.color = movie.rating >= 7 ? '#4ade80' : (movie.rating >= 5 ? '#facc15' : '#ef4444');
         
-        // --- ПРОФЕССИОНАЛЬНАЯ ОБРЕЗКА (SCRIPT) ---
+        // --- ПРОФЕССИОНАЛЬНАЯ ОБРЕЗКА (ДЛЯ РАСПИСАНИЯ - 5 СТРОК) ---
         infoDesc.innerHTML = ''; 
         
         const containerWidth = infoDesc.clientWidth || Math.min(600, window.innerWidth - 60);
         const charsPerLine = Math.floor(containerWidth / 9); 
-        const dynamicLimit = (charsPerLine * 2) - 40; 
+        
+        // !!! ДЛЯ РАСПИСАНИЯ: 5 СТРОК !!!
+        const dynamicLimit = (charsPerLine * 5) - 40; 
 
         if (movie.description && movie.description.length > dynamicLimit) {
             let cutIndex = movie.description.lastIndexOf(' ', dynamicLimit);
@@ -326,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
             p.textContent = movie.description || '';
             infoDesc.appendChild(p);
         }
-        // -----------------------------------------
+        // -----------------------------------------------------------
 
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
