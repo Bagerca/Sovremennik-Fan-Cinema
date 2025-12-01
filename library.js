@@ -203,58 +203,57 @@ document.addEventListener('DOMContentLoaded', () => {
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
         infoRating.style.color = movie.rating >= 7 ? '#4ade80' : (movie.rating >= 5 ? '#facc15' : '#ef4444');
 
-        // --- УМНАЯ АДАПТИВНАЯ ОБРЕЗКА ТЕКСТА ---
+        // --- ПРОФЕССИОНАЛЬНАЯ ОБРЕЗКА (LIBRARY) ---
         infoDesc.innerHTML = ''; 
         
-        // 1. Берем реальную ширину или fallback (600px для ПК, ширина экрана для моб)
+        // 1. Берем реальную ширину или fallback
         const containerWidth = infoDesc.clientWidth || Math.min(600, window.innerWidth - 60);
         
-        // 2. Считаем лимит: (Ширина / 8.5px) * 2 строки - место под кнопку
-        const charsPerLine = Math.floor(containerWidth / 8.5);
-        const dynamicLimit = (charsPerLine * 2) - 20;
+        // 2. Считаем лимит (делитель 9 для запаса)
+        const charsPerLine = Math.floor(containerWidth / 9); 
+        const dynamicLimit = (charsPerLine * 2) - 40; // 40 симв. запас под кнопку
 
         if (movie.description && movie.description.length > dynamicLimit) {
             let cutIndex = movie.description.lastIndexOf(' ', dynamicLimit);
             if (cutIndex === -1) cutIndex = dynamicLimit; 
 
-            const shortText = movie.description.substring(0, cutIndex) + '...';
-            const fullText = movie.description;
+            const shortHTML = movie.description.substring(0, cutIndex) + '...';
+            const fullHTML = movie.description;
 
-            const textSpan = document.createElement('span');
-            textSpan.className = 'description-text';
-            textSpan.innerHTML = shortText;
-
-            const btn = document.createElement('button');
-            btn.className = 'read-more-btn';
-            btn.textContent = 'ЧИТАТЬ ДАЛЕЕ';
+            const contentWrapper = document.createElement('span');
+            contentWrapper.className = 'description-text';
             
-            btn.onclick = () => {
-                // Сбрасываем анимацию (чтобы перезапустить)
-                textSpan.classList.remove('anim-text-reveal');
-                void textSpan.offsetWidth; // Хак для перезапуска
+            const renderState = (isExpanded) => {
+                // Анимация
+                contentWrapper.classList.remove('fade-in-effect');
+                void contentWrapper.offsetWidth; 
+                contentWrapper.classList.add('fade-in-effect');
 
-                if (btn.textContent === 'ЧИТАТЬ ДАЛЕЕ') {
-                    textSpan.innerHTML = fullText;
-                    btn.textContent = 'СВЕРНУТЬ';
+                if (isExpanded) {
+                    contentWrapper.innerHTML = `${fullHTML} <button class="read-more-btn" id="toggleDescBtn">СВЕРНУТЬ</button>`;
                 } else {
-                    textSpan.innerHTML = shortText;
-                    btn.textContent = 'ЧИТАТЬ ДАЛЕЕ';
+                    contentWrapper.innerHTML = `${shortHTML}<button class="read-more-btn" id="toggleDescBtn">ЧИТАТЬ ДАЛЕЕ</button>`;
                 }
 
-                // Запускаем анимацию
-                textSpan.classList.add('anim-text-reveal');
+                // Вешаем клик
+                setTimeout(() => {
+                    const btn = document.getElementById('toggleDescBtn');
+                    if(btn) {
+                        btn.onclick = (e) => { e.stopPropagation(); renderState(!isExpanded); };
+                    }
+                }, 0);
             };
 
-            infoDesc.appendChild(textSpan);
-            infoDesc.appendChild(btn);
+            renderState(false);
+            infoDesc.appendChild(contentWrapper);
+
         } else {
             const p = document.createElement('p');
             p.className = 'description-text';
             p.textContent = movie.description || '';
-            p.style.margin = '0';
             infoDesc.appendChild(p);
         }
-        // ----------------------------------------
+        // ------------------------------------------
 
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
@@ -277,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nextMediaBtn.style.display = 'none';
         }
 
-        // --- ГЕНЕРАЦИЯ БИЛЕТОВ ---
+        // ГЕНЕРАЦИЯ БИЛЕТОВ (Только для library.js)
         if (typeof miniContainer !== 'undefined' && miniContainer) {
             miniContainer.innerHTML = '';
             const scheduleEntry = allSchedule.find(s => s.movieId === movie.id || s.movieId === movie.movieId);
