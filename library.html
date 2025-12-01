@@ -48,14 +48,25 @@
 
                 <div class="sort-container">
                     <span class="sort-label">Сортировка:</span>
-                    <div class="select-wrapper">
-                        <select id="sortSelect">
-                            <option value="newest">Сначала новые</option>
-                            <option value="oldest">Сначала старые</option>
-                            <option value="az">По названию (А-Я)</option>
-                            <option value="za">По названию (Я-А)</option>
-                        </select>
+                    
+                    <!-- КАСТОМНЫЙ ВЫПАДАЮЩИЙ СПИСОК -->
+                    <div class="custom-select-wrapper">
+                        <div class="custom-select">
+                            <div class="custom-select__trigger">
+                                <span>Сначала новые</span>
+                            </div>
+                            <div class="custom-options">
+                                <span class="custom-option selected" data-value="newest">Сначала новые</span>
+                                <span class="custom-option" data-value="rating_high">По рейтингу (Высокий)</span>
+                                <span class="custom-option" data-value="rating_low">По рейтингу (Низкий)</span>
+                                <span class="custom-option" data-value="oldest">Сначала старые</span>
+                                <span class="custom-option" data-value="az">По названию (А-Я)</span>
+                                <span class="custom-option" data-value="za">По названию (Я-А)</span>
+                            </div>
+                        </div>
                     </div>
+                    <!-- КОНЕЦ КАСТОМНОГО СПИСКА -->
+
                 </div>
             </div>
 
@@ -75,7 +86,7 @@
         </div>
     </main>
 
-    <!-- МОДАЛЬНОЕ ОКНО О ФИЛЬМЕ (3 КОЛОНКИ С ГАЛЕРЕЕЙ) -->
+    <!-- МОДАЛЬНОЕ ОКНО О ФИЛЬМЕ -->
     <div id="movieInfoModal" class="modal">
         <div class="modal-content info-modal-content">
             <span class="close-btn info-close-btn" style="z-index: 20;">&times;</span>
@@ -83,60 +94,36 @@
             <div class="info-modal-body">
                 <div class="info-layout">
                     
-                    <!-- 1. ЛЕВАЯ КОЛОНКА: Постер + Название -->
+                    <!-- 1. ЛЕВАЯ КОЛОНКА -->
                     <div class="info-col-visual">
                         <img id="infoPoster" src="" alt="Poster">
                         <h2 id="infoTitle" class="info-main-title"></h2>
                         <div id="infoTags" class="row-meta centered-meta"></div>
                     </div>
 
-                    <!-- 2. ЦЕНТРАЛЬНАЯ КОЛОНКА: Слайдер -->
+                    <!-- 2. ЦЕНТРАЛЬНАЯ КОЛОНКА -->
                     <div class="info-col-trailer">
                         <div class="media-container" id="mediaContainer">
-                            <!-- Сюда JS будет вставлять iframe или img -->
+                            <!-- JS вставляет iframe/img -->
                         </div>
-                        
-                        <!-- Кнопки навигации -->
                         <button class="slider-arrow prev" id="prevMediaBtn">❮</button>
                         <button class="slider-arrow next" id="nextMediaBtn">❯</button>
-
-                        <!-- Подпись -->
                         <div class="media-counter" id="mediaCounter"></div>
                     </div>
 
-                    <!-- 3. ПРАВАЯ КОЛОНКА: Информация -->
+                    <!-- 3. ПРАВАЯ КОЛОНКА -->
                     <div class="info-col-data">
                         <div class="info-specs">
-                            <!-- Рейтинг -->
                             <div class="spec-row">
                                 <span class="spec-label">Рейтинг:</span>
                                 <span class="spec-value" id="infoRating" style="color: #4ade80; font-weight: 800;"></span>
                             </div>
-
-                            <div class="spec-row">
-                                <span class="spec-label">Год:</span>
-                                <span class="spec-value" id="infoYear"></span>
-                            </div>
-                            <div class="spec-row">
-                                <span class="spec-label">Страна:</span>
-                                <span class="spec-value" id="infoCountry"></span>
-                            </div>
-                            <div class="spec-row">
-                                <span class="spec-label">Жанры:</span>
-                                <span class="spec-value" id="infoGenre"></span>
-                            </div>
-                            <div class="spec-row">
-                                <span class="spec-label">Режиссер:</span>
-                                <span class="spec-value" id="infoDirector"></span>
-                            </div>
-                             <div class="spec-row">
-                                <span class="spec-label">Время:</span>
-                                <span class="spec-value" id="infoDuration"></span>
-                            </div>
-                            <div class="spec-row">
-                                <span class="spec-label">MPAA:</span>
-                                <span class="spec-value spec-badge" id="infoMpaa"></span>
-                            </div>
+                            <div class="spec-row"><span class="spec-label">Год:</span><span class="spec-value" id="infoYear"></span></div>
+                            <div class="spec-row"><span class="spec-label">Страна:</span><span class="spec-value" id="infoCountry"></span></div>
+                            <div class="spec-row"><span class="spec-label">Жанры:</span><span class="spec-value" id="infoGenre"></span></div>
+                            <div class="spec-row"><span class="spec-label">Режиссер:</span><span class="spec-value" id="infoDirector"></span></div>
+                             <div class="spec-row"><span class="spec-label">Время:</span><span class="spec-value" id="infoDuration"></span></div>
+                            <div class="spec-row"><span class="spec-label">MPAA:</span><span class="spec-value spec-badge" id="infoMpaa"></span></div>
                         </div>
 
                         <p id="infoDesc" class="info-description"></p>
@@ -151,7 +138,6 @@
         <div class="footer-container">
             <div class="footer-info">
                 <p class="copyright">© 2005 — 2025, Кинотеатр «Современник»</p>
-                <!-- Ссылка на карту теперь ведет на index.html -->
                 <a href="index.html#location-map" class="address-link">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
