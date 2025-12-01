@@ -123,21 +123,23 @@
 .ticket-info span { color: var(--accent-blue); }
 
 /* --- FIX FOR SCHEDULE MODAL GRID --- */
-/* Растягиваем постер по высоте на 2 ряда */
-.info-layout .info-col-visual {
-    grid-row: 1 / 3;
-}
-/* Растягиваем описание по ширине на 2-ю и 3-ю колонку */
-.info-layout > #infoDesc {
-    grid-column: 2 / -1; 
-    margin-top: 0;
-    align-self: start;
+.info-layout .info-col-visual { grid-row: 1 / 3; }
+.info-layout > #infoDesc { grid-column: 2 / -1; margin-top: 0; align-self: start; }
+.media-counter { margin-bottom: 0 !important; }
+
+/* --- СТИЛЬ ДЛЯ ПРОШЕДШИХ СЕАНСОВ (НОВОЕ) --- */
+.session-btn.disabled {
+    opacity: 0.5;
+    pointer-events: none; /* Запрещает клик */
+    background: #0f172a;  /* Темный фон */
+    border-color: #1e293b;
+    filter: grayscale(100%);
 }
 
-/* FIX: Убираем отступ у счетчика на странице расписания, 
-   потому что здесь и так большой Grid-gap */
-.media-counter {
-    margin-bottom: 0 !important;
+.session-btn.disabled .session-time,
+.session-btn.disabled .session-price,
+.session-btn.disabled .session-format {
+    color: #64748b; /* Серый текст */
 }
 
 /* MEDIA QUERIES */
@@ -147,7 +149,6 @@
     .info-col-trailer { order: -1; }
     .info-modal-content { text-align: center !important; }
     .spec-row { justify-content: space-between; text-align: left; }
-    
     .info-layout .info-col-visual { grid-row: auto; }
     .info-layout > #infoDesc { grid-column: auto; }
 }
