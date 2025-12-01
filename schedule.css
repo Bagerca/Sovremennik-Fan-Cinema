@@ -6,15 +6,14 @@
 .schedule-header { 
     display: flex; 
     flex-direction: column; 
-    align-items: center; /* Центрируем блоки */
-    text-align: center;  /* Центрируем текст */
+    align-items: center; 
+    text-align: center; 
     margin-bottom: 40px; 
     gap: 25px; 
     border-bottom: 1px solid var(--border-color); 
     padding-bottom: 30px; 
 }
 
-/* Поправка отступов заголовка */
 .schedule-header .subtitle {
     margin-top: 0;
     margin-bottom: 15px;
@@ -89,7 +88,7 @@
 .promo-content p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
 
 /* --- HALL MODAL --- */
-.hall-modal-content { max-width: 750px; padding: 30px; }
+.hall-modal-content { max-width: 800px; padding: 30px; }
 .hall-title { color: var(--accent-blue); margin-bottom: 5px; }
 .hall-subtitle { color: #fff; font-size: 1.1em; font-weight: 700; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #334155; }
 .showcase { background: rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 8px; color: #94a3b8; list-style: none; display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
@@ -97,24 +96,42 @@
 .screen { background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%); height: 40px; width: 100%; margin: 10px 0 25px; transform: perspective(400px) rotateX(-10deg); box-shadow: 0 15px 20px -10px rgba(255, 255, 255, 0.2); border-radius: 8px; color: rgba(255,255,255,0.3); font-size: 10px; display: flex; align-items: center; justify-content: center; letter-spacing: 5px; }
 .seats-area { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .seat-row { display: flex; gap: 4px; justify-content: center; align-items: center; }
-.row-number { color: #64748b; font-size: 12px; font-weight: 700; width: 25px; text-align: right; margin-right: 10px; user-select: none; }
+
+/* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ ЦИФР РЯДА (ЛЕВО И ПРАВО) */
+.row-number { 
+    color: #64748b; 
+    font-size: 12px; 
+    font-weight: 700; 
+    width: 25px; 
+    user-select: none; 
+    display: flex;
+    align-items: center;
+}
+.row-left {
+    justify-content: flex-end; /* Текст прижат к креслам */
+    margin-right: 12px;       /* Отступ от кресел */
+}
+.row-right {
+    justify-content: flex-start; /* Текст прижат к креслам */
+    margin-left: 12px;           /* Отступ от кресел */
+}
+
+/* КРЕСЛА */
 .seat { background-color: #334155; height: 16px; width: 18px; border-top-left-radius: 6px; border-top-right-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 0; }
 .seat:not(.occupied):hover { transform: scale(1.3); background-color: #64748b; z-index: 2; }
 .seat.selected { background-color: var(--accent-blue); box-shadow: 0 0 8px var(--accent-blue); }
 .seat.occupied { background-color: #94a3b8; cursor: not-allowed; opacity: 0.6; position: relative; box-shadow: none; }
 .seat.occupied::after { content: ''; position: absolute; top: 50%; left: 50%; width: 60%; height: 60%; transform: translate(-50%, -50%) rotate(45deg); background: rgba(0,0,0,0.3); height: 1px; width: 80%; }
 .seat.occupied::before { content: ''; position: absolute; top: 50%; left: 50%; width: 60%; height: 60%; transform: translate(-50%, -50%) rotate(-45deg); background: rgba(0,0,0,0.3); height: 1px; width: 80%; }
+
 .ticket-footer { margin-top: 30px; border-top: 1px solid #334155; padding-top: 20px; }
 .ticket-info { display: flex; justify-content: space-between; margin-bottom: 15px; color: #fff; font-weight: 700; font-size: 1.1em; }
 .ticket-info span { color: var(--accent-blue); }
 
 /* --- FIX FOR SCHEDULE MODAL GRID --- */
-/* Растягиваем постер по вертикали на 2 ряда */
 .info-layout .info-col-visual {
     grid-row: 1 / 3;
 }
-
-/* Растягиваем описание по горизонтали на 2 колонки */
 .info-layout > #infoDesc {
     grid-column: 2 / -1; 
     margin-top: 0;
@@ -129,7 +146,6 @@
     .info-modal-content { text-align: center !important; }
     .spec-row { justify-content: space-between; text-align: left; }
     
-    /* Сброс сетки для мобильных */
     .info-layout .info-col-visual { grid-row: auto; }
     .info-layout > #infoDesc { grid-column: auto; }
 }
