@@ -386,6 +386,12 @@
 
 .meta-tag { background: rgba(255, 255, 255, 0.1); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
 
+/* --- КОРРЕКЦИЯ ОТСТУПОВ МОДАЛКИ (ТОЛЬКО ДЛЯ БИБЛИОТЕКИ) --- */
+/* Уменьшаем нижний отступ, чтобы "днище" было меньше */
+.info-modal-body {
+    padding-bottom: 10px !important; /* Было 20px, стало 10px */
+}
+
 /* Адаптив для модального окна в Library */
 @media (max-width: 1200px) {
     #infoPoster {
