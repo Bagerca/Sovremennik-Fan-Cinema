@@ -174,11 +174,11 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     top: 0;
 }
 
-/* FIX: Постер фиксированной высоты как трейлер */
-.info-col-visual img { 
+/* FIX: Постер фиксированной высоты как трейлер. Используем ID #infoPoster для приоритета! */
+#infoPoster { 
     width: 100%;
-    height: 360px;       /* Высота */
-    object-fit: cover;   /* Красивое заполнение */
+    height: 360px !important;    /* Принудительная высота */
+    object-fit: cover !important; /* Красивое заполнение */
     object-position: top center; /* Фокус на лицах сверху */
     border-radius: 12px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
@@ -278,7 +278,7 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 
 @media (max-width: 1200px) {
     /* На ноутбуках немного уменьшаем высоту, сохраняя симметрию */
-    .info-col-visual img, 
+    #infoPoster, 
     .media-container {
         height: 300px !important;
     }
@@ -286,8 +286,10 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 
 @media (max-width: 1100px) { 
     .info-layout { grid-template-columns: 1fr; gap: 30px; } 
-    .info-col-visual img { width: 240px; height: auto !important; margin: 0 auto; } 
+    /* На мобильных сбрасываем высоту */
+    #infoPoster { width: 240px; height: auto !important; margin: 0 auto; } 
     .media-container { height: auto !important; padding-bottom: 56.25% !important; }
+    
     .info-col-trailer { order: -1; } 
     .info-modal-content { height: auto; overflow-y: auto; max-width: 95% !important;} 
     
