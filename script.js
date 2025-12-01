@@ -281,27 +281,43 @@ document.addEventListener('DOMContentLoaded', () => {
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
         infoRating.style.color = movie.rating >= 7 ? '#4ade80' : (movie.rating >= 5 ? '#facc15' : '#ef4444');
         
-        // --- ОБНОВЛЕННЫЙ БЛОК ОПИСАНИЯ ДЛЯ SCRIPT.JS ---
+        // --- ОБРЕЗКА ТЕКСТА JS ---
         infoDesc.innerHTML = ''; 
-        const descParagraph = document.createElement('p');
-        descParagraph.textContent = movie.description;
-        descParagraph.className = 'desc-clamped description-text'; 
-        descParagraph.style.margin = '0'; 
-        infoDesc.appendChild(descParagraph);
+        const charLimit = 180; // Лимит символов
 
-        if (movie.description && movie.description.length > 130) {
-            const toggleBtn = document.createElement('button');
-            toggleBtn.className = 'read-more-btn';
-            toggleBtn.textContent = 'Читать далее';
-            toggleBtn.onclick = () => {
-                const isClamped = descParagraph.classList.toggle('desc-clamped');
-                toggleBtn.textContent = isClamped ? 'Читать далее' : 'Свернуть';
+        if (movie.description && movie.description.length > charLimit) {
+            const cutIndex = movie.description.lastIndexOf(' ', charLimit);
+            const shortText = movie.description.substring(0, cutIndex) + '...';
+            const fullText = movie.description;
+
+            const textSpan = document.createElement('span');
+            textSpan.className = 'description-text';
+            textSpan.innerHTML = shortText;
+
+            const btn = document.createElement('button');
+            btn.className = 'read-more-btn';
+            btn.textContent = 'ЧИТАТЬ ДАЛЕЕ';
+            
+            btn.onclick = () => {
+                if (btn.textContent === 'ЧИТАТЬ ДАЛЕЕ') {
+                    textSpan.innerHTML = fullText;
+                    btn.textContent = 'СВЕРНУТЬ';
+                } else {
+                    textSpan.innerHTML = shortText;
+                    btn.textContent = 'ЧИТАТЬ ДАЛЕЕ';
+                }
             };
-            infoDesc.appendChild(toggleBtn);
+
+            infoDesc.appendChild(textSpan);
+            infoDesc.appendChild(btn);
         } else {
-            descParagraph.classList.remove('desc-clamped');
+            const p = document.createElement('p');
+            p.className = 'description-text';
+            p.textContent = movie.description || '';
+            p.style.margin = '0';
+            infoDesc.appendChild(p);
         }
-        // -----------------------------------------------
+        // -------------------------
 
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
