@@ -26,7 +26,7 @@
     </header>
 
     <main class="container">
-        <!-- Заголовок и Даты (Subtitle сверху!) -->
+        <!-- Заголовок и Даты (Subtitle сверху) -->
         <div class="schedule-header">
             <h1 class="page-title">
                 <span class="subtitle">Выберите удобное время</span>
@@ -35,6 +35,7 @@
             <div class="date-slider" id="date-slider"></div>
         </div>
 
+        <!-- Фильтры -->
         <div class="filters-bar">
             <button class="filter-btn active" data-filter="all">Все фильмы</button>
             <button class="filter-btn" data-filter="family">Детям и семье</button>
@@ -42,10 +43,12 @@
             <button class="filter-btn" data-filter="horror">Ужасы 18+</button>
         </div>
         
+        <!-- Список фильмов -->
         <div class="schedule-list" id="movies-container">
             <p style="color: #64748b; font-size: 1.2rem; text-align: center; margin-top: 50px;">Загрузка расписания...</p>
         </div>
 
+        <!-- Акции (Вернул Пушкинскую карту!) -->
         <div class="promotions-section">
             <h2 class="page-title" style="font-size: 2rem; margin-bottom: 30px;">Акции и предложения</h2>
             <div class="promo-grid">
@@ -67,11 +70,20 @@
                         <p>Большой попкорн + напиток за <strong>700₽</strong>.</p>
                     </div>
                 </div>
+                <div class="promo-card">
+                    <div class="promo-image" style="background-image: url('assets/images/promo_pushkin.jpg');">
+                        <span class="promo-badge" style="background: #7c3aed;">Культура</span>
+                    </div>
+                    <div class="promo-content">
+                        <h3>Пушкинская карта</h3>
+                        <p>Молодые люди от 14 до 22 лет могут посещать кино бесплатно! Ищите фильмы с отметкой «Пушка».</p>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- Modal Ticket -->
+    <!-- Модальное окно покупки билета -->
     <div id="ticketModal" class="modal">
         <div class="modal-content hall-modal-content">
             <span class="close-btn">&times;</span>
@@ -96,26 +108,33 @@
         </div>
     </div>
 
-    <!-- Modal Info (БЕЗ БИЛЕТОВ) -->
+    <!-- Модальное окно О ФИЛЬМЕ (Улучшенная структура) -->
     <div id="movieInfoModal" class="modal">
         <div class="modal-content info-modal-content">
+            
             <div class="modal-backdrop-blur"></div>
             <div class="modal-gradient-overlay"></div>
             <span class="close-btn info-close-btn" style="z-index: 20;">&times;</span>
+            
             <div class="info-modal-body">
                 <div class="info-layout">
+                    
+                    <!-- 1. Постер (Займет высоту двух рядов) -->
                     <div class="info-col-visual">
                         <img id="infoPoster" src="" alt="Poster" style="width: 100%; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);">
                         <h2 id="infoTitle" class="info-main-title"></h2>
                         <div id="infoTags" class="row-meta centered-meta" style="justify-content: center; flex-wrap: wrap; display:flex; gap:10px;"></div>
                     </div>
+
+                    <!-- 2. Трейлер -->
                     <div class="info-col-trailer">
                         <div class="media-container" id="mediaContainer"></div>
                         <div class="media-counter" id="mediaCounter"></div>
                         <button class="slider-arrow prev" id="prevMediaBtn" style="position:absolute; top:30%; left:20px; z-index:10;">❮</button>
                         <button class="slider-arrow next" id="nextMediaBtn" style="position:absolute; top:30%; right:20px; z-index:10;">❯</button>
-                        <div id="infoDesc" class="glass-panel description-text"></div>
                     </div>
+
+                    <!-- 3. Инфо таблица -->
                     <div class="info-col-data">
                         <div class="glass-panel">
                             <div class="spec-row"><span class="spec-label">Рейтинг:</span><span class="spec-value rating-val" id="infoRating"></span></div>
@@ -126,6 +145,10 @@
                             <div class="spec-row"><span class="spec-label">MPAA:</span><span class="spec-value spec-badge" id="infoMpaa"></span></div>
                         </div>
                     </div>
+
+                    <!-- 4. Описание (Растянется под трейлером и таблицей) -->
+                    <div id="infoDesc" class="glass-panel description-text"></div>
+
                 </div>
             </div>
         </div>
