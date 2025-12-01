@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentMediaList = [];
     let currentMediaIndex = 0;
 
-    // 1. DATES
+    // 1. DATES (Генерация дат)
     function generateDates() {
         dateSlider.innerHTML = '';
         const today = new Date();
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedDate = today.toISOString().split('T')[0];
     }
 
-    // 2. DATA LOADING
+    // 2. DATA LOADING (Загрузка данных)
     Promise.all([
         fetch('library.json').then(res => res.json()),
         fetch('schedule.json').then(res => res.json())
@@ -79,10 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
         initFilters();      
     })
     .catch(error => {
+        console.error(error);
         moviesContainer.innerHTML = '<p style="color:red; text-align:center;">Ошибка загрузки расписания.</p>';
     });
 
-    // 3. RENDER CARDS
+    // 3. RENDER CARDS (Отрисовка карточек фильмов)
     function renderMovies(dateToFilter) {
         moviesContainer.innerHTML = '';
         const filteredMovies = allMovies.filter(movie => {
@@ -140,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
-    // 4. FILTERS
+    // 4. FILTERS (Фильтры по категориям)
     function initFilters() {
         const filterButtons = document.querySelectorAll('.filter-btn');
         filterButtons.forEach(btn => {
@@ -155,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 5. CLICKS
+    // 5. CLICKS DELEGATION (Обработка кликов)
     moviesContainer.addEventListener('click', (e) => {
         const buyBtn = e.target.closest('.buy-ticket-btn');
         if (buyBtn) {
@@ -178,38 +179,57 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 6. HALL
+    // 6. HALL (ОБНОВЛЕННАЯ ГЕНЕРАЦИЯ ЗАЛА)
     function renderHall() {
         const seatsArea = document.getElementById('seatsArea');
         seatsArea.innerHTML = ''; 
-        let seatsCreated = 0;
-        for (let i = 0; i < 16; i++) {
+
+        // Настройки рядов согласно схеме
+        const startRow = 2;
+        const endRow = 16;
+
+        for (let rowNum = startRow; rowNum <= endRow; rowNum++) {
             const rowDiv = document.createElement('div');
             rowDiv.className = 'seat-row';
-            const rowNum = document.createElement('div');
-            rowNum.className = 'row-number';
-            rowNum.innerText = i + 1;
-            rowDiv.appendChild(rowNum);
-            for (let j = 0; j < 25; j++) {
-                if (seatsCreated >= 398) break;
+
+            // Номер ряда
+            const rowLabel = document.createElement('div');
+            rowLabel.className = 'row-number';
+            rowLabel.innerText = rowNum;
+            rowDiv.appendChild(rowLabel);
+
+            // Количество мест
+            let seatsInRow = 24; // Основной блок (3-15 ряды)
+            
+            if (rowNum === 2) {
+                seatsInRow = 22; // Верхний ряд короче
+            } else if (rowNum === 16) {
+                seatsInRow = 29; // Нижний ряд длиннее (проход)
+            }
+
+            // Генерация мест
+            for (let j = 0; j < seatsInRow; j++) {
                 const seat = document.createElement('div');
                 seat.className = 'seat';
-                seat.title = `Ряд ${i + 1}, Место ${j + 1}`; 
+                seat.title = `Ряд ${rowNum}, Место ${j + 1}`; 
+                
                 seat.addEventListener('click', () => {
+                    // Простая логика выбора
                     seat.classList.toggle('selected');
                     updateSelectedCount();
                 });
                 rowDiv.appendChild(seat);
-                seatsCreated++;
             }
             seatsArea.appendChild(rowDiv);
         }
     }
+
     function updateSelectedCount() {
         const count = document.querySelectorAll('#seatsArea .seat.selected').length;
         document.getElementById('count').innerText = count;
         document.getElementById('total').innerText = count * currentPrice;
     }
+
     document.getElementById('confirmBuyBtn').addEventListener('click', () => {
         const count = document.getElementById('count').innerText;
         if(count > 0) {
@@ -219,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else alert('Пожалуйста, выберите хотя бы одно место.');
     });
 
-    // 7. INFO MODAL
+    // 7. INFO MODAL (Модальное окно о фильме)
     function updateMediaSlider() {
         mediaContainer.innerHTML = '';
         const item = currentMediaList[currentMediaIndex];
@@ -288,6 +308,8 @@ document.addEventListener('DOMContentLoaded', () => {
         mediaContainer.innerHTML = ''; 
         document.body.style.overflow = ''; 
     }
+    
+    // Закрытие модальных окон
     closeTicketBtn.addEventListener('click', () => { ticketModal.style.display = 'none'; document.body.style.overflow = ''; });
     closeInfoBtn.addEventListener('click', closeInfo);
     window.addEventListener('click', (e) => {
