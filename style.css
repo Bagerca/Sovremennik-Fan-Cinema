@@ -67,7 +67,7 @@ header {
 .container { max-width: 1440px; margin: 0 auto; padding: 0 40px; }
 main.container { flex: 1; padding: 140px 40px 80px 40px; }
 
-/* --- TYPOGRAPHY (Обновленный заголовок с анимацией) --- */
+/* --- TYPOGRAPHY (Анимированный заголовок) --- */
 .page-title {
     font-size: 3.5rem; 
     font-weight: 900; 
@@ -80,20 +80,16 @@ main.container { flex: 1; padding: 140px 40px 80px 40px; }
         90deg,
         #ffffff 0%,
         #94a3b8 40%,
-        #0ea5e9 50%,    /* Блик */
+        #0ea5e9 50%,
         #94a3b8 60%,
         #ffffff 100%
     );
     background-size: 200% auto;
-    
-    /* Обрезка фона по тексту */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     
-    /* Запуск анимации (5 секунд) */
     animation: gradientMove 5s linear infinite;
-    
     filter: drop-shadow(0 0 20px rgba(14, 165, 233, 0.15));
 }
 
@@ -132,108 +128,53 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .buy-btn { background-color: var(--accent-blue); color: #fff; padding: 12px 30px; border: none; border-radius: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 20px; transition: 0.3s; width: 100%; }
 .buy-btn:hover { background-color: var(--accent-dark); }
 
-/* --- MEDIA QUERIES (GLOBAL) --- */
-@media (max-width: 900px) {
-    .header-fluid { padding: 0 20px; flex-direction: column; gap: 15px; }
-    .page-title { font-size: 2.2rem; }
-}
-@media (max-width: 768px) {
-    .footer-container { flex-direction: column; text-align: center; gap: 25px; }
-    .footer-info { text-align: center; }
-}
-
-/* =========================================
-   MEDIA SLIDER STYLES (Gallery in Modal)
-   ========================================= */
-
-.info-col-trailer {
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Контейнер для медиа (видео или фото) */
-.media-container {
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-    background: #000;
-    border-radius: 16px;
-    border: 1px solid #334155;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-}
-
-/* Элементы внутри контейнера (iframe или img) */
-.media-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Для картинок */
-    display: none; /* Скрываем все по умолчанию */
-}
-
-.media-content.active {
-    display: block;
-    animation: fadeIn 0.4s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* Стрелки навигации */
-.slider-arrow {
-    position: absolute;
-    top: 50%; /* Центр по высоте контейнера */
-    transform: translateY(-50%);
-    background: rgba(15, 23, 42, 0.6);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(4px);
-    user-select: none;
-    font-size: 18px;
-}
-
-.slider-arrow:hover {
-    background: var(--accent-blue);
-    border-color: var(--accent-blue);
-    transform: translateY(-50%) scale(1.1);
-}
-
-/* Позиция стрелок */
+/* --- MEDIA SLIDER STYLES --- */
+.info-col-trailer { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; }
+.media-container { width: 100%; position: relative; overflow: hidden; padding-bottom: 56.25%; background: #000; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
+.media-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+.media-content.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.slider-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(15, 23, 42, 0.6); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: all 0.2s ease; backdrop-filter: blur(4px); user-select: none; font-size: 18px; }
+.slider-arrow:hover { background: var(--accent-blue); border-color: var(--accent-blue); transform: translateY(-50%) scale(1.1); }
 .slider-arrow.prev { left: -20px; }
 .slider-arrow.next { right: -20px; }
+.media-counter { margin-top: 15px; font-size: 0.85rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 20px; }
+@media (max-width: 1200px) { .slider-arrow.prev { left: 10px; } .slider-arrow.next { right: 10px; } }
 
-/* Текст снизу (Трейлер 1/3) */
-.media-counter {
-    margin-top: 15px;
-    font-size: 0.85rem;
-    color: #64748b;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 1px;
-    background: rgba(255,255,255,0.05);
-    padding: 4px 12px;
-    border-radius: 20px;
-}
+/* =========================================
+   NEW MODAL STYLES (NETFLIX STYLE)
+   ========================================= */
 
-/* Адаптив стрелок */
-@media (max-width: 1200px) {
-    .slider-arrow.prev { left: 10px; }
-    .slider-arrow.next { right: 10px; }
-}
+.info-modal-content { max-width: 1300px !important; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 50px 100px -20px rgba(0,0,0,0.9); position: relative; overflow: hidden; padding: 0 !important; }
+.modal-backdrop-blur { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-size: cover; background-position: center top; filter: blur(80px) brightness(0.4) saturate(1.2); z-index: 0; transform: scale(1.2); transition: background-image 0.5s ease; }
+.modal-gradient-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.8) 60%, #0f172a 100%); z-index: 1; }
+.info-modal-body { position: relative; z-index: 2; padding: 50px; }
+.info-layout { display: grid; grid-template-columns: 240px 1fr 260px; gap: 40px; align-items: start; }
+.info-col-visual { text-align: center; }
+.info-main-title { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; margin: 20px 0 10px; line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+.glass-panel { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 25px; margin-bottom: 20px; }
+.glass-panel:last-child { margin-bottom: 0; }
+.panel-title { font-size: 0.85rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 15px; letter-spacing: 1px; font-weight: 700; }
+.description-text { font-size: 1rem; line-height: 1.6; color: #e2e8f0; text-shadow: 0 1px 2px rgba(0,0,0,0.5); text-align: left; }
+.spec-row { display: flex; justify-content: space-between; font-size: 0.9rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; margin-bottom: 10px; }
+.spec-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.spec-label { color: #94a3b8; font-weight: 600; text-align: left; }
+.spec-value { color: #fff; font-weight: 500; text-align: right; }
+.rating-val { color: #4ade80; font-weight: 800; }
+
+/* MINI TICKETS */
+.mini-schedule-list { display: flex; flex-direction: column; gap: 10px; }
+.mini-ticket-btn { display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 12px 15px; cursor: pointer; transition: all 0.2s ease; text-align: left; position: relative; overflow: hidden; width: 100%; }
+.mini-ticket-btn:hover { background: var(--accent-blue); border-color: var(--accent-blue); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(14, 165, 233, 0.3); }
+.mini-ticket-btn::before { content: ''; position: absolute; left: -5px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: #0f172a; border-radius: 50%; border-right: 1px solid rgba(255,255,255,0.1); }
+.mini-ticket-btn:hover::before { border-color: var(--accent-blue); }
+.ticket-time { font-size: 1.2rem; font-weight: 800; color: #fff; line-height: 1; display: block; }
+.ticket-date { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; text-transform: uppercase; font-weight: 600; display: block; }
+.mini-ticket-btn:hover .ticket-date, .mini-ticket-btn:hover .ticket-price { color: #fff; }
+.ticket-price { font-size: 0.95rem; font-weight: 700; color: var(--accent-blue); display: block;}
+.ticket-format { font-size: 0.7rem; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; color: #cbd5e1; margin-top: 3px; display: inline-block; }
+.no-sessions-stub { border: 2px dashed #334155; border-radius: 12px; padding: 20px; text-align: center; color: #64748b; font-size: 0.9rem; }
+
+@media (max-width: 900px) { .header-fluid { padding: 0 20px; flex-direction: column; gap: 15px; } .page-title { font-size: 2.2rem; } }
+@media (max-width: 768px) { .footer-container { flex-direction: column; text-align: center; gap: 25px; } .footer-info { text-align: center; } }
+@media (max-width: 1100px) { .info-layout { grid-template-columns: 1fr; gap: 30px; } .info-col-visual img { width: 220px; margin: 0 auto; } .info-col-trailer { order: -1; } .info-modal-content { height: auto; overflow-y: auto; max-width: 95% !important;} }
