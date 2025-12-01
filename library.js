@@ -203,12 +203,19 @@ document.addEventListener('DOMContentLoaded', () => {
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
         infoRating.style.color = movie.rating >= 7 ? '#4ade80' : (movie.rating >= 5 ? '#facc15' : '#ef4444');
 
-        // --- ОБРЕЗКА ТЕКСТА JS (90 символов для 2 строк) ---
+        // --- АДАПТИВНАЯ ОБРЕЗКА ТЕКСТА ---
         infoDesc.innerHTML = ''; 
-        const charLimit = 90; // Уменьшенный лимит
+        
+        // Считаем ширину контейнера
+        const containerWidth = infoDesc.clientWidth || (infoModal.querySelector('.info-modal-content').clientWidth - 100);
+        // Считаем лимит: (Ширина / ср. ширину буквы * 2 строки) - место под кнопку
+        const charsPerLine = Math.floor(containerWidth / 8.5);
+        const dynamicLimit = (charsPerLine * 2) - 25;
 
-        if (movie.description && movie.description.length > charLimit) {
-            const cutIndex = movie.description.lastIndexOf(' ', charLimit);
+        if (movie.description && movie.description.length > dynamicLimit) {
+            let cutIndex = movie.description.lastIndexOf(' ', dynamicLimit);
+            if (cutIndex === -1) cutIndex = dynamicLimit; 
+
             const shortText = movie.description.substring(0, cutIndex) + '...';
             const fullText = movie.description;
 
@@ -239,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
             p.style.margin = '0';
             infoDesc.appendChild(p);
         }
-        // -------------------------
+        // ---------------------------------
 
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
