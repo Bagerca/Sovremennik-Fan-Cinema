@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Берем реальную ширину или fallback (600px для ПК, ширина экрана для моб)
         const containerWidth = infoDesc.clientWidth || Math.min(600, window.innerWidth - 60);
         
-        // 2. Считаем лимит
+        // 2. Считаем лимит: (Ширина / 8.5px) * 2 строки - место под кнопку
         const charsPerLine = Math.floor(containerWidth / 8.5);
         const dynamicLimit = (charsPerLine * 2) - 20;
 
@@ -307,6 +307,10 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.textContent = 'ЧИТАТЬ ДАЛЕЕ';
             
             btn.onclick = () => {
+                // Сбрасываем анимацию (чтобы перезапустить)
+                textSpan.classList.remove('anim-text-reveal');
+                void textSpan.offsetWidth; // Хак для перезапуска
+
                 if (btn.textContent === 'ЧИТАТЬ ДАЛЕЕ') {
                     textSpan.innerHTML = fullText;
                     btn.textContent = 'СВЕРНУТЬ';
@@ -314,6 +318,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     textSpan.innerHTML = shortText;
                     btn.textContent = 'ЧИТАТЬ ДАЛЕЕ';
                 }
+
+                // Запускаем анимацию
+                textSpan.classList.add('anim-text-reveal');
             };
 
             infoDesc.appendChild(textSpan);
@@ -345,6 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
             prevMediaBtn.style.display = 'none';
             nextMediaBtn.style.display = 'none';
         }
+
         infoModal.style.display = 'flex';
         document.body.style.overflow = 'hidden'; 
     }
