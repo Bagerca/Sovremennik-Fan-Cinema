@@ -206,12 +206,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- ПРОФЕССИОНАЛЬНАЯ ОБРЕЗКА (LIBRARY) ---
         infoDesc.innerHTML = ''; 
         
-        // 1. Берем реальную ширину или fallback
         const containerWidth = infoDesc.clientWidth || Math.min(600, window.innerWidth - 60);
-        
-        // 2. Считаем лимит (делитель 9 для запаса)
         const charsPerLine = Math.floor(containerWidth / 9); 
-        const dynamicLimit = (charsPerLine * 2) - 40; // 40 симв. запас под кнопку
+        const dynamicLimit = (charsPerLine * 2) - 40; 
 
         if (movie.description && movie.description.length > dynamicLimit) {
             let cutIndex = movie.description.lastIndexOf(' ', dynamicLimit);
@@ -224,7 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
             contentWrapper.className = 'description-text';
             
             const renderState = (isExpanded) => {
-                // Анимация
                 contentWrapper.classList.remove('fade-in-effect');
                 void contentWrapper.offsetWidth; 
                 contentWrapper.classList.add('fade-in-effect');
@@ -235,7 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     contentWrapper.innerHTML = `${shortHTML}<button class="read-more-btn" id="toggleDescBtn">ЧИТАТЬ ДАЛЕЕ</button>`;
                 }
 
-                // Вешаем клик
                 setTimeout(() => {
                     const btn = document.getElementById('toggleDescBtn');
                     if(btn) {
@@ -276,19 +271,34 @@ document.addEventListener('DOMContentLoaded', () => {
             nextMediaBtn.style.display = 'none';
         }
 
-        // ГЕНЕРАЦИЯ БИЛЕТОВ (Только для library.js)
+        // ГЕНЕРАЦИЯ БИЛЕТОВ (ОБНОВЛЕННАЯ ЛОГИКА - СКРЫВАЕМ ПРОШЕДШИЕ)
         if (typeof miniContainer !== 'undefined' && miniContainer) {
             miniContainer.innerHTML = '';
             const scheduleEntry = allSchedule.find(s => s.movieId === movie.id || s.movieId === movie.movieId);
 
             if (scheduleEntry && scheduleEntry.sessions) {
-                const dates = scheduleEntry.dates.slice(0, 2);
-                dates.forEach(date => {
+                const now = new Date(); // Текущее время
+                
+                // Сортируем даты по возрастанию
+                const sortedDates = scheduleEntry.dates.sort();
+                let sessionsCount = 0;
+
+                sortedDates.forEach(date => {
+                    if (sessionsCount >= 4) return; // Лимит показа кнопок
+
                     const dateObj = new Date(date);
                     const day = dateObj.getDate();
                     const month = dateObj.toLocaleDateString('ru-RU', { month: 'short' });
                     
-                    scheduleEntry.sessions.slice(0, 2).forEach(session => {
+                    scheduleEntry.sessions.forEach(session => {
+                        if (sessionsCount >= 4) return;
+
+                        // 1. Проверяем время сеанса
+                        const sessionDateTime = new Date(`${date}T${session.time}`);
+                        
+                        // Если сеанс прошел - пропускаем
+                        if (sessionDateTime < now) return;
+
                         const btn = document.createElement('button');
                         btn.className = 'mini-ticket-btn';
                         btn.onclick = () => window.location.href = 'schedule.html'; 
@@ -303,11 +313,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         `;
                         miniContainer.appendChild(btn);
+                        sessionsCount++;
                     });
                 });
             } 
             if (miniContainer.children.length === 0) {
-                miniContainer.innerHTML = `<div class="no-sessions-stub"><span>Сеансов пока нет</span></div>`;
+                miniContainer.innerHTML = `<div class="no-sessions-stub"><span>Актуальных сеансов нет</span></div>`;
             }
         }
 
