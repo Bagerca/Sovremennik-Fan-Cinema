@@ -52,13 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!customSelect.contains(e.target)) customSelect.classList.remove('open');
     });
 
-    // 1. DATA LOADING (BOTH FILES)
+    // 1. DATA LOADING
     Promise.all([
         fetch('library.json').then(res => res.json()),
         fetch('schedule.json').then(res => res.json())
     ])
     .then(([libraryData, scheduleData]) => {
-        // Convert library object to array with IDs embedded
         allMoviesLibrary = Object.entries(libraryData).map(([id, movie]) => ({ id, ...movie }));
         allSchedule = scheduleData;
         generateGenreButtons(allMoviesLibrary);
@@ -204,7 +203,28 @@ document.addEventListener('DOMContentLoaded', () => {
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
         infoRating.style.color = movie.rating >= 7 ? '#4ade80' : (movie.rating >= 5 ? '#facc15' : '#ef4444');
 
-        infoDesc.textContent = movie.description;
+        // --- БЛОК ОПИСАНИЯ С КНОПКОЙ "ЧИТАТЬ ДАЛЕЕ" ---
+        infoDesc.innerHTML = ''; // Очищаем старый текст
+        const descParagraph = document.createElement('p');
+        descParagraph.textContent = movie.description;
+        descParagraph.className = 'desc-clamped description-text'; // Класс ограничения строк
+        descParagraph.style.margin = '0'; 
+        infoDesc.appendChild(descParagraph);
+
+        if (movie.description && movie.description.length > 130) {
+            const toggleBtn = document.createElement('button');
+            toggleBtn.className = 'read-more-btn';
+            toggleBtn.textContent = 'Читать далее';
+            toggleBtn.onclick = () => {
+                const isClamped = descParagraph.classList.toggle('desc-clamped');
+                toggleBtn.textContent = isClamped ? 'Читать далее' : 'Свернуть';
+            };
+            infoDesc.appendChild(toggleBtn);
+        } else {
+            descParagraph.classList.remove('desc-clamped');
+        }
+        // --- КОНЕЦ БЛОКА ОПИСАНИЯ ---
+
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
         infoDirector.textContent = movie.director || '-';
