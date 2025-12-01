@@ -8,8 +8,13 @@
             "ageClass": "age-green",
             "category": "family",
             "tags": ["Анимация", "Приключения", "Семейный"],
-            "description": "Эпическое приключение робота ROZZUM 7134, потерпевшего кораблекрушение на необитаемом острове. Ему предстоит подружиться с местными животными и стать приемным родителем для осиротевшего гусенка.",
-            "trailer": "LJG6tD5ONxY",
+            "description": "Эпическое приключение робота ROZZUM 7134...",
+            "media": [
+                { "type": "video", "src": "LJG6tD5ONxY" },
+                { "type": "video", "src": "67b0q1q8zaQ" },
+                { "type": "image", "src": "https://i.ytimg.com/vi/LJG6tD5ONxY/maxresdefault.jpg" },
+                { "type": "image", "src": "https://images.stopgame.ru/news/2024/03/05/krasoti_v_pervom_treylere_multfilma_dikiy_robot_ot_dreamworks-1709653066.jpg" }
+            ],
             "year": "2024",
             "country": "США",
             "duration": "1 ч 42 мин",
@@ -24,8 +29,11 @@
             "ageClass": "age-orange",
             "category": "action",
             "tags": ["Триллер", "Криминал"],
-            "description": "Четыре Всадника возвращаются, чтобы совершить своё самое дерзкое ограбление в истории магии. На этот раз ставки выше, а враги — опаснее.",
-            "trailer": "z3Kl3jubJ9I",
+            "description": "Четыре Всадника возвращаются...",
+            "media": [
+                { "type": "video", "src": "z3Kl3jubJ9I" },
+                { "type": "image", "src": "https://i.ytimg.com/vi/oZ6iiRrz1SY/maxresdefault.jpg" }
+            ],
             "year": "2025",
             "country": "США",
             "duration": "1 ч 52 мин",
@@ -40,8 +48,12 @@
             "ageClass": "age-orange",
             "category": "horror",
             "tags": ["Ужасы", "Мистика"],
-            "description": "Охранник пиццерии Freddy Fazbear's Pizza сталкивается с ожившими аниматрониками, которые пытаются убить любого, кто останется в здании после полуночи.",
-            "trailer": "f-z578y5G1Y",
+            "description": "Охранник пиццерии Freddy Fazbear's Pizza...",
+            "media": [
+                { "type": "video", "src": "f-z578y5G1Y" },
+                { "type": "video", "src": "Z_T0o5uNCIY" },
+                { "type": "image", "src": "https://cq.ru/storage/uploads/posts/1344465/1.jpg" }
+            ],
             "year": "2023",
             "country": "США",
             "duration": "1 ч 50 мин",
@@ -56,8 +68,11 @@
             "ageClass": "age-red",
             "category": "action",
             "tags": ["Боевик", "Комедия", "Шпионский"],
-            "description": "Элитная секретная служба набирает новичков. Парню предстоит пройти обучение и спасти мир от злодея, решившего уничтожить большую часть человечества ради экологии.",
-            "trailer": "kl8F-8tR8to",
+            "description": "Элитная секретная служба набирает новичков...",
+            "media": [
+                { "type": "video", "src": "kl8F-8tR8to" },
+                { "type": "image", "src": "https://i.ytimg.com/vi/kl8F-8tR8to/maxresdefault.jpg" }
+            ],
             "year": "2015",
             "country": "Великобритания",
             "duration": "2 ч 09 мин",
@@ -72,8 +87,11 @@
             "ageClass": "age-green",
             "category": "family",
             "tags": ["Мультфильм", "Фантастика", "Драма"],
-            "description": "Робот ВАЛЛ-И из года в год прилежно трудится на опустевшей Земле, очищая нашу планету от гор мусора. Он и не представляет, что совсем скоро найдет друзей и отправится к звездам.",
-            "trailer": "Q-075wQ70qI",
+            "description": "Робот ВАЛЛ-И из года в год прилежно трудится...",
+            "media": [
+                { "type": "video", "src": "Q-075wQ70qI" },
+                { "type": "image", "src": "https://rezka.ag/uploads/shots/142953-1280x720-64.jpg" }
+            ],
             "year": "2008",
             "country": "США",
             "duration": "1 ч 38 мин",
@@ -88,8 +106,11 @@
             "ageClass": "age-green",
             "category": "family",
             "tags": ["Мультфильм", "Мюзикл", "Фэнтези"],
-            "description": "Джек Скеллингтон, повелитель тыкв из города Хэллоуин, случайно попадает в город Рождества. Вдохновленный увиденным, он решает похитить Санта-Клауса и занять его место.",
-            "trailer": "wrhMercVE1M",
+            "description": "Джек Скеллингтон, повелитель тыкв...",
+            "media": [
+                { "type": "video", "src": "wrhMercVE1M" },
+                { "type": "image", "src": "https://m.media-amazon.com/images/M/MV5BN2E5ZTIwYmYtNTYyYi00YjJjLWI2Y2MtNmFlMzVkYWU2NGVkXkEyXkFqcGc@._V1_.jpg" }
+            ],
             "year": "1993",
             "country": "США",
             "duration": "1 ч 16 мин",
@@ -104,8 +125,12 @@
             "ageClass": "age-red",
             "category": "horror",
             "tags": ["Аниме", "Мультфильм", "Фэнтези", "Боевик"],
-            "description": "Дэндзи встречает девушку по имени Резе, которая работает в кафе. Между ними завязываются отношения, но вскоре выясняется, что она не та, за кого себя выдает. Взрывная арка популярной манги.",
-            "trailer": "pv8A7eubPQQ",
+            "description": "Дэндзи встречает девушку по имени Резе...",
+            "media": [
+                { "type": "video", "src": "pv8A7eubPQQ" },
+                { "type": "video", "src": "v4yLeDt9plI" },
+                { "type": "image", "src": "https://i.ytimg.com/vi/pv8A7eubPQQ/maxresdefault.jpg" }
+            ],
             "year": "2025",
             "country": "Япония",
             "duration": "1 ч 40 мин",
@@ -120,8 +145,11 @@
             "ageClass": "age-green",
             "category": "family",
             "tags": ["Военный", "Комедия"],
-            "description": "Захватывающая история создания легендарных истребителей МиГ. Уникальные кадры испытаний, интервью с конструкторами и пилотами, которые покоряли небо на скоростях выше звука.",
-            "trailer": "PD9H5wMbdPs",
+            "description": "Захватывающая история создания легендарных истребителей МиГ...",
+            "media": [
+                { "type": "video", "src": "PD9H5wMbdPs" },
+                { "type": "image", "src": "https://cdn.culture.ru/images/05697380-60b6-52c6-bd46-218151219b26" }
+            ],
             "year": "2025",
             "country": "Россия",
             "duration": "1 ч 40 мин",
