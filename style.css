@@ -251,6 +251,17 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 }
 .read-more-btn:hover { color: #fff; text-decoration: underline; }
 
+/* --- АНИМАЦИЯ ДЛЯ ТЕКСТА ОПИСАНИЯ --- */
+.anim-text-reveal {
+    display: inline-block;
+    animation: textAppear 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes textAppear {
+    0% { opacity: 0; transform: translateY(-5px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
 /* Таблица характеристик */
 .spec-row { display: flex; justify-content: space-between; font-size: 0.9rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; margin-bottom: 0; }
 .spec-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
