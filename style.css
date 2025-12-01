@@ -141,7 +141,21 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 .slider-arrow:hover { background: var(--accent-blue); border-color: var(--accent-blue); transform: translateY(-50%) scale(1.1); }
 .slider-arrow.prev { left: -20px; }
 .slider-arrow.next { right: -20px; }
-.media-counter { margin-top: 15px; font-size: 0.85rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 20px; }
+
+/* FIX: Увеличен отступ снизу */
+.media-counter { 
+    margin-top: 15px;
+    margin-bottom: 25px; /* <--- Больше воздуха между трейлером и текстом */
+    font-size: 0.85rem; 
+    color: #64748b; 
+    text-transform: uppercase; 
+    font-weight: 700; 
+    letter-spacing: 1px; 
+    background: rgba(255,255,255,0.05); 
+    padding: 4px 12px; 
+    border-radius: 20px; 
+}
+
 @media (max-width: 1200px) { .slider-arrow.prev { left: 10px; } .slider-arrow.next { right: 10px; } }
 
 /* =========================================
@@ -218,29 +232,20 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 /* Описание фильма */
 .description-text { font-size: 1rem; line-height: 1.6; color: #e2e8f0; text-shadow: 0 1px 2px rgba(0,0,0,0.5); text-align: left; margin: 0; }
 
-/* Класс для сворачивания текста */
-.desc-clamped {
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* 2 строки */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 8px;
-    color: #cbd5e1;
-}
-
-/* Кнопка Читать далее */
+/* FIX: Новые стили для инлайн-кнопки */
 .read-more-btn {
+    display: inline; /* Кнопка идет прямо в тексте */
     background: transparent;
     border: none;
-    color: var(--accent-blue);
-    font-size: 0.85rem;
-    font-weight: 700;
+    color: var(--accent-blue); /* Ярко-голубой */
+    font-size: 0.95rem; 
+    font-weight: 800;
     text-transform: uppercase;
     cursor: pointer;
+    margin-left: 8px; /* Отступ от троеточия */
     padding: 0;
-    transition: color 0.2s;
-    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    text-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
 }
 .read-more-btn:hover { color: #fff; text-decoration: underline; }
 
