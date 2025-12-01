@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
-    // 4. FILTERS (Фильтры по категориям)
+    // 4. FILTERS
     function initFilters() {
         const filterButtons = document.querySelectorAll('.filter-btn');
         filterButtons.forEach(btn => {
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 5. CLICKS DELEGATION (Обработка кликов)
+    // 5. CLICKS DELEGATION
     moviesContainer.addEventListener('click', (e) => {
         const buyBtn = e.target.closest('.buy-ticket-btn');
         if (buyBtn) {
@@ -179,12 +179,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 6. HALL (ОБНОВЛЕННАЯ ФУНКЦИЯ С НОМЕРАМИ С ДВУХ СТОРОН)
+    // 6. HALL RENDER
     function renderHall() {
         const seatsArea = document.getElementById('seatsArea');
         seatsArea.innerHTML = ''; 
 
-        // Ряды с 2 по 16
         const startRow = 2;
         const endRow = 16;
 
@@ -192,21 +191,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const rowDiv = document.createElement('div');
             rowDiv.className = 'seat-row';
 
-            // --- ЛЕВЫЙ НОМЕР РЯДА ---
             const rowLabelLeft = document.createElement('div');
             rowLabelLeft.className = 'row-number row-left';
             rowLabelLeft.innerText = rowNum;
             rowDiv.appendChild(rowLabelLeft);
 
-            // Количество мест
             let seatsInRow = 24; 
             if (rowNum === 2) {
-                seatsInRow = 22; // Верхний ряд
+                seatsInRow = 22; 
             } else if (rowNum === 16) {
-                seatsInRow = 29; // Нижний ряд
+                seatsInRow = 29; 
             }
 
-            // Генерация мест
             for (let j = 0; j < seatsInRow; j++) {
                 const seat = document.createElement('div');
                 seat.className = 'seat';
@@ -219,7 +215,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 rowDiv.appendChild(seat);
             }
 
-            // --- ПРАВЫЙ НОМЕР РЯДА ---
             const rowLabelRight = document.createElement('div');
             rowLabelRight.className = 'row-number row-right';
             rowLabelRight.innerText = rowNum;
@@ -244,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else alert('Пожалуйста, выберите хотя бы одно место.');
     });
 
-    // 7. INFO MODAL (Модальное окно о фильме)
+    // 7. INFO MODAL (С ОБНОВЛЕННОЙ ЛОГИКОЙ ТЕКСТА)
     function updateMediaSlider() {
         mediaContainer.innerHTML = '';
         const item = currentMediaList[currentMediaIndex];
@@ -285,7 +280,29 @@ document.addEventListener('DOMContentLoaded', () => {
         infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
         infoRating.style.color = movie.rating >= 7 ? '#4ade80' : (movie.rating >= 5 ? '#facc15' : '#ef4444');
-        infoDesc.textContent = movie.description;
+        
+        // --- ОБНОВЛЕННЫЙ БЛОК ОПИСАНИЯ ДЛЯ SCRIPT.JS ---
+        infoDesc.innerHTML = ''; 
+        const descParagraph = document.createElement('p');
+        descParagraph.textContent = movie.description;
+        descParagraph.className = 'desc-clamped description-text'; 
+        descParagraph.style.margin = '0'; 
+        infoDesc.appendChild(descParagraph);
+
+        if (movie.description && movie.description.length > 130) {
+            const toggleBtn = document.createElement('button');
+            toggleBtn.className = 'read-more-btn';
+            toggleBtn.textContent = 'Читать далее';
+            toggleBtn.onclick = () => {
+                const isClamped = descParagraph.classList.toggle('desc-clamped');
+                toggleBtn.textContent = isClamped ? 'Читать далее' : 'Свернуть';
+            };
+            infoDesc.appendChild(toggleBtn);
+        } else {
+            descParagraph.classList.remove('desc-clamped');
+        }
+        // -----------------------------------------------
+
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
         infoDirector.textContent = movie.director || '-';
@@ -314,7 +331,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = ''; 
     }
     
-    // Закрытие модальных окон
     closeTicketBtn.addEventListener('click', () => { ticketModal.style.display = 'none'; document.body.style.overflow = ''; });
     closeInfoBtn.addEventListener('click', closeInfo);
     window.addEventListener('click', (e) => {
