@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>О нас | Современник</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Обратите внимание: контент "О нас" использует about.css -->
     <link rel="stylesheet" href="about.css">
     <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -13,12 +14,15 @@
 
     <header>
         <div class="header-fluid">
+            <!-- Логотип теперь ведет на главную (сюда же) -->
             <a href="index.html" class="logo-link">
                 <img src="assets/images/logo.svg" alt="Кинотеатр Современник" class="logo-img">
             </a>
             <nav class="nav-links">
-                <a href="about.html" class="active">О нас</a>
-                <a href="index.html">Расписание</a>
+                <!-- Ссылка "О нас" теперь ведет на index.html -->
+                <a href="index.html" class="active">О нас</a>
+                <!-- Ссылка "Расписание" теперь ведет на schedule.html -->
+                <a href="schedule.html">Расписание</a>
                 <a href="library.html">Фильмы</a>
                 <a href="rules.html">Правила</a>
             </nav>
@@ -41,44 +45,44 @@
                 скачать в интернете.
             </p>
 
-            <a href="index.html" class="red-glow-btn">Купить билет</a>
+            <!-- Кнопка теперь ведет на расписание -->
+            <a href="schedule.html" class="red-glow-btn">Купить билет</a>
         </div>
 
         <!-- ABOUT GRID -->
         <div class="about-hero-grid">
             <div class="about-left">
-    <div class="year-badge">С 2005 года</div>
-    
-    <h2 class="hero-title" style="font-size: 3rem;">
-        СОВРЕМЕННИК —<br>
-        <span class="text-gray">БОЛЬШЕ ЧЕМ КИНО</span>
-    </h2>
+                <div class="year-badge">С 2005 года</div>
+                
+                <h2 class="hero-title" style="font-size: 3rem;">
+                    СОВРЕМЕННИК —<br>
+                    <span class="text-gray">БОЛЬШЕ ЧЕМ КИНО</span>
+                </h2>
 
-    <p class="hero-desc">
-        Мы сохранили масштаб классического зала, но полностью обновили восприятие кино. 
-        Вас ждут <strong>огромный звукопроводящий экран</strong> с повышенной четкостью 
-        и испанские кресла <span style="color:var(--accent-blue)">EUROSEATING Montreal</span>, 
-        созданные для долгих сеансов.
-        <br><br>
-        Особенность зала — <strong>16-й ряд</strong>. Кресла здесь оснащены убирающимися подлокотниками 
-        (формат Love Seats), чтобы ничто не мешало вам наслаждаться фильмом вдвоем.
-    </p>
+                <p class="hero-desc">
+                    Мы сохранили масштаб классического зала, но полностью обновили восприятие кино. 
+                    Вас ждут <strong>огромный звукопроводящий экран</strong> с повышенной четкостью 
+                    и испанские кресла <span style="color:var(--accent-blue)">EUROSEATING Montreal</span>, 
+                    созданные для долгих сеансов.
+                    <br><br>
+                    Особенность зала — <strong>16-й ряд</strong>. Кресла здесь оснащены убирающимися подлокотниками 
+                    (формат Love Seats), чтобы ничто не мешало вам наслаждаться фильмом вдвоем.
+                </p>
 
-    <div class="stats-row">
-        <div class="stat-box">
-            <span class="stat-number">398</span>
-            <span class="stat-label">Мест в зале</span>
-        </div>
-        <div class="stat-box">
-            <span class="stat-number">16</span>
-            <span class="stat-label">Рядов комфорта</span>
-        </div>
-    </div>
-</div>
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <span class="stat-number">398</span>
+                        <span class="stat-label">Мест в зале</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">16</span>
+                        <span class="stat-label">Рядов комфорта</span>
+                    </div>
+                </div>
+            </div>
 
             <div class="about-right">
                 <div id="location-map" class="map-preview">
-                    <!-- Заглушка карты или iframe Яндекс/Google -->
                     <iframe src="https://yandex.ru/map-widget/v1/?ll=29.092145%2C59.891683&z=17&pt=29.092145%2C59.891683,pm2blm" width="100%" height="100%" frameborder="0" allowfullscreen="true"></iframe>
                 </div>
 
@@ -102,7 +106,7 @@
         <div class="footer-container">
             <div class="footer-info">
                 <p class="copyright">© 2005 — 2025, Кинотеатр «Современник»</p>
-                <a href="about.html#location-map" class="address-link">
+                <a href="index.html#location-map" class="address-link">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
                     </svg>
