@@ -2,8 +2,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const libraryContainer = document.getElementById('libraryContainer');
     const searchInput = document.getElementById('searchInput');
     const genresContainer = document.getElementById('genresContainer');
-    const sortSelect = document.getElementById('sortSelect');
     
+    // Элементы кастомного селекта
+    const customSelect = document.querySelector('.custom-select');
+    const customSelectTrigger = customSelect.querySelector('.custom-select__trigger');
+    const customOptions = customSelect.querySelectorAll('.custom-option');
+    const customSelectText = customSelectTrigger.querySelector('span');
+
+    let currentSortOrder = 'newest'; // Значение сортировки по умолчанию
+
     // Элементы модального окна
     const infoModal = document.getElementById('movieInfoModal');
     const closeInfoBtn = document.querySelector('.info-close-btn');
@@ -34,18 +41,47 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentMediaList = [];
     let currentMediaIndex = 0;
 
-    // 1. ЗАГРУЗКА ДАННЫХ (ИЗМЕНЕНО: Загружаем только library.json)
+    // --- ЛОГИКА КАСТОМНОГО СЕЛЕКТА ---
+    customSelectTrigger.addEventListener('click', () => {
+        customSelect.classList.toggle('open');
+    });
+
+    customOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            // Удаляем класс selected у всех
+            customOptions.forEach(op => op.classList.remove('selected'));
+            // Добавляем текущему
+            option.classList.add('selected');
+            // Меняем текст триггера
+            customSelectText.textContent = option.textContent;
+            // Обновляем значение сортировки
+            currentSortOrder = option.getAttribute('data-value');
+            
+            // Закрываем меню и применяем фильтры
+            customSelect.classList.remove('open');
+            applyFiltersAndSort();
+        });
+    });
+
+    // Закрытие селекта при клике вне его
+    window.addEventListener('click', (e) => {
+        if (!customSelect.contains(e.target)) {
+            customSelect.classList.remove('open');
+        }
+    });
+
+
+    // 1. ЗАГРУЗКА ДАННЫХ
     fetch('library.json')
         .then(response => response.json())
         .then(data => {
-            // Данные теперь приходят сразу как объект, без обертки "library"
             allMoviesLibrary = Object.values(data);
             generateGenreButtons(allMoviesLibrary);
             applyFiltersAndSort();
         })
         .catch(error => console.error('Ошибка:', error));
 
-    // 2. ГЕНЕРАЦИЯ КНОПОК
+    // 2. ГЕНЕРАЦИЯ КНОПОК ЖАНРОВ
     function generateGenreButtons(movies) {
         const allTags = new Set();
         movies.forEach(movie => {
@@ -126,15 +162,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        const sortType = sortSelect.value;
+        // Используем переменную currentSortOrder вместо select.value
         result.sort((a, b) => {
-            if (sortType === 'newest') {
+            if (currentSortOrder === 'newest') {
                 return parseInt(b.year) - parseInt(a.year); 
-            } else if (sortType === 'oldest') {
+            } else if (currentSortOrder === 'oldest') {
                 return parseInt(a.year) - parseInt(b.year);
-            } else if (sortType === 'az') {
+            } else if (currentSortOrder === 'rating_high') {
+                return (b.rating || 0) - (a.rating || 0);
+            } else if (currentSortOrder === 'rating_low') {
+                return (a.rating || 0) - (b.rating || 0);
+            } else if (currentSortOrder === 'az') {
                 return a.title.localeCompare(b.title);
-            } else if (sortType === 'za') {
+            } else if (currentSortOrder === 'za') {
                 return b.title.localeCompare(a.title);
             }
         });
@@ -142,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderLibrary(result);
     }
 
-    // 4. РЕНДЕР
+    // 4. РЕНДЕР КАРТОЧЕК
     function renderLibrary(movies) {
         libraryContainer.innerHTML = '';
 
@@ -176,9 +216,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Слушатели
+    // Слушатели поиска
     searchInput.addEventListener('input', applyFiltersAndSort);
-    sortSelect.addEventListener('change', applyFiltersAndSort);
 
     // --- ЛОГИКА СЛАЙДЕРА ---
     function updateMediaSlider() {
@@ -191,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (item.type === 'video') {
             element = document.createElement('iframe');
             element.className = 'media-content active';
-            element.src = `https://www.youtube.com/embed/${item.src}?autoplay=0`; // Autoplay off при переключении
+            element.src = `https://www.youtube.com/embed/${item.src}?autoplay=0`;
             element.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
             element.allowFullscreen = true;
         } else {
@@ -202,7 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         mediaContainer.appendChild(element);
 
-        // Обновляем текст счетчика
         const typeText = item.type === 'video' ? 'Трейлер' : 'Кадр';
         mediaCounter.textContent = `${typeText} ${currentMediaIndex + 1} / ${currentMediaList.length}`;
     }
@@ -242,7 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Инициализация слайдера
         currentMediaList = movie.media || [];
-        // Если медиа нет, но есть старое поле trailer (для совместимости)
         if (currentMediaList.length === 0 && movie.trailer) {
             currentMediaList.push({ type: 'video', src: movie.trailer });
         }
@@ -251,7 +288,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (currentMediaList.length > 0) {
             updateMediaSlider();
-            // Показываем стрелки только если больше 1 элемента
             prevMediaBtn.style.display = currentMediaList.length > 1 ? 'flex' : 'none';
             nextMediaBtn.style.display = currentMediaList.length > 1 ? 'flex' : 'none';
         } else {
@@ -267,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeInfo() {
         infoModal.style.display = 'none';
-        mediaContainer.innerHTML = ''; // Очищаем iframe чтобы остановить звук
+        mediaContainer.innerHTML = '';
         document.body.style.overflow = ''; 
     }
 
