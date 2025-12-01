@@ -67,7 +67,7 @@ header {
 .container { max-width: 1440px; margin: 0 auto; padding: 0 40px; }
 main.container { flex: 1; padding: 140px 40px 80px 40px; }
 
-/* --- TYPOGRAPHY (Анимированный заголовок) --- */
+/* --- TYPOGRAPHY --- */
 .page-title {
     font-size: 3.5rem; 
     font-weight: 900; 
@@ -120,7 +120,20 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 
 /* --- MEDIA SLIDER --- */
 .info-col-trailer { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; }
-.media-container { width: 100%; position: relative; overflow: hidden; padding-bottom: 56.25%; background: #000; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
+
+/* FIX: Обновленный контейнер медиа с фиксированной высотой */
+.media-container { 
+    width: 100%; 
+    height: 360px !important; /* Фиксированная высота как у постера */
+    padding-bottom: 0 !important; /* Убираем хак aspect-ratio */
+    position: relative; 
+    overflow: hidden; 
+    background: #000; 
+    border-radius: 12px; 
+    border: 1px solid #334155; 
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7); 
+}
+
 .media-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
 .media-content.active { display: block; animation: fadeIn 0.4s ease; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -132,7 +145,7 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 @media (max-width: 1200px) { .slider-arrow.prev { left: 10px; } .slider-arrow.next { right: 10px; } }
 
 /* =========================================
-   NEW MODAL STYLES (NETFLIX STYLE)
+   NETFLIX STYLE MODAL (ОБНОВЛЕННОЕ)
    ========================================= */
 
 /* Контейнер окна */
@@ -144,24 +157,36 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 
 /* Основная сетка */
 .info-modal-body { position: relative; z-index: 2; padding: 50px; }
+
+/* FIX: Выравнивание колонок */
 .info-layout { 
     display: grid; 
-    /* FIX: Увеличили левую колонку (360px), чтобы постер был БОЛЬШИМ */
-    grid-template-columns: 360px 1fr 300px; 
+    grid-template-columns: 280px 1fr 280px; 
     gap: 30px; 
-    /* Выравниваем по верху, чтобы постер и трейлер начинались с одной линии */
-    align-items: start; 
+    align-items: start; /* Выравнивание по верху для симметрии */
 }
 
 /* Левая колонка (Постер) */
 .info-col-visual { 
     text-align: center; 
-    /* Липкий постер - скользит при скролле правой части */
     align-self: start; 
     position: sticky;
     top: 0;
 }
-.info-main-title { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; margin: 20px 0 10px; line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+
+/* FIX: Постер фиксированной высоты как трейлер */
+.info-col-visual img { 
+    width: 100%;
+    height: 360px;       /* Высота */
+    object-fit: cover;   /* Красивое заполнение */
+    object-position: top center; /* Фокус на лицах сверху */
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    margin-bottom: 20px;
+    display: block; 
+}
+
+.info-main-title { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; margin: 0 0 10px; line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
 
 /* Правая колонка (Характеристики + Билеты) */
 .info-col-data { 
@@ -180,7 +205,6 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
     margin-bottom: 20px; 
 }
 
-/* Первая панель (Таблица) растягивается если нужно */
 .info-col-data .glass-panel:first-child {
     display: flex;
     flex-direction: column;
@@ -189,19 +213,39 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 }
 
 .glass-panel:last-child { margin-bottom: 0; }
-
 .panel-title { font-size: 0.85rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 15px; letter-spacing: 1px; font-weight: 700; }
-.description-text { font-size: 1rem; line-height: 1.6; color: #e2e8f0; text-shadow: 0 1px 2px rgba(0,0,0,0.5); text-align: left; }
+
+/* Описание фильма */
+.description-text { font-size: 1rem; line-height: 1.6; color: #e2e8f0; text-shadow: 0 1px 2px rgba(0,0,0,0.5); text-align: left; margin: 0; }
+
+/* Класс для сворачивания текста */
+.desc-clamped {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 2 строки */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 8px;
+    color: #cbd5e1;
+}
+
+/* Кнопка Читать далее */
+.read-more-btn {
+    background: transparent;
+    border: none;
+    color: var(--accent-blue);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+    letter-spacing: 0.5px;
+}
+.read-more-btn:hover { color: #fff; text-decoration: underline; }
 
 /* Таблица характеристик */
-.spec-row { 
-    display: flex; 
-    justify-content: space-between; 
-    font-size: 0.9rem; 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-    padding-bottom: 10px; 
-    margin-bottom: 0; 
-}
+.spec-row { display: flex; justify-content: space-between; font-size: 0.9rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; margin-bottom: 0; }
 .spec-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 .spec-label { color: #94a3b8; font-weight: 600; text-align: left; }
 .spec-value { color: #fff; font-weight: 500; text-align: right; }
@@ -228,18 +272,25 @@ footer { background-color: #020617; padding: 40px 0; border-top: 1px solid #1e29
 @media (max-width: 900px) { .header-fluid { padding: 0 20px; flex-direction: column; gap: 15px; } .page-title { font-size: 2.2rem; } }
 @media (max-width: 768px) { .footer-container { flex-direction: column; text-align: center; gap: 25px; } .footer-info { text-align: center; } }
 
-/* FIX: Новый адаптив для ноутбуков (1400px), так как колонки стали широкими */
 @media (max-width: 1400px) {
-    .info-layout { grid-template-columns: 280px 1fr 280px; }
+    .info-layout { grid-template-columns: 260px 1fr 260px; }
+}
+
+@media (max-width: 1200px) {
+    /* На ноутбуках немного уменьшаем высоту, сохраняя симметрию */
+    .info-col-visual img, 
+    .media-container {
+        height: 300px !important;
+    }
 }
 
 @media (max-width: 1100px) { 
     .info-layout { grid-template-columns: 1fr; gap: 30px; } 
-    .info-col-visual img { width: 240px; margin: 0 auto; } 
+    .info-col-visual img { width: 240px; height: auto !important; margin: 0 auto; } 
+    .media-container { height: auto !important; padding-bottom: 56.25% !important; }
     .info-col-trailer { order: -1; } 
     .info-modal-content { height: auto; overflow-y: auto; max-width: 95% !important;} 
     
-    /* Сброс сетки и липкости */
     .info-layout .info-col-visual { grid-row: auto; align-self: center; position: static; }
     .info-layout > #infoDesc { grid-column: auto; }
     .info-col-data { height: auto; }
