@@ -1,163 +1,162 @@
 {
-    "library": {
-        "1": {
-            "title": "Дикий робот",
-            "rating": 8.4,
-            "poster": "assets/images/Дикий робот (2024).jpg",
-            "age": "6+",
-            "ageClass": "age-green",
-            "category": "family",
-            "tags": ["Мультфильм", "Семейный", "Фантастика", "Приключения"],
-            "description": "Эпическое приключение робота ROZZUM 7134, потерпевшего кораблекрушение на необитаемом острове. Ему предстоит приспособиться к суровым условиям, подружиться с местными животными и стать приемным родителем для осиротевшего гусенка.",
-            "media": [
-                { "type": "video", "src": "dnYMdlt1vCU" },
-                { "type": "video", "src": "u7SfIW5tjdE" },
-                { "type": "image", "src": "https://i.ytimg.com/vi/dnYMdlt1vCU/maxresdefault.jpg" }
-            ],
-            "year": "2024",
-            "country": "США, Япония",
-            "duration": "1 ч 42 мин",
-            "director": "Крис Сандерс",
-            "mpaa": "PG"
-        },
-        "2": {
-            "title": "Иллюзия обмана 3",
-            "rating": 6.9,
-            "poster": "assets/images/Иллюзия обмана 3 (2025).jpg",
-            "age": "16+",
-            "ageClass": "age-orange",
-            "category": "action",
-            "tags": ["Триллер", "Криминал"],
-            "description": "Четыре Всадника возвращаются, чтобы вновь удивить мир своими невероятными иллюзиями. На этот раз ставки выше, а магия становится еще опаснее.",
-            "media": [
-                { "type": "video", "src": "z3Kl3jubJ9I" },
-                { "type": "video", "src": "Goc9D8bVYPc" },
-                { "type": "video", "src": "wySOLxvatTQ" },
-                { "type": "image", "src": "https://i.ytimg.com/vi/z3Kl3jubJ9I/maxresdefault.jpg" }
-            ],
-            "year": "2025",
-            "country": "США",
-            "duration": "1 ч 52 мин",
-            "director": "Рубен Фляйшер",
-            "mpaa": "PG-13"
-        },
-        "3": {
-            "title": "Пять ночей с Фредди",
-            "rating": 5.8,
-            "poster": "assets/images/Пять ночей с Фредди (2023).jpg",
-            "age": "18+",
-            "ageClass": "age-red",
-            "category": "horror",
-            "tags": ["Ужасы", "Драма"],
-            "description": "Охранник пиццерии Freddy Fazbear's Pizza сталкивается с оживающими по ночам аниматрониками, которые скрывают мрачные тайны прошлого.",
-            "media": [
-                { "type": "video", "src": "WgKp00O9wCQ" },
-                { "type": "video", "src": "ZLc75xxc0FM" },
-                { "type": "image", "src": "https://i.ytimg.com/vi/WgKp00O9wCQ/maxresdefault.jpg" }
-            ],
-            "year": "2023",
-            "country": "США",
-            "duration": "1 ч 49 мин",
-            "director": "Эмма Тамми",
-            "mpaa": "PG-13"
-        },
-        "4": {
-            "title": "Kingsman: Секретная служба",
-            "rating": 7.7,
-            "poster": "assets/images/Kingsman Секретная служба (2015).jpg",
-            "age": "18+",
-            "ageClass": "age-red",
-            "category": "action",
-            "tags": ["Боевик", "Комедия", "Приключения"],
-            "description": "Элитная секретная служба набирает новичков. Уличный хулиган Эггси получает шанс стать джентльменом-шпионом и спасти мир.",
-            "media": [
-                { "type": "video", "src": "Ee9kXN3e8iQ" },
-                { "type": "video", "src": "zGmke5L8VkI" },
-                { "type": "image", "src": "https://i.ytimg.com/vi/Ee9kXN3e8iQ/maxresdefault.jpg" }
-            ],
-            "year": "2015",
-            "country": "Великобритания, США",
-            "duration": "2 ч 10 мин",
-            "director": "Мэттью Вон",
-            "mpaa": "R"
-        },
-        "5": {
-            "title": "ВАЛЛ-И",
-            "rating": 8.4,
-            "poster": "assets/images/ВАЛЛ-И (2008).jpg",
-            "age": "0+",
-            "ageClass": "age-green",
-            "category": "family",
-            "tags": ["Мультфильм", "Фантастика", "Приключения", "Семейный"],
-            "description": "Робот ВАЛЛ-И из года в год прилежно трудится на опустевшей Земле, очищая нашу планету от гор мусора, который оставили после себя улетевшие в космос люди.",
-            "media": [
-                { "type": "video", "src": "pATSLKKeKVY" },
-                { "type": "image", "src": "https://i.ytimg.com/vi/pATSLKKeKVY/maxresdefault.jpg" }
-            ],
-            "year": "2008",
-            "country": "США",
-            "duration": "1 ч 38 мин",
-            "director": "Эндрю Стэнтон",
-            "mpaa": "G"
-        },
-        "6": {
-            "title": "Кошмар перед Рождеством",
-            "rating": 8.1,
-            "poster": "assets/images/Кошмар перед Рождеством (1993).jpg",
-            "age": "12+",
-            "ageClass": "age-green",
-            "category": "family",
-            "tags": ["Мультфильм", "Мюзикл", "Фэнтези", "Семейный"],
-            "description": "Джек Скеллингтон, повелитель тыкв из города Хэллоуин, случайно попадает в город Рождества и решает занять место Санта-Клауса.",
-            "media": [
-                { "type": "video", "src": "0styVB5CdLY" },
-                { "type": "video", "src": "wr6N_hZyBCk" },
-                { "type": "image", "src": "https://i.ytimg.com/vi/0styVB5CdLY/maxresdefault.jpg" }
-            ],
-            "year": "1993",
-            "country": "США",
-            "duration": "1 ч 16 мин",
-            "director": "Генри Селик",
-            "mpaa": "PG"
-        },
-        "7": {
-            "title": "Человек-бензопила: История Резе",
-            "rating": 8.3,
-            "poster": "assets/images/Человек-бензопила. Фильм: История Резе (2025).png",
-            "age": "18+",
-            "ageClass": "age-red",
-            "category": "horror",
-            "tags": ["Аниме", "Мультфильм", "Фэнтези", "Боевик"],
-            "description": "Дэндзи встречает девушку по имени Резе, которая проявляет к нему интерес. Но за милой внешностью скрывается взрывная тайна.",
-            "media": [
-                { "type": "video", "src": "d1n552v1ng0" },
-                { "type": "video", "src": "kXFBM9sT3G0" },
-                { "type": "image", "src": "https://i.ytimg.com/vi/d1n552v1ng0/maxresdefault.jpg" }
-            ],
-            "year": "2025",
-            "country": "Япония",
-            "duration": "1 ч 40 мин",
-            "director": "Тацуя Ёсихара",
-            "mpaa": "R"
-        },
-        "8": {
-            "title": "Есть только МиГ",
-            "rating": 6.7,
-            "poster": "assets/images/Есть только МиГ (2025).jpg",
-            "age": "12+",
-            "ageClass": "age-green",
-            "category": "family",
-            "tags": ["Военный", "Драма"],
-            "description": "Захватывающая история создания легендарных истребителей МиГ, рассказанная через судьбы конструкторов и летчиков-испытателей.",
-            "media": [
-                { "type": "video", "src": "bOqiyrx2PJA" },
-                { "type": "video", "src": "PD9H5wMbdPs" },
-                { "type": "image", "src": "https://i.ytimg.com/vi/bOqiyrx2PJA/maxresdefault.jpg" }
-            ],
-            "year": "2025",
-            "country": "Россия",
-            "duration": "1 ч 40 мин",
-            "director": "Александр Жигалкин",
-            "mpaa": "12+"
-        }
+    "1": {
+        "title": "Дикий робот",
+        "rating": 8.4,
+        "poster": "assets/images/Дикий робот (2024).jpg",
+        "age": "6+",
+        "ageClass": "age-green",
+        "category": "family",
+        "tags": ["Мультфильм", "Семейный", "Фантастика", "Приключения"],
+        "description": "Эпическое приключение робота ROZZUM 7134, потерпевшего кораблекрушение на необитаемом острове. Ему предстоит приспособиться к суровым условиям, подружиться с местными животными и стать приемным родителем для осиротевшего гусенка.",
+        "media": [
+            { "type": "video", "src": "dnYMdlt1vCU" },
+            { "type": "video", "src": "u7SfIW5tjdE" },
+            { "type": "image", "src": "https://i.ytimg.com/vi/dnYMdlt1vCU/maxresdefault.jpg" }
+        ],
+        "year": "2024",
+        "country": "США, Япония",
+        "duration": "1 ч 42 мин",
+        "director": "Крис Сандерс",
+        "mpaa": "PG"
+    },
+    "2": {
+        "title": "Иллюзия обмана 3",
+        "rating": 6.9,
+        "poster": "assets/images/Иллюзия обмана 3 (2025).jpg",
+        "age": "16+",
+        "ageClass": "age-orange",
+        "category": "action",
+        "tags": ["Триллер", "Криминал"],
+        "description": "Четыре Всадника возвращаются, чтобы вновь удивить мир своими невероятными иллюзиями. На этот раз ставки выше, а магия становится еще опаснее.",
+        "media": [
+            { "type": "video", "src": "z3Kl3jubJ9I" },
+            { "type": "video", "src": "Goc9D8bVYPc" },
+            { "type": "video", "src": "wySOLxvatTQ" },
+            { "type": "image", "src": "https://i.ytimg.com/vi/z3Kl3jubJ9I/maxresdefault.jpg" }
+        ],
+        "year": "2025",
+        "country": "США",
+        "duration": "1 ч 52 мин",
+        "director": "Рубен Фляйшер",
+        "mpaa": "PG-13"
+    },
+    "3": {
+        "title": "Пять ночей с Фредди",
+        "rating": 5.8,
+        "poster": "assets/images/Пять ночей с Фредди (2023).jpg",
+        "age": "18+",
+        "ageClass": "age-red",
+        "category": "horror",
+        "tags": ["Ужасы", "Драма"],
+        "description": "Охранник пиццерии Freddy Fazbear's Pizza сталкивается с оживающими по ночам аниматрониками, которые скрывают мрачные тайны прошлого.",
+        "media": [
+            { "type": "video", "src": "WgKp00O9wCQ" },
+            { "type": "video", "src": "ZLc75xxc0FM" },
+            { "type": "image", "src": "https://i.ytimg.com/vi/WgKp00O9wCQ/maxresdefault.jpg" }
+        ],
+        "year": "2023",
+        "country": "США",
+        "duration": "1 ч 49 мин",
+        "director": "Эмма Тамми",
+        "mpaa": "PG-13"
+    },
+    "4": {
+        "title": "Kingsman: Секретная служба",
+        "rating": 7.7,
+        "poster": "assets/images/Kingsman Секретная служба (2015).jpg",
+        "age": "18+",
+        "ageClass": "age-red",
+        "category": "action",
+        "tags": ["Боевик", "Комедия", "Приключения"],
+        "description": "Элитная секретная служба набирает новичков. Уличный хулиган Эггси получает шанс стать джентльменом-шпионом и спасти мир.",
+        "media": [
+            { "type": "video", "src": "Ee9kXN3e8iQ" },
+            { "type": "video", "src": "zGmke5L8VkI" },
+            { "type": "image", "src": "https://i.ytimg.com/vi/Ee9kXN3e8iQ/maxresdefault.jpg" }
+        ],
+        "year": "2015",
+        "country": "Великобритания, США",
+        "duration": "2 ч 10 мин",
+        "director": "Мэттью Вон",
+        "mpaa": "R"
+    },
+    "5": {
+        "title": "ВАЛЛ-И",
+        "rating": 8.4,
+        "poster": "assets/images/ВАЛЛ-И (2008).jpg",
+        "age": "0+",
+        "ageClass": "age-green",
+        "category": "family",
+        "tags": ["Мультфильм", "Фантастика", "Приключения", "Семейный"],
+        "description": "Робот ВАЛЛ-И из года в год прилежно трудится на опустевшей Земле, очищая нашу планету от гор мусора, который оставили после себя улетевшие в космос люди.",
+        "media": [
+            { "type": "video", "src": "pATSLKKeKVY" },
+            { "type": "image", "src": "https://i.ytimg.com/vi/pATSLKKeKVY/maxresdefault.jpg" }
+        ],
+        "year": "2008",
+        "country": "США",
+        "duration": "1 ч 38 мин",
+        "director": "Эндрю Стэнтон",
+        "mpaa": "G"
+    },
+    "6": {
+        "title": "Кошмар перед Рождеством",
+        "rating": 8.1,
+        "poster": "assets/images/Кошмар перед Рождеством (1993).jpg",
+        "age": "12+",
+        "ageClass": "age-green",
+        "category": "family",
+        "tags": ["Мультфильм", "Мюзикл", "Фэнтези", "Семейный"],
+        "description": "Джек Скеллингтон, повелитель тыкв из города Хэллоуин, случайно попадает в город Рождества и решает занять место Санта-Клауса.",
+        "media": [
+            { "type": "video", "src": "0styVB5CdLY" },
+            { "type": "video", "src": "wr6N_hZyBCk" },
+            { "type": "image", "src": "https://i.ytimg.com/vi/0styVB5CdLY/maxresdefault.jpg" }
+        ],
+        "year": "1993",
+        "country": "США",
+        "duration": "1 ч 16 мин",
+        "director": "Генри Селик",
+        "mpaa": "PG"
+    },
+    "7": {
+        "title": "Человек-бензопила: История Резе",
+        "rating": 8.3,
+        "poster": "assets/images/Человек-бензопила. Фильм: История Резе (2025).png",
+        "age": "18+",
+        "ageClass": "age-red",
+        "category": "horror",
+        "tags": ["Аниме", "Мультфильм", "Фэнтези", "Боевик"],
+        "description": "Дэндзи встречает девушку по имени Резе, которая проявляет к нему интерес. Но за милой внешностью скрывается взрывная тайна.",
+        "media": [
+            { "type": "video", "src": "d1n552v1ng0" },
+            { "type": "video", "src": "kXFBM9sT3G0" },
+            { "type": "image", "src": "https://i.ytimg.com/vi/d1n552v1ng0/maxresdefault.jpg" }
+        ],
+        "year": "2025",
+        "country": "Япония",
+        "duration": "1 ч 40 мин",
+        "director": "Тацуя Ёсихара",
+        "mpaa": "R"
+    },
+    "8": {
+        "title": "Есть только МиГ",
+        "rating": 6.7,
+        "poster": "assets/images/Есть только МиГ (2025).jpg",
+        "age": "12+",
+        "ageClass": "age-green",
+        "category": "family",
+        "tags": ["Военный", "Драма"],
+        "description": "Захватывающая история создания легендарных истребителей МиГ, рассказанная через судьбы конструкторов и летчиков-испытателей.",
+        "media": [
+            { "type": "video", "src": "bOqiyrx2PJA" },
+            { "type": "video", "src": "PD9H5wMbdPs" },
+            { "type": "image", "src": "https://i.ytimg.com/vi/bOqiyrx2PJA/maxresdefault.jpg" }
+        ],
+        "year": "2025",
+        "country": "Россия",
+        "duration": "1 ч 40 мин",
+        "director": "Александр Жигалкин",
+        "mpaa": "12+"
     }
+}
