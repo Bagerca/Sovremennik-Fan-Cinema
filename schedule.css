@@ -3,7 +3,17 @@
    ========================================= */
 
 /* --- SCHEDULE HEADER --- */
-.schedule-header { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 40px; gap: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 30px; }
+/* FIX: Центрирование заголовка и подзаголовка */
+.schedule-header { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; /* Выравнивание блоков по центру */
+    text-align: center;  /* Выравнивание текста по центру */
+    margin-bottom: 40px; 
+    gap: 25px; 
+    border-bottom: 1px solid var(--border-color); 
+    padding-bottom: 30px; 
+}
 
 /* FIX: Отступ сверху, чтобы карточки не обрезались при ховере */
 .date-slider { display: flex; gap: 12px; overflow-x: auto; width: 100%; padding-bottom: 10px; padding-top: 20px; justify-content: center; }
@@ -84,7 +94,7 @@
 .info-col-visual img:hover { transform: scale(1.02); }
 .info-main-title { color: #fff; font-size: 1.6rem; line-height: 1.2; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
 
-/* FIX: Добавлен flex-wrap для переноса тегов */
+/* FIX: flex-wrap добавлен, чтобы теги переносились */
 .centered-meta { 
     justify-content: center !important; 
     margin-bottom: 0 !important; 
