@@ -68,7 +68,7 @@
     color: var(--accent-blue);
 }
 
-/* Сортировка */
+/* Сортировка (Контейнер) */
 .sort-container {
     display: flex;
     align-items: center;
@@ -81,42 +81,102 @@
     font-weight: 600;
 }
 
-.select-wrapper {
+/* --- CUSTOM SELECT (Кастомный выпадающий список) --- */
+.custom-select-wrapper {
     position: relative;
-}
-
-.select-wrapper select {
-    appearance: none;
-    background-color: rgba(30, 41, 59, 0.6);
-    border: 1px solid var(--border-color);
-    padding: 12px 35px 12px 20px;
-    border-radius: 12px;
-    color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    outline: none;
+    user-select: none;
+    width: 240px;
     font-family: 'Inter', sans-serif;
     font-size: 0.9rem;
-    transition: 0.3s;
 }
 
-.select-wrapper::after {
-    content: '▼';
-    font-size: 0.7em;
-    color: var(--accent-blue);
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
+.custom-select {
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
-.select-wrapper select:hover {
+.custom-select__trigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-select__trigger:hover {
     border-color: #475569;
 }
 
-.select-wrapper select:focus {
+.custom-select__trigger::after {
+    content: '▼';
+    font-size: 0.7em;
+    color: var(--accent-blue);
+    transition: transform 0.3s;
+}
+
+.custom-select.open .custom-select__trigger::after {
+    transform: rotate(180deg);
+}
+
+.custom-select.open .custom-select__trigger {
     border-color: var(--accent-blue);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.custom-options {
+    position: absolute;
+    display: block;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid var(--accent-blue);
+    border-top: 0;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    background: #0f172a; /* Темный фон списка */
+    transition: all 0.3s;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 100;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.custom-select.open .custom-options {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+}
+
+.custom-option {
+    position: relative;
+    display: block;
+    padding: 12px 20px;
+    font-weight: 500;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.custom-option:hover {
+    color: #fff;
+    background-color: rgba(14, 165, 233, 0.1);
+    padding-left: 25px; /* Эффект сдвига */
+}
+
+.custom-option.selected {
+    color: #fff;
+    background-color: var(--accent-blue);
 }
 
 /* Нижний ряд: Теги жанров (Облако тегов) */
@@ -284,10 +344,13 @@
     .sort-container {
         justify-content: space-between;
     }
+    .custom-select-wrapper {
+        width: 100%;
+    }
 }
 
 /* =========================================================
-   FIX: СТИЛИ ДЛЯ МОДАЛЬНОГО ОКНА "О ФИЛЬМЕ"
+   СТИЛИ ДЛЯ МОДАЛЬНОГО ОКНА "О ФИЛЬМЕ"
    ========================================================= */
 
 .info-modal-content { max-width: 1400px !important; text-align: left !important; padding: 0 !important; overflow: hidden; }
@@ -300,13 +363,13 @@
 .info-col-visual img:hover { transform: scale(1.02); }
 .info-main-title { color: #fff; font-size: 1.6rem; line-height: 1.2; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
 
-/* FIX: Добавлен flex-wrap для переноса тегов */
+/* FIX: flex-wrap добавлен, чтобы теги переносились на новую строку */
 .centered-meta { 
     justify-content: center !important; 
     margin-bottom: 0 !important; 
     display: flex; 
     gap: 10px; 
-    flex-wrap: wrap; /* Исправление переноса строк */
+    flex-wrap: wrap; 
 }
 
 .meta-tag { background: rgba(255, 255, 255, 0.1); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
