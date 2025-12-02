@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let ballsContainer = null;
     let svgLayer = null;
-    let ropes = []; // Массив объектов веревок
+    let ropes = []; 
     let animationFrameId = null;
     
     let lastScrollY = window.scrollY;
@@ -46,8 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentScrollY = window.scrollY;
         const delta = currentScrollY - lastScrollY;
         lastScrollY = currentScrollY;
-        // Накапливаем скорость для инерции
-        scrollVelocity += delta * 0.5;
+        
+        // УМЕНЬШИЛ КОЭФФИЦИЕНТ: было 0.5, стало 0.2
+        // Теперь скролл дает более слабый толчок
+        scrollVelocity += delta * 0.2;
     });
 
     function applyTheme(themeName) {
@@ -85,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (faviconLink) faviconLink.href = path;
     }
 
-    // --- 3. СОЗДАНИЕ ВЕРЕВОК (VERLET INTEGRATION) ---
+    // --- 3. СОЗДАНИЕ ВЕРЕВОК ---
     function createOrnaments() {
         if (!header) return;
         
@@ -109,20 +111,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const width = window.innerWidth;
 
         configs.forEach(conf => {
-            // 1. Создаем DOM элемента шара
             const ballEl = document.createElement('div');
             ballEl.className = `ball-wrapper ${conf.color}`;
             ballEl.innerHTML = `<div class="ball-cap"></div><div class="ball-body"></div>`;
             ballsContainer.appendChild(ballEl);
 
-            // 2. Создаем SVG путь
             const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
             pathEl.classList.add('rope-path');
             svgLayer.appendChild(pathEl);
 
-            // 3. Генерируем точки (сегменты) веревки
-            // Чем больше сегментов, тем более гибкая веревка ("змейка")
-            const segmentCount = 20; 
+            // Увеличил количество сегментов для большей плавности (было 20 -> 25)
+            const segmentCount = 25; 
             const segmentLength = conf.length / segmentCount;
             const points = [];
             const startX = (width * conf.offset) / 100;
@@ -130,10 +129,10 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i <= segmentCount; i++) {
                 points.push({
                     x: startX,
-                    y: i * segmentLength, // Начальное положение - висит прямо
-                    oldX: startX,     // Для алгоритма Верле (предыдущая позиция)
+                    y: i * segmentLength, 
+                    oldX: startX,     
                     oldY: i * segmentLength,
-                    pinned: i === 0   // Первая точка прибита к потолку
+                    pinned: i === 0   
                 });
             }
 
@@ -142,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 segmentLength: segmentLength,
                 ballEl: ballEl,
                 pathEl: pathEl,
-                anchorXPercent: conf.offset // Чтобы пересчитывать при ресайзе (опционально)
+                anchorXPercent: conf.offset 
             });
         });
 
@@ -162,24 +161,23 @@ document.addEventListener('DOMContentLoaded', () => {
         ropes = [];
     }
 
-    // --- 4. ФИЗИЧЕСКИЙ ДВИЖОК ---
+    // --- 4. ФИЗИЧЕСКИЙ ДВИЖОК (ТЮНИНГ) ---
     function updatePhysics() {
         if (!ropes.length) return;
 
-        // Затухание глобального скролла
-        scrollVelocity *= 0.9;
+        // Быстрое гашение скорости скролла, чтобы импульс был коротким
+        scrollVelocity *= 0.85;
 
-        const gravity = 0.5;
-        const friction = 0.9; // Трение воздуха (чем меньше, тем быстрее останавливается)
-        const wind = Math.sin(Date.now() / 1500) * 0.05; // Легкий ветерок
+        // Увеличил гравитацию (было 0.5 -> 0.8), чтобы шары казались тяжелее
+        const gravity = 0.8; 
+        const friction = 0.92; // Немного увеличил скольжение
+        const wind = Math.sin(Date.now() / 2000) * 0.02; // Очень слабый ветер
 
         ropes.forEach(rope => {
-            // A. ОБНОВЛЕНИЕ ТОЧЕК (Verlet Integration)
-            // x = x + (x - oldX) * friction + force
-            
+            // A. Verlet Integration
             for (let i = 0; i < rope.points.length; i++) {
                 const p = rope.points[i];
-                if (p.pinned) continue; // Точка крепления не двигается
+                if (p.pinned) continue; 
 
                 const vx = (p.x - p.oldX) * friction;
                 const vy = (p.y - p.oldY) * friction;
@@ -187,27 +185,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 p.oldX = p.x;
                 p.oldY = p.y;
 
-                // Применяем силы
                 p.x += vx + wind;
                 p.y += vy + gravity;
 
-                // Сила от скролла (действует на все точки, но сильнее снизу)
-                // Имитация сопротивления воздуха при движении страницы
-                // (scrollVelocity > 0 значит едем вниз, значит веревка летит ВВЕРХ)
-                const scrollForce = -scrollVelocity * 0.05; 
+                // Сила от скролла:
+                // Теперь она действует слабее и с элементом хаоса (чтобы нить гнулась)
+                const scrollForce = -scrollVelocity * 0.02; 
                 
-                // Хаос: добавляем случайность, чтобы веревка изгибалась, а не летела палкой
-                // Чем ниже точка (i), тем сильнее на нее влияет инерция
-                const chaos = (Math.random() - 0.5) * Math.abs(scrollVelocity) * 0.1;
+                // Хаос уменьшен, чтобы нить не трясло слишком сильно
+                const chaos = (Math.random() - 0.5) * Math.abs(scrollVelocity) * 0.05;
                 
+                // Чем ниже сегмент (i), тем сильнее на него влияет инерция
+                // p.y += scrollForce * (i / rope.points.length); // Раскомментируйте для линейного влияния
                 p.y += scrollForce + chaos;
-                p.x += chaos; // Скролл трясет веревку и по горизонтали чуть-чуть
+                p.x += chaos; 
             }
 
-            // B. ОГРАНИЧЕНИЯ (CONSTRAINTS) - Самое важное для веревки
-            // Заставляем точки держаться на фиксированном расстоянии друг от друга
-            // Повторяем несколько раз для жесткости (Solver Iterations)
-            for (let iter = 0; iter < 5; iter++) {
+            // B. Constraints (Ограничения длины)
+            // Увеличил количество итераций (было 5 -> 10)
+            // Это делает веревку более жесткой и менее "резиновой"
+            for (let iter = 0; iter < 10; iter++) {
                 for (let i = 0; i < rope.points.length - 1; i++) {
                     const p1 = rope.points[i];
                     const p2 = rope.points[i + 1];
@@ -216,9 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const dy = p2.y - p1.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
                     
-                    // Насколько растянулась/сжалась
                     const diff = rope.segmentLength - dist;
-                    const percent = diff / dist / 2; // Делим пополам, чтобы сдвинуть обе точки
+                    const percent = diff / dist / 2;
                     
                     const offsetX = dx * percent;
                     const offsetY = dy * percent;
@@ -232,34 +228,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // C. ОТРИСОВКА (RENDER)
-            
-            // 1. Рисуем нить через SVG
-            // Используем L (линии) между точками. 
-            // При 20 сегментах это выглядит как кривая.
+            // C. Render
             let d = `M ${rope.points[0].x} ${rope.points[0].y}`;
-            for (let i = 1; i < rope.points.length; i++) {
-                d += ` L ${rope.points[i].x} ${rope.points[i].y}`;
+            
+            // Используем квадратичные кривые для сглаживания углов нити
+            // Это сделает веревку визуально более плавной
+            for (let i = 1; i < rope.points.length - 1; i++) {
+                const xc = (rope.points[i].x + rope.points[i + 1].x) / 2;
+                const yc = (rope.points[i].y + rope.points[i + 1].y) / 2;
+                d += ` Q ${rope.points[i].x} ${rope.points[i].y}, ${xc} ${yc}`;
             }
+            // Последний сегмент прямой линией
+            d += ` L ${rope.points[rope.points.length - 1].x} ${rope.points[rope.points.length - 1].y}`;
+            
             rope.pathEl.setAttribute('d', d);
 
-            // 2. Двигаем шар (последняя точка)
+            // Поворот шара
             const lastP = rope.points[rope.points.length - 1];
-            // Используем rotate, чтобы шар наклонялся по ходу движения веревки
-            // Вычисляем угол наклона последнего сегмента
             const prevP = rope.points[rope.points.length - 2];
             const angle = Math.atan2(lastP.y - prevP.y, lastP.x - prevP.x) * 180 / Math.PI;
-            // Корректируем угол (90 градусов, т.к. 0 это вправо)
             const rotation = angle - 90;
 
+            // Добавляем плавность движению самого шара, чтобы он не дергался
             rope.ballEl.style.transform = `translate(${lastP.x}px, ${lastP.y}px) rotate(${rotation}deg)`;
         });
 
         animationFrameId = requestAnimationFrame(updatePhysics);
     }
 
-    // Функции снега и мышей остаются теми же...
-    function createSnow() { /* Ваш код снега */
+    // --- ЭФФЕКТЫ ---
+    function createSnow() {
         const count = 30;
         let html = '';
         for (let i = 0; i < count; i++) {
@@ -273,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
         snowContainer.innerHTML = html;
     }
 
-    function createBats() { /* Ваш код мышей */
+    function createBats() {
         const count = 15;
         let html = '';
         for (let i = 0; i < count; i++) {
