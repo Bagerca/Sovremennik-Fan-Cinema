@@ -47,8 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const delta = currentScrollY - lastScrollY;
         lastScrollY = currentScrollY;
         
-        // УМЕНЬШИЛ КОЭФФИЦИЕНТ: было 0.5, стало 0.2
-        // Теперь скролл дает более слабый толчок
+        // Накапливаем скорость скролла (коэффициент 0.2 для веса)
         scrollVelocity += delta * 0.2;
     });
 
@@ -98,13 +97,13 @@ document.addEventListener('DOMContentLoaded', () => {
         svgLayer.classList.add('balls-svg-layer');
         ballsContainer.appendChild(svgLayer);
 
-        // Конфигурация
+        // Конфигурация (тяжелые параметры массы)
         const configs = [
-            { offset: 10, length: 150, color: 'ball-red' },
-            { offset: 25, length: 220, color: 'ball-gold' },
-            { offset: 45, length: 180, color: 'ball-blue' },
-            { offset: 70, length: 200, color: 'ball-red' },
-            { offset: 88, length: 140, color: 'ball-gold' }
+            { offset: 10, length: 150, color: 'ball-red', mass: 2.5 },
+            { offset: 25, length: 220, color: 'ball-gold', mass: 3.5 },
+            { offset: 45, length: 180, color: 'ball-blue', mass: 3.0 },
+            { offset: 70, length: 200, color: 'ball-red', mass: 3.2 },
+            { offset: 88, length: 140, color: 'ball-gold', mass: 2.0 }
         ];
 
         ropes = [];
@@ -120,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
             pathEl.classList.add('rope-path');
             svgLayer.appendChild(pathEl);
 
-            // Увеличил количество сегментов для большей плавности (было 20 -> 25)
             const segmentCount = 25; 
             const segmentLength = conf.length / segmentCount;
             const points = [];
@@ -141,7 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 segmentLength: segmentLength,
                 ballEl: ballEl,
                 pathEl: pathEl,
-                anchorXPercent: conf.offset 
+                anchorXPercent: conf.offset,
+                currentRotation: 0 // Храним текущий угол для плавности
             });
         });
 
@@ -161,20 +160,19 @@ document.addEventListener('DOMContentLoaded', () => {
         ropes = [];
     }
 
-    // --- 4. ФИЗИЧЕСКИЙ ДВИЖОК (ТЮНИНГ) ---
+    // --- 4. ФИЗИЧЕСКИЙ ДВИЖОК ---
     function updatePhysics() {
         if (!ropes.length) return;
 
-        // Быстрое гашение скорости скролла, чтобы импульс был коротким
+        // Гашение скорости скролла
         scrollVelocity *= 0.85;
 
-        // Увеличил гравитацию (было 0.5 -> 0.8), чтобы шары казались тяжелее
         const gravity = 0.8; 
-        const friction = 0.92; // Немного увеличил скольжение
-        const wind = Math.sin(Date.now() / 2000) * 0.02; // Очень слабый ветер
+        const friction = 0.92; 
+        const wind = Math.sin(Date.now() / 2000) * 0.02;
 
         ropes.forEach(rope => {
-            // A. Verlet Integration
+            // A. Verlet Integration (Движение точек)
             for (let i = 0; i < rope.points.length; i++) {
                 const p = rope.points[i];
                 if (p.pinned) continue; 
@@ -188,23 +186,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 p.x += vx + wind;
                 p.y += vy + gravity;
 
-                // Сила от скролла:
-                // Теперь она действует слабее и с элементом хаоса (чтобы нить гнулась)
                 const scrollForce = -scrollVelocity * 0.02; 
-                
-                // Хаос уменьшен, чтобы нить не трясло слишком сильно
                 const chaos = (Math.random() - 0.5) * Math.abs(scrollVelocity) * 0.05;
                 
-                // Чем ниже сегмент (i), тем сильнее на него влияет инерция
-                // p.y += scrollForce * (i / rope.points.length); // Раскомментируйте для линейного влияния
                 p.y += scrollForce + chaos;
                 p.x += chaos; 
             }
 
-            // B. Constraints (Ограничения длины)
-            // Увеличил количество итераций (было 5 -> 10)
-            // Это делает веревку более жесткой и менее "резиновой"
-            for (let iter = 0; iter < 10; iter++) {
+            // B. Constraints (Ограничения длины) - 20 итераций для жесткости веревки
+            for (let iter = 0; iter < 20; iter++) {
                 for (let i = 0; i < rope.points.length - 1; i++) {
                     const p1 = rope.points[i];
                     const p2 = rope.points[i + 1];
@@ -228,29 +218,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // C. Render
+            // C. Render (Отрисовка)
             let d = `M ${rope.points[0].x} ${rope.points[0].y}`;
             
-            // Используем квадратичные кривые для сглаживания углов нити
-            // Это сделает веревку визуально более плавной
+            // Кривые Безье для гладкости
             for (let i = 1; i < rope.points.length - 1; i++) {
                 const xc = (rope.points[i].x + rope.points[i + 1].x) / 2;
                 const yc = (rope.points[i].y + rope.points[i + 1].y) / 2;
                 d += ` Q ${rope.points[i].x} ${rope.points[i].y}, ${xc} ${yc}`;
             }
-            // Последний сегмент прямой линией
-            d += ` L ${rope.points[rope.points.length - 1].x} ${rope.points[rope.points.length - 1].y}`;
+            
+            // --- ХИТРОСТЬ №1: Визуальное удлинение ---
+            // Рисуем линию к последней точке, но добавляем +10px по Y (вниз).
+            // Линия зайдет внутрь шарика, и разрыва не будет видно.
+            const lastP = rope.points[rope.points.length - 1];
+            d += ` L ${lastP.x} ${lastP.y + 10}`;
             
             rope.pathEl.setAttribute('d', d);
 
             // Поворот шара
-            const lastP = rope.points[rope.points.length - 1];
             const prevP = rope.points[rope.points.length - 2];
-            const angle = Math.atan2(lastP.y - prevP.y, lastP.x - prevP.x) * 180 / Math.PI;
-            const rotation = angle - 90;
+            const angleRad = Math.atan2(lastP.y - prevP.y, lastP.x - prevP.x);
+            let targetRotation = (angleRad * 180 / Math.PI) - 90;
 
-            // Добавляем плавность движению самого шара, чтобы он не дергался
-            rope.ballEl.style.transform = `translate(${lastP.x}px, ${lastP.y}px) rotate(${rotation}deg)`;
+            // --- ХИТРОСТЬ №2: Плавный поворот (Lerp) ---
+            // Вместо мгновенного присвоения угла, мы плавно приближаем текущий угол к целевому.
+            // 0.1 - коэффициент плавности (чем меньше, тем медленнее реакция)
+            rope.currentRotation += (targetRotation - rope.currentRotation) * 0.1;
+
+            rope.ballEl.style.transform = `translate(${lastP.x}px, ${lastP.y}px) rotate(${rope.currentRotation}deg)`;
         });
 
         animationFrameId = requestAnimationFrame(updatePhysics);
