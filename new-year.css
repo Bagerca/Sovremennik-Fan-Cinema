@@ -4,13 +4,13 @@
 
 /* Активируется только при наличии класса new-year-mode у body */
 body.new-year-mode {
-    --accent-blue: #e11d48; /* Рождественский красный вместо голубого */
+    --accent-blue: #e11d48; /* Рождественский красный */
     --accent-dark: #be123c;
-    --card-bg: #1c1315;     /* Более теплый темный фон карточек */
+    --card-bg: #1c1315;     /* Теплый темный фон */
     --border-color: #4a1818; 
 }
 
-/* --- ЦВЕТОВЫЕ ИЗМЕНЕНИЯ ИНТЕРФЕЙСА --- */
+/* --- ЦВЕТА И ЭЛЕМЕНТЫ ИНТЕРФЕЙСА --- */
 
 /* Градиент заголовков: красно-золотой */
 body.new-year-mode .page-title,
@@ -28,12 +28,11 @@ body.new-year-mode .nav-links a.active {
     box-shadow: 0 0 20px rgba(225, 29, 72, 0.2);
 }
 
-/* Шапка сайта: красная граница и тень */
+/* Шапка сайта */
 body.new-year-mode header {
     border-bottom: 2px solid #e11d48;
     box-shadow: 0 5px 30px rgba(225, 29, 72, 0.2);
-    /* Шапка остается fixed из style.css, здесь мы просто гарантируем, 
-       что она выше снега и модалок */
+    /* Шапка должна быть выше снега и эффектов */
     z-index: 1001; 
 }
 
@@ -52,7 +51,7 @@ body.new-year-mode .red-glow-btn {
     box-shadow: 0 0 30px rgba(251, 191, 36, 0.4); 
 }
 
-/* --- КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ --- */
+/* Кнопка переключения темы */
 .theme-toggle-btn {
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -74,7 +73,6 @@ body.new-year-mode .red-glow-btn {
     transform: rotate(15deg);
 }
 
-/* Активная кнопка темы */
 body.new-year-mode .theme-toggle-btn {
     background: #e11d48;
     border-color: #e11d48;
@@ -83,7 +81,7 @@ body.new-year-mode .theme-toggle-btn {
 }
 
 /* =========================================
-   СНЕГ (Слои Z-Index)
+   СНЕГ И СЛОИ (Z-INDEX)
    ========================================= */
 
 /* 1. Контейнер для снега */
@@ -93,19 +91,19 @@ body.new-year-mode .theme-toggle-btn {
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none; /* Пропускает клики сквозь себя */
+    pointer-events: none; /* Пропускает клики */
     z-index: 1; /* Слой 1: Поверх фона body, но ниже контента */
 }
 
 /* 2. Поднимаем контент сайта выше снега */
-/* ВАЖНО: Мы НЕ трогаем здесь header и .modal, чтобы они оставались fixed */
+/* ВАЖНО: header и .modal здесь НЕ трогаем, чтобы они оставались fixed */
 body.new-year-mode main,
 body.new-year-mode footer {
     position: relative;
-    z-index: 10; /* Слой 10: Контент лежит НАД снегом */
+    z-index: 10; 
 }
 
-/* 3. Задаем фон карточкам, чтобы снег не просвечивал сквозь них */
+/* 3. Фон для карточек, чтобы снег не просвечивал сквозь них */
 body.new-year-mode .stat-box,
 body.new-year-mode .game-zone-card,
 body.new-year-mode .lib-card,
@@ -116,10 +114,10 @@ body.new-year-mode details {
     z-index: 11;
 }
 
-/* 4. Сами снежинки */
+/* 4. Анимация снежинок */
 .snowflake {
     position: absolute; 
-    top: -20%; /* Начинаем падение ВЫШЕ экрана, чтобы не было рывков */
+    top: -20%; /* Старт выше экрана */
     color: #fff;
     font-family: Arial;
     text-shadow: 0 0 2px #000;
@@ -127,7 +125,6 @@ body.new-year-mode details {
     pointer-events: none;
     
     animation-name: snowflakes-fall, snowflakes-shake;
-    animation-duration: 10s, 3s;
     animation-timing-function: linear, ease-in-out;
     animation-iteration-count: infinite, infinite;
     animation-play-state: running, running;
@@ -135,7 +132,7 @@ body.new-year-mode details {
 
 @keyframes snowflakes-fall {
     0% { top: -20%; } 
-    100% { top: 110%; } /* Падают ниже экрана */
+    100% { top: 110%; } 
 }
 
 @keyframes snowflakes-shake {
@@ -145,15 +142,42 @@ body.new-year-mode details {
 }
 
 /* =========================================
-   ЛОГОТИП ПРИ НАВЕДЕНИИ (Фильтр)
+   ЛОГОТИП (Красный фильтр)
    ========================================= */
 
 body.new-year-mode .logo-link:hover {
-    filter: drop-shadow(0 0 15px rgba(225, 29, 72, 0.8)); /* Красная тень */
+    filter: drop-shadow(0 0 15px rgba(225, 29, 72, 0.8));
     transform: scale(1.05);
 }
 
 body.new-year-mode .logo-link:hover .logo-img {
-    /* Фильтр превращает белый цвет в красный #e11d48 */
+    /* Фильтр превращает белый в #e11d48 */
     filter: brightness(0) saturate(100%) invert(18%) sepia(90%) saturate(5456%) hue-rotate(340deg) brightness(92%) contrast(96%);
+}
+
+/* =========================================
+   МИНИ-БИЛЕТЫ (В окне фильма)
+   ========================================= */
+
+/* При наведении: Красная рамка и свечение */
+body.new-year-mode .mini-ticket-btn:hover {
+    border-color: #e11d48;
+    background: rgba(225, 29, 72, 0.15);
+    box-shadow: 0 5px 20px rgba(225, 29, 72, 0.4);
+}
+
+/* Вырезы */
+body.new-year-mode .mini-ticket-btn:hover::before,
+body.new-year-mode .mini-ticket-btn:hover::after {
+    border-color: #e11d48;
+}
+
+/* Пунктир */
+body.new-year-mode .mini-ticket-btn:hover .ticket-price-col {
+    border-left-color: #e11d48;
+}
+
+/* Цена золотая */
+body.new-year-mode .ticket-price {
+    color: #fbbf24;
 }
