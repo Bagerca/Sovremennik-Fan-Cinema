@@ -69,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('schedule.json').then(res => res.json())
     ])
     .then(([libraryData, scheduleData]) => {
-        // Объединяем данные: берем расписание и добавляем инфо о фильме
         allMovies = scheduleData.map(item => {
             const movieInfo = libraryData[item.movieId];
             if (!movieInfo) return item; 
@@ -84,32 +83,47 @@ document.addEventListener('DOMContentLoaded', () => {
         moviesContainer.innerHTML = '<p style="color:red; text-align:center;">Ошибка загрузки расписания.</p>';
     });
 
-    // 3. RENDER MOVIES (ОБНОВЛЕННАЯ ЛОГИКА ДЛЯ НОВОГО JSON)
+    // 3. RENDER MOVIES (С СОРТИРОВКОЙ ПО ВРЕМЕНИ)
     function renderMovies(dateToFilter) {
         moviesContainer.innerHTML = '';
 
-        // Проходим по всем фильмам и ищем тот блок расписания, который подходит под выбранную дату
+        // Шаг 1: Находим фильмы для выбранной даты
         const moviesOnDate = allMovies.map(movie => {
             if (!movie.schedule) return null;
 
-            // Ищем блок внутри schedule, где dates включает нашу дату
+            // Ищем блок расписания для этой даты
             const activeBlock = movie.schedule.find(block => block.dates && block.dates.includes(dateToFilter));
 
             if (activeBlock) {
-                // Если нашли, возвращаем фильм, но подменяем sessions на те, что в этом блоке
+                // Копируем сеансы и сортируем их (на всякий случай, чтобы 10:00 шло перед 18:00 внутри карточки)
+                const sortedSessions = [...activeBlock.sessions].sort((a, b) => {
+                    return a.time.localeCompare(b.time);
+                });
+
                 return { 
                     ...movie, 
-                    sessions: activeBlock.sessions 
+                    sessions: sortedSessions 
                 };
             }
             return null;
-        }).filter(item => item !== null); // Убираем пустые (фильмы, которых нет в этот день)
+        }).filter(item => item !== null); // Убираем пустые
 
         if (moviesOnDate.length === 0) {
             moviesContainer.innerHTML = '<div style="text-align:center; padding: 40px; color: #64748b;">На эту дату сеансов нет</div>';
             return;
         }
 
+        // Шаг 2: Сортируем САМИ ФИЛЬМЫ по времени их первого сеанса
+        moviesOnDate.sort((movieA, movieB) => {
+            // Берем время первого сеанса (например "10:00")
+            const timeA = movieA.sessions[0].time;
+            const timeB = movieB.sessions[0].time;
+            
+            // Сравниваем строки времени ("09:00" < "10:00")
+            return timeA.localeCompare(timeB);
+        });
+
+        // Шаг 3: Отрисовка
         moviesOnDate.forEach(movie => {
             moviesContainer.insertAdjacentHTML('beforeend', createMovieCard(movie));
         });
