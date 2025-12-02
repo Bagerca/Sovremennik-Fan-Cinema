@@ -127,19 +127,35 @@
 .info-layout > #infoDesc { grid-column: 2 / -1; margin-top: 0; align-self: start; }
 .media-counter { margin-bottom: 0 !important; }
 
-/* --- СТИЛЬ ДЛЯ ПРОШЕДШИХ СЕАНСОВ (НОВОЕ) --- */
+/* --- СТИЛЬ ДЛЯ ПРОШЕДШИХ СЕАНСОВ (RED/STRIKETHROUGH) --- */
 .session-btn.disabled {
-    opacity: 0.5;
-    pointer-events: none; /* Запрещает клик */
-    background: #0f172a;  /* Темный фон */
-    border-color: #1e293b;
-    filter: grayscale(100%);
+    pointer-events: none;         /* Запрещаем клик */
+    cursor: not-allowed;          /* Курсор "стоп" */
+    
+    /* Делаем фон темно-красным/прозрачным */
+    background: rgba(69, 10, 10, 0.4); 
+    
+    /* Красная, но тусклая рамка */
+    border-color: rgba(239, 68, 68, 0.3);
+    
+    /* Убираем тень и свечение при наведении, если вдруг остались */
+    box-shadow: none;
+    transform: none !important;
 }
 
-.session-btn.disabled .session-time,
+/* Время: Зачеркиваем и красим в красный */
+.session-btn.disabled .session-time {
+    text-decoration: line-through; /* Черточка (зачеркивание) */
+    color: #ef4444;                /* Ярко-красный цвет */
+    opacity: 0.6;                  /* Немного приглушаем */
+}
+
+/* Цена и формат: Делаем еле заметными и красными */
 .session-btn.disabled .session-price,
 .session-btn.disabled .session-format {
-    color: #64748b; /* Серый текст */
+    color: #fca5a5;                /* Светло-красный */
+    opacity: 0.3;                  /* Почти прозрачные */
+    text-decoration: none;
 }
 
 /* MEDIA QUERIES */
