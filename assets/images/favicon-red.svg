@@ -1,23 +1,26 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Бобины (Красные) -->
-    <circle cx="22" cy="24" r="10" stroke="#e11d48" stroke-width="6"/>
-    <circle cx="42" cy="24" r="10" stroke="#e11d48" stroke-width="6"/>
-    
-    <!-- Корпус (Красный) -->
-    <rect x="12" y="36" width="40" height="24" rx="4" fill="#e11d48"/>
-    
-    <!-- Объектив -->
-    <path d="M52 42L60 38V58L52 54V42Z" fill="#e11d48"/>
-    
-    <!-- Спицы -->
-    <circle cx="22" cy="24" r="3" fill="#e11d48"/>
-    <circle cx="42" cy="24" r="3" fill="#e11d48"/>
+    <!-- Группа сдвинута чуть ниже (translate Y=12), чтобы влезла шапка -->
+    <g transform="translate(11, 12)">
+        <!-- Бобины -->
+        <circle cx="8" cy="8" r="5" stroke="#e11d48" stroke-width="3"/>
+        <circle cx="22" cy="8" r="5" stroke="#e11d48" stroke-width="3"/>
+        
+        <!-- Корпус -->
+        <rect x="0" y="14" width="30" height="18" rx="3" fill="#e11d48"/>
+        
+        <!-- Объектив -->
+        <path d="M30 18 L42 12 V34 L30 28 Z" fill="#e11d48"/>
+        
+        <!-- Подставка -->
+        <rect x="4" y="36" width="22" height="3" fill="#e11d48"/>
+        <rect x="8" y="41" width="14" height="3" fill="#e11d48"/>
 
-    <!-- ШАПКА ДЕДА МОРОЗА (На левой бобине) -->
-    <!-- Красная часть шапки -->
-    <path d="M10 20 C 10 20, 15 0, 32 10 C 32 10, 25 15, 22 24 Z" fill="#e11d48"/>
-    <!-- Белая опушка -->
-    <rect x="8" y="20" width="28" height="8" rx="4" fill="white"/>
-    <!-- Белый помпон -->
-    <circle cx="34" cy="12" r="5" fill="white"/>
+        <!-- ШАПКА ДЕДА МОРОЗА (надета на левую бобину) -->
+        <!-- Красный колпак -->
+        <path d="M2 4 C 2 4, 8 -6, 16 0 L 14 6 Z" fill="#e11d48"/>
+        <!-- Белая опушка -->
+        <rect x="1" y="3" width="14" height="4" rx="2" fill="white"/>
+        <!-- Белый помпон -->
+        <circle cx="16" cy="0" r="3" fill="white"/>
+    </g>
 </svg>
