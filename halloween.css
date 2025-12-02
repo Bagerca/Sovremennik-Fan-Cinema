@@ -84,6 +84,11 @@ body.halloween-mode details {
     z-index: 11;
 }
 
+/* --- ВАЖНОЕ ИСПРАВЛЕНИЕ: МОДАЛЬНОЕ ОКНО ПОВЕРХ ШАПКИ --- */
+body.halloween-mode .modal {
+    z-index: 2000;
+}
+
 .bat {
     position: absolute;
     font-size: 24px;
@@ -99,23 +104,22 @@ body.halloween-mode details {
 }
 
 /* =========================================
-   ЛОГОТИП (Оранжевый фильтр)
+   ЛОГОТИП
    ========================================= */
 
 body.halloween-mode .logo-link:hover {
     filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.8));
     transform: scale(1.05);
 }
-
 body.halloween-mode .logo-link:hover .logo-img {
     filter: brightness(0) saturate(100%) invert(60%) sepia(55%) saturate(4644%) hue-rotate(359deg) brightness(101%) contrast(96%);
 }
 
 /* =========================================
-   БИЛЕТЫ (Library & Schedule)
+   БИЛЕТЫ И КНОПКИ
    ========================================= */
 
-/* Мини-билеты в Library */
+/* Мини-билеты (Library) */
 body.halloween-mode .mini-ticket-btn:hover {
     border-color: #f97316;
     background: rgba(249, 115, 22, 0.15);
@@ -132,9 +136,12 @@ body.halloween-mode .ticket-price {
     color: #a855f7;
 }
 
-/* Кнопки сеансов в Schedule (Оранжевое свечение) */
+/* Кнопки сеансов (Schedule) */
 body.halloween-mode .session-btn:hover {
     background: #f97316;
     border-color: #f97316;
-    box-shadow: 0 5px 20px rgba(249, 115, 22, 0.5); /* Было синее, стало оранжевое */
+    box-shadow: 0 5px 20px rgba(249, 115, 22, 0.5); 
+}
+body.halloween-mode .session-btn:hover .session-price {
+    color: #fff;
 }
