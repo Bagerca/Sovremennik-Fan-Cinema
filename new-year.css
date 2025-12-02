@@ -231,36 +231,52 @@ body.new-year-mode .genre-btn.active {
 }
 
 /* =========================================
-   ЕЛОЧНЫЕ ШАРЫ (Физика JS)
+   ЕЛОЧНЫЕ ШАРЫ (SVG + Physics)
    ========================================= */
 
-/* Контейнер для шаров */
+/* Контейнер */
 .christmas-balls-container {
     position: absolute;
-    top: 100%; /* Вешаем СРАЗУ ПОД шапкой */
+    top: 100%; /* Начинается сразу под шапкой */
     left: 0;
     width: 100%;
-    height: 300px; /* Даем пространство внизу, чтобы шарам было где висеть */
-    pointer-events: none; /* Пропускаем клики сквозь них */
-    z-index: 1000; /* Под шапкой, но над контентом */
+    height: 400px; /* Большой запас высоты для полета шаров */
+    pointer-events: none;
+    z-index: 1000;
     overflow: visible;
 }
 
-/* Обертка одного шара (Нить + Шар) */
+/* SVG слой для рисования веревок */
+.balls-svg-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Веревки под шарами */
+}
+
+/* Сами веревки (стиль линии) */
+.rope-path {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.6);
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+/* Обертка шара (теперь тут только сам шар и крепление) */
 .ball-wrapper {
     position: absolute;
     top: 0;
-    transform-origin: top center; /* Точка вращения - самый верх нити */
-    /* ВАЖНО: Мы убрали animation: sway... управляет JS */
-    will-change: transform; /* Оптимизация для JS-анимации */
+    left: 0;
+    width: 50px; /* Ширина шара */
+    z-index: 2;
+    will-change: transform;
+    /* Центрируем, чтобы координаты JS указывали на центр верха крепления */
+    margin-left: -25px; 
 }
 
-/* НИТЬ */
-.ball-string {
-    width: 2px;
-    background: rgba(255, 255, 255, 0.6); /* Чуть ярче нить */
-    margin: 0 auto;
-}
+/* Мы убрали .ball-string, так как теперь это SVG */
 
 /* КРЕПЛЕНИЕ */
 .ball-cap {
