@@ -89,8 +89,9 @@ body.halloween-mode details,
 body.halloween-mode .date-card,  /* Кнопки дат */
 body.halloween-mode .filter-btn, /* Кнопки фильтров */
 body.halloween-mode .genre-btn { /* Кнопки жанров */
-    background-color: var(--card-bg); 
-    z-index: 11;
+    background: var(--card-bg); /* Сплошной фон */
+    position: relative;         /* Z-index работает */
+    z-index: 11;                /* Выше мышей */
 }
 
 .bat {
