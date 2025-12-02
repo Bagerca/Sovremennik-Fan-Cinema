@@ -164,8 +164,15 @@ body.halloween-mode .date-card:hover {
     background: rgba(249, 115, 22, 0.1);
 }
 
-/* Кнопки фильтров */
-body.halloween-mode .filter-btn:hover,
-body.halloween-mode .filter-btn.active {
+/* Кнопки фильтров Halloween */
+body.halloween-mode .filter-btn:hover {
     border-color: #f97316;
+    background: rgba(249, 115, 22, 0.1);
+    color: #fff;
+}
+body.halloween-mode .filter-btn.active {
+    background-color: #f97316; /* Оранжевый фон */
+    border-color: #f97316;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
 }
