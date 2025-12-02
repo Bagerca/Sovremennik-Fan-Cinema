@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let ballsContainer = null;
     let svgLayer = null;
-    let ballsElements = []; 
+    let ropes = []; // Массив объектов веревок
     let animationFrameId = null;
     
     let lastScrollY = window.scrollY;
@@ -41,15 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(currentTheme);
     });
 
-    // --- 2. ОБРАБОТКА СКРОЛЛА ---
+    // --- 2. СЛУШАТЕЛЬ СКРОЛЛА ---
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
         const delta = currentScrollY - lastScrollY;
         lastScrollY = currentScrollY;
-
-        // Копим скорость.
-        // delta * 0.3 - уменьшили чувствительность к резким рывкам
-        scrollVelocity += delta * 0.3; 
+        // Накапливаем скорость для инерции
+        scrollVelocity += delta * 0.5;
     });
 
     function applyTheme(themeName) {
@@ -87,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (faviconLink) faviconLink.href = path;
     }
 
-    // --- 3. СОЗДАНИЕ ШАРОВ ---
+    // --- 3. СОЗДАНИЕ ВЕРЕВОК (VERLET INTEGRATION) ---
     function createOrnaments() {
         if (!header) return;
         
@@ -98,47 +96,58 @@ document.addEventListener('DOMContentLoaded', () => {
         svgLayer.classList.add('balls-svg-layer');
         ballsContainer.appendChild(svgLayer);
 
-        // УВЕЛИЧИЛ МАССУ (было 1.0 - 1.3, стало 2.0 - 3.5)
-        const ballsConfig = [
-            { offset: 10, length: 100, color: 'ball-red', mass: 2.5 },
-            { offset: 25, length: 160, color: 'ball-gold', mass: 3.5 }, // Самый тяжелый
-            { offset: 45, length: 120, color: 'ball-blue', mass: 3.0 },
-            { offset: 70, length: 150, color: 'ball-red', mass: 3.2 },
-            { offset: 85, length: 90, color: 'ball-gold', mass: 2.0 }
+        // Конфигурация
+        const configs = [
+            { offset: 10, length: 150, color: 'ball-red' },
+            { offset: 25, length: 220, color: 'ball-gold' },
+            { offset: 45, length: 180, color: 'ball-blue' },
+            { offset: 70, length: 200, color: 'ball-red' },
+            { offset: 88, length: 140, color: 'ball-gold' }
         ];
 
-        ballsElements = [];
+        ropes = [];
+        const width = window.innerWidth;
 
-        ballsConfig.forEach((config) => {
-            const wrapper = document.createElement('div');
-            wrapper.className = `ball-wrapper ${config.color}`;
-            
-            wrapper.innerHTML = `
-                <div class="ball-cap"></div>
-                <div class="ball-body"></div>
-            `;
-            ballsContainer.appendChild(wrapper);
+        configs.forEach(conf => {
+            // 1. Создаем DOM элемента шара
+            const ballEl = document.createElement('div');
+            ballEl.className = `ball-wrapper ${conf.color}`;
+            ballEl.innerHTML = `<div class="ball-cap"></div><div class="ball-body"></div>`;
+            ballsContainer.appendChild(ballEl);
 
-            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-            path.classList.add('rope-path');
-            svgLayer.appendChild(path);
+            // 2. Создаем SVG путь
+            const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            pathEl.classList.add('rope-path');
+            svgLayer.appendChild(pathEl);
 
-            ballsElements.push({
-                el: wrapper,
-                path: path,
-                anchorXPercent: config.offset,
-                length: config.length,
-                x: 0, 
-                y: config.length,
-                vx: 0,
-                vy: 0,
-                mass: config.mass,
-                phase: Math.random() * 10 
+            // 3. Генерируем точки (сегменты) веревки
+            // Чем больше сегментов, тем более гибкая веревка ("змейка")
+            const segmentCount = 20; 
+            const segmentLength = conf.length / segmentCount;
+            const points = [];
+            const startX = (width * conf.offset) / 100;
+
+            for (let i = 0; i <= segmentCount; i++) {
+                points.push({
+                    x: startX,
+                    y: i * segmentLength, // Начальное положение - висит прямо
+                    oldX: startX,     // Для алгоритма Верле (предыдущая позиция)
+                    oldY: i * segmentLength,
+                    pinned: i === 0   // Первая точка прибита к потолку
+                });
+            }
+
+            ropes.push({
+                points: points,
+                segmentLength: segmentLength,
+                ballEl: ballEl,
+                pathEl: pathEl,
+                anchorXPercent: conf.offset // Чтобы пересчитывать при ресайзе (опционально)
             });
         });
 
         header.appendChild(ballsContainer);
-        startPhysicsLoop();
+        updatePhysics();
     }
 
     function removeOrnaments() {
@@ -150,90 +159,107 @@ document.addEventListener('DOMContentLoaded', () => {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
         }
-        ballsElements = [];
+        ropes = [];
     }
 
     // --- 4. ФИЗИЧЕСКИЙ ДВИЖОК ---
-    function startPhysicsLoop() {
-        if (currentTheme !== 'newyear') return;
+    function updatePhysics() {
+        if (!ropes.length) return;
 
-        const width = window.innerWidth;
-        
-        // Быстрое гашение глобальной скорости скролла (чтобы ветер быстро стихал)
-        scrollVelocity *= 0.85; 
+        // Затухание глобального скролла
+        scrollVelocity *= 0.9;
 
-        ballsElements.forEach(ball => {
-            const anchorX = (width * ball.anchorXPercent) / 100;
-            const anchorY = 0;
+        const gravity = 0.5;
+        const friction = 0.9; // Трение воздуха (чем меньше, тем быстрее останавливается)
+        const wind = Math.sin(Date.now() / 1500) * 0.05; // Легкий ветерок
 
-            if (ball.x === 0) ball.x = anchorX;
-
-            // --- НАСТРОЙКИ ФИЗИКИ ---
+        ropes.forEach(rope => {
+            // A. ОБНОВЛЕНИЕ ТОЧЕК (Verlet Integration)
+            // x = x + (x - oldX) * friction + force
             
-            // 1. ГРАВИТАЦИЯ (УВЕЛИЧЕНА)
-            // Было 0.5, стало 0.8. Теперь их сильнее тянет вниз.
-            ball.vy += 0.8; 
+            for (let i = 0; i < rope.points.length; i++) {
+                const p = rope.points[i];
+                if (p.pinned) continue; // Точка крепления не двигается
 
-            // 2. СИЛА СКРОЛЛА (УМЕНЬШЕНА)
-            // Было 0.15, стало 0.05. Теперь скролл толкает их слабее.
-            // Делим на массу: чем тяжелее шар, тем меньше он подлетает.
-            ball.vy -= scrollVelocity * 0.05 / ball.mass;
+                const vx = (p.x - p.oldX) * friction;
+                const vy = (p.y - p.oldY) * friction;
 
-            // Ветер (легкое покачивание X)
-            ball.vx += Math.sin(Date.now() / 1000 + ball.phase) * 0.05;
+                p.oldX = p.x;
+                p.oldY = p.y;
 
-            // Сопротивление воздуха
-            ball.vx *= 0.98;
-            ball.vy *= 0.98;
+                // Применяем силы
+                p.x += vx + wind;
+                p.y += vy + gravity;
 
-            // 3. Обновляем позицию
-            ball.x += ball.vx;
-            ball.y += ball.vy;
-
-            // 4. ОГРАНИЧЕНИЕ ВЕРЕВКИ
-            const dx = ball.x - anchorX;
-            const dy = ball.y - anchorY;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-
-            if (dist > ball.length) {
-                const angle = Math.atan2(dy, dx);
+                // Сила от скролла (действует на все точки, но сильнее снизу)
+                // Имитация сопротивления воздуха при движении страницы
+                // (scrollVelocity > 0 значит едем вниз, значит веревка летит ВВЕРХ)
+                const scrollForce = -scrollVelocity * 0.05; 
                 
-                // Возвращаем шар к радиусу веревки
-                const targetX = anchorX + Math.cos(angle) * ball.length;
-                const targetY = anchorY + Math.sin(angle) * ball.length;
-
-                // Гасим скорость при натяжении (удар об веревку)
-                // Чем меньше коэффициент, тем жестче веревка
-                ball.vx -= (ball.x - targetX) * 0.1; 
-                ball.vy -= (ball.y - targetY) * 0.1;
+                // Хаос: добавляем случайность, чтобы веревка изгибалась, а не летела палкой
+                // Чем ниже точка (i), тем сильнее на нее влияет инерция
+                const chaos = (Math.random() - 0.5) * Math.abs(scrollVelocity) * 0.1;
                 
-                ball.x = targetX;
-                ball.y = targetY;
-            } 
-
-            // 5. Рендер Шара
-            ball.el.style.transform = `translate(${ball.x}px, ${ball.y}px)`;
-
-            // 6. Рендер Нити
-            let pathString = "";
-            if (dist >= ball.length - 1) {
-                pathString = `M ${anchorX} ${anchorY} L ${ball.x} ${ball.y}`;
-            } else {
-                // Провисание
-                const midX = (anchorX + ball.x) / 2;
-                const midY = (anchorY + ball.y) / 2;
-                // Уменьшил провисание (0.3), чтобы нитка не выглядела как резина
-                const sag = (ball.length - dist) * 0.3;
-                pathString = `M ${anchorX} ${anchorY} Q ${midX} ${midY + sag} ${ball.x} ${ball.y}`;
+                p.y += scrollForce + chaos;
+                p.x += chaos; // Скролл трясет веревку и по горизонтали чуть-чуть
             }
+
+            // B. ОГРАНИЧЕНИЯ (CONSTRAINTS) - Самое важное для веревки
+            // Заставляем точки держаться на фиксированном расстоянии друг от друга
+            // Повторяем несколько раз для жесткости (Solver Iterations)
+            for (let iter = 0; iter < 5; iter++) {
+                for (let i = 0; i < rope.points.length - 1; i++) {
+                    const p1 = rope.points[i];
+                    const p2 = rope.points[i + 1];
+
+                    const dx = p2.x - p1.x;
+                    const dy = p2.y - p1.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    // Насколько растянулась/сжалась
+                    const diff = rope.segmentLength - dist;
+                    const percent = diff / dist / 2; // Делим пополам, чтобы сдвинуть обе точки
+                    
+                    const offsetX = dx * percent;
+                    const offsetY = dy * percent;
+
+                    if (!p1.pinned) {
+                        p1.x -= offsetX;
+                        p1.y -= offsetY;
+                    }
+                    p2.x += offsetX;
+                    p2.y += offsetY;
+                }
+            }
+
+            // C. ОТРИСОВКА (RENDER)
             
-            ball.path.setAttribute("d", pathString);
+            // 1. Рисуем нить через SVG
+            // Используем L (линии) между точками. 
+            // При 20 сегментах это выглядит как кривая.
+            let d = `M ${rope.points[0].x} ${rope.points[0].y}`;
+            for (let i = 1; i < rope.points.length; i++) {
+                d += ` L ${rope.points[i].x} ${rope.points[i].y}`;
+            }
+            rope.pathEl.setAttribute('d', d);
+
+            // 2. Двигаем шар (последняя точка)
+            const lastP = rope.points[rope.points.length - 1];
+            // Используем rotate, чтобы шар наклонялся по ходу движения веревки
+            // Вычисляем угол наклона последнего сегмента
+            const prevP = rope.points[rope.points.length - 2];
+            const angle = Math.atan2(lastP.y - prevP.y, lastP.x - prevP.x) * 180 / Math.PI;
+            // Корректируем угол (90 градусов, т.к. 0 это вправо)
+            const rotation = angle - 90;
+
+            rope.ballEl.style.transform = `translate(${lastP.x}px, ${lastP.y}px) rotate(${rotation}deg)`;
         });
 
-        animationFrameId = requestAnimationFrame(startPhysicsLoop);
+        animationFrameId = requestAnimationFrame(updatePhysics);
     }
 
-    function createSnow() {
+    // Функции снега и мышей остаются теми же...
+    function createSnow() { /* Ваш код снега */
         const count = 30;
         let html = '';
         for (let i = 0; i < count; i++) {
@@ -247,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
         snowContainer.innerHTML = html;
     }
 
-    function createBats() {
+    function createBats() { /* Ваш код мышей */
         const count = 15;
         let html = '';
         for (let i = 0; i < count; i++) {
