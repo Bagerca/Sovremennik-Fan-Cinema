@@ -1,42 +1,39 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Ищем меню
     const navContainer = document.querySelector('.nav-links');
-    const header = document.querySelector('header'); // Находим шапку для шаров
+    const header = document.querySelector('header');
     if (!navContainer) return;
 
-    // 2. Создаем кнопку
+    // Кнопка
     const toggleBtn = document.createElement('button');
     toggleBtn.className = 'theme-toggle-btn';
     toggleBtn.title = 'Переключить тему';
     navContainer.appendChild(toggleBtn);
 
-    // 3. Создаем контейнеры для эффектов
+    // Контейнеры
     const body = document.body;
-    
-    // Контейнер снега
     const snowContainer = document.createElement('div');
     snowContainer.id = 'snow-container';
     body.appendChild(snowContainer);
 
-    // Контейнер летучих мышей
     const batContainer = document.createElement('div');
     batContainer.id = 'halloween-container';
     body.appendChild(batContainer);
 
-    // Контейнер для ЕЛОЧНЫХ ШАРОВ (внутри шапки)
+    // Переменные для шаров
     let ballsContainer = null;
+    let ballsElements = []; // Массив объектов с физикой { element, angle, velocity, length }
+    let animationFrameId = null;
+    let lastScrollY = window.scrollY;
+    let scrollVelocity = 0;
 
-    // Фавикон
     const faviconLink = document.querySelector("link[rel~='icon']");
 
-    // 4. Темы
     const themes = ['default', 'newyear', 'halloween'];
     let currentTheme = localStorage.getItem('theme') || 'default';
     if (!themes.includes(currentTheme)) currentTheme = 'default';
 
     applyTheme(currentTheme);
 
-    // 5. Клик
     toggleBtn.addEventListener('click', () => {
         const currentIndex = themes.indexOf(currentTheme);
         const nextIndex = (currentIndex + 1) % themes.length;
@@ -44,12 +41,31 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(currentTheme);
     });
 
-    // --- ФУНКЦИЯ ПРИМЕНЕНИЯ ТЕМЫ ---
+    // --- СЛУШАТЕЛЬ СКРОЛЛА ДЛЯ ФИЗИКИ ---
+    window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        // Вычисляем скорость скролла (разница между текущей и прошлой позицией)
+        // Делим на коэффициент, чтобы сила удара не была слишком дикой
+        const delta = (currentScrollY - lastScrollY) * 0.15;
+        
+        scrollVelocity = delta;
+        lastScrollY = currentScrollY;
+
+        // Если включен Новый год, передаем импульс шарам
+        if (currentTheme === 'newyear' && ballsElements.length > 0) {
+            ballsElements.forEach(ball => {
+                // Добавляем импульс к текущей скорости шара
+                // ball.mass - чтобы тяжелые (длинные) шары реагировали медленнее
+                ball.velocity += scrollVelocity / ball.mass; 
+            });
+        }
+    });
+
     function applyTheme(themeName) {
         body.classList.remove('new-year-mode', 'halloween-mode');
         snowContainer.innerHTML = '';
         batContainer.innerHTML = '';
-        removeOrnaments(); // Удаляем шары при смене темы
+        removeOrnaments(); // Удаляем старые шары и останавливаем физику
         
         localStorage.setItem('theme', themeName);
 
@@ -64,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleBtn.innerHTML = '🎅';
                 setFavicon('assets/images/favicon-red.svg');
                 createSnow();
-                createOrnaments(); // Вешаем шары
+                createOrnaments(); // Создаем шары с физикой
                 break;
 
             case 'halloween':
@@ -80,30 +96,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (faviconLink) faviconLink.href = path;
     }
 
-    // --- ЛОГИКА ЕЛОЧНЫХ ШАРОВ ---
+    // --- ФИЗИКА ЕЛОЧНЫХ ШАРОВ ---
     function createOrnaments() {
         if (!header) return;
         
         ballsContainer = document.createElement('div');
         ballsContainer.className = 'christmas-balls-container';
         
-        // Настройки шаров (смещение по X, длина нити, цвет, скорость качания)
+        // Конфигурация шаров
+        // mass: чем больше, тем тяжелее раскачать и дольше останавливается
         const ballsConfig = [
-            { left: '5%', height: 120, color: 'ball-red', duration: 3.5 },
-            { left: '15%', height: 90, color: 'ball-gold', duration: 2.8 },
-            { left: '25%', height: 140, color: 'ball-red', duration: 4.2 },
-            { left: '55%', height: 100, color: 'ball-gold', duration: 3.1 },
-            { left: '85%', height: 130, color: 'ball-red', duration: 3.8 },
-            { left: '95%', height: 80, color: 'ball-gold', duration: 2.5 }
+            { left: '10%', height: 60, color: 'ball-red', mass: 1.5 },
+            { left: '25%', height: 100, color: 'ball-gold', mass: 2.2 },
+            { left: '40%', height: 80, color: 'ball-blue', mass: 1.8 },
+            { left: '70%', height: 120, color: 'ball-gold', mass: 2.5 },
+            { left: '85%', height: 70, color: 'ball-red', mass: 1.6 }
         ];
+
+        ballsElements = []; // Очищаем массив
 
         ballsConfig.forEach(config => {
             const wrapper = document.createElement('div');
             wrapper.className = `ball-wrapper ${config.color}`;
             wrapper.style.left = config.left;
-            wrapper.style.animationDuration = `${config.duration}s`; // У каждого своя скорость
             
-            // HTML структура шара
             wrapper.innerHTML = `
                 <div class="ball-string" style="height: ${config.height}px;"></div>
                 <div class="ball-cap"></div>
@@ -111,9 +127,21 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             
             ballsContainer.appendChild(wrapper);
+
+            // Сохраняем объект для физики
+            ballsElements.push({
+                el: wrapper,
+                angle: 0,       // Текущий угол
+                velocity: 0,    // Текущая скорость
+                mass: config.mass, // "Вес" шара (влияет на инерцию)
+                damping: 0.98   // Коэффициент затухания (трение воздуха)
+            });
         });
 
         header.appendChild(ballsContainer);
+        
+        // Запускаем цикл анимации
+        startPhysicsLoop();
     }
 
     function removeOrnaments() {
@@ -121,6 +149,41 @@ document.addEventListener('DOMContentLoaded', () => {
             ballsContainer.remove();
             ballsContainer = null;
         }
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+        ballsElements = [];
+    }
+
+    // Главный цикл физики (60 FPS)
+    function startPhysicsLoop() {
+        if (currentTheme !== 'newyear') return;
+
+        ballsElements.forEach(ball => {
+            // 1. Сила возврата (Гравитация)
+            // Чем больше угол, тем сильнее тянет обратно к 0
+            const force = -0.05 * ball.angle; 
+
+            // 2. Ускорение = Сила
+            ball.velocity += force;
+
+            // 3. Трение (Затухание)
+            ball.velocity *= ball.damping;
+
+            // 4. Обновляем угол
+            ball.angle += ball.velocity;
+
+            // 5. Ограничиваем максимальный угол (чтобы не крутились солнышком)
+            if (ball.angle > 60) { ball.angle = 60; ball.velocity *= -0.5; }
+            if (ball.angle < -60) { ball.angle = -60; ball.velocity *= -0.5; }
+
+            // 6. Применяем к DOM элементу
+            // Используем rotate3d для плавности
+            ball.el.style.transform = `rotate(${ball.angle}deg)`;
+        });
+
+        animationFrameId = requestAnimationFrame(startPhysicsLoop);
     }
 
     // --- ЭФФЕКТЫ ---
@@ -129,11 +192,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let html = '';
         for (let i = 0; i < count; i++) {
             const left = Math.random() * 100;
-            const animDelay = Math.random() * 10; 
+            const animDelay = Math.random() * 10;
             const animDuration = Math.random() * 5 + 5; 
             const size = Math.random() * 10 + 10;
             const opacity = Math.random() * 0.5 + 0.3;
-            html += `<div class="snowflake" style="left: ${left}%; animation-delay: ${animDelay}s, ${Math.random() * 3}s; animation-duration: ${animDuration}s, 3s; font-size: ${size}px; opacity: ${opacity};">❅</div>`;
+            html += `<div class="snowflake" style="left: ${left}%; animation-delay: ${animDelay}s; animation-duration: ${animDuration}s; font-size: ${size}px; opacity: ${opacity};">❅</div>`;
         }
         snowContainer.innerHTML = html;
     }
