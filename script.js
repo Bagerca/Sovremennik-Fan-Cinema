@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const moviesContainer = document.getElementById('movies-container');
     const dateSlider = document.getElementById('date-slider');
-    const filtersBar = document.querySelector('.filters-bar'); // Ссылка на контейнер фильтров
+    const filtersBar = document.querySelector('.filters-bar'); 
     
     // UI Elements
     const ticketModal = document.getElementById('ticketModal');
@@ -33,10 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentMediaList = [];
     let currentMediaIndex = 0;
     
-    // Текущий активный фильтр (по умолчанию 'all')
+    // Текущий активный фильтр
     let activeFilter = 'all';
 
-    // СЛОВАРЬ НАЗВАНИЙ КАТЕГОРИЙ
+    // Словарь категорий
     const categoryNames = {
         'family': 'Детям и семье',
         'action': 'Экшн и Фантастика',
@@ -89,18 +89,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         generateDates();    
         renderMovies(selectedDate); 
-        // initFilters() больше не нужен, мы используем делегирование
     })
     .catch(error => {
         console.error(error);
         moviesContainer.innerHTML = '<p style="color:red; text-align:center;">Ошибка загрузки расписания.</p>';
     });
 
-    // 3. RENDER MOVIES + ОБНОВЛЕНИЕ ФИЛЬТРОВ
+    // 3. RENDER MOVIES
     function renderMovies(dateToFilter) {
         moviesContainer.innerHTML = '';
 
-        // Находим фильмы и сеансы на эту дату
         const moviesOnDate = allMovies.map(movie => {
             if (!movie.schedule) return null;
             const activeBlock = movie.schedule.find(block => block.dates && block.dates.includes(dateToFilter));
@@ -114,52 +112,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (moviesOnDate.length === 0) {
             moviesContainer.innerHTML = '<div style="text-align:center; padding: 40px; color: #64748b;">На эту дату сеансов нет</div>';
-            filtersBar.innerHTML = ''; // Очищаем фильтры, если фильмов нет
+            filtersBar.innerHTML = ''; 
             return;
         }
 
-        // Сортируем фильмы по времени первого сеанса
+        // Сортировка фильмов по времени
         moviesOnDate.sort((movieA, movieB) => {
             const timeA = movieA.sessions[0].time;
             const timeB = movieB.sessions[0].time;
             return timeA.localeCompare(timeB);
         });
 
-        // --- ДИНАМИЧЕСКИЕ ФИЛЬТРЫ (НОВОЕ) ---
         updateFilters(moviesOnDate);
 
-        // Отрисовка фильмов
         moviesOnDate.forEach(movie => {
             moviesContainer.insertAdjacentHTML('beforeend', createMovieCard(movie));
         });
 
-        // Применяем текущий активный фильтр (скрываем/показываем строки)
         applyFilterVisuals();
     }
 
-    // Функция отрисовки кнопок фильтров
     function updateFilters(movies) {
-        // Собираем уникальные категории, которые есть в списке movies
         const availableCategories = new Set(movies.map(m => m.category));
-
-        // Если текущий выбранный фильтр исчез из доступных (например, был Horror, а сегодня его нет),
-        // сбрасываем на 'all'
         if (activeFilter !== 'all' && !availableCategories.has(activeFilter)) {
             activeFilter = 'all';
         }
 
         filtersBar.innerHTML = '';
 
-        // 1. Кнопка "Все фильмы" (всегда есть)
         const allBtn = document.createElement('button');
         allBtn.className = `filter-btn ${activeFilter === 'all' ? 'active' : ''}`;
         allBtn.dataset.filter = 'all';
         allBtn.textContent = 'Все фильмы';
         filtersBar.appendChild(allBtn);
 
-        // 2. Кнопки категорий (только те, что есть в availableCategories)
         availableCategories.forEach(cat => {
-            if (categoryNames[cat]) { // Если у нас есть красивое название для категории
+            if (categoryNames[cat]) {
                 const btn = document.createElement('button');
                 btn.className = `filter-btn ${activeFilter === cat ? 'active' : ''}`;
                 btn.dataset.filter = cat;
@@ -169,21 +157,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Делегирование событий для клика по фильтрам (так как кнопки пересоздаются)
     filtersBar.addEventListener('click', (e) => {
         if (e.target.classList.contains('filter-btn')) {
-            // Убираем активный класс у всех
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            // Добавляем нажатой
             e.target.classList.add('active');
-            // Обновляем переменную
             activeFilter = e.target.dataset.filter;
-            // Применяем фильтрацию
             applyFilterVisuals();
         }
     });
 
-    // Функция, которая скрывает/показывает строки в зависимости от activeFilter
     function applyFilterVisuals() {
         const rows = document.querySelectorAll('.movie-row');
         rows.forEach(row => {
@@ -263,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 6. HALL RENDER (STATIC)
+    // 6. HALL RENDER (С НУМЕРАЦИЕЙ СПРАВА НАЛЕВО)
     function renderHall() {
         const seatsArea = document.getElementById('seatsArea');
         seatsArea.innerHTML = ''; 
@@ -284,7 +266,14 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let j = 0; j < seatsInRow; j++) {
                 const seat = document.createElement('div');
                 seat.className = 'seat';
-                seat.title = `Ряд ${rowNum}, Место ${j + 1}`; 
+                
+                // --- ИЗМЕНЕНА ЛОГИКА НУМЕРАЦИИ (СПРАВА НАЛЕВО) ---
+                // Раньше: j + 1
+                // Теперь: seatsInRow - j
+                // j=0 (слева) -> 24
+                // j=23 (справа) -> 1
+                seat.title = `Ряд ${rowNum}, Место ${seatsInRow - j}`; 
+                
                 seat.addEventListener('click', () => {
                     seat.classList.toggle('selected');
                     updateSelectedCount();
