@@ -211,9 +211,9 @@ body.new-year-mode .filter-btn:hover {
     color: #fff;
 }
 body.new-year-mode .filter-btn.active {
-    background-color: #e11d48; /* Фон */
+    background-color: #e11d48; /* Исправлен цвет фона */
     border-color: #e11d48;
-    color: #fff;               /* Текст */
+    color: #fff;               /* Исправлен цвет текста */
     box-shadow: 0 0 15px rgba(225, 29, 72, 0.4);
 }
 
@@ -224,49 +224,49 @@ body.new-year-mode .genre-btn:hover {
     color: #fff;
 }
 body.new-year-mode .genre-btn.active {
-    background-color: #e11d48; /* Фон */
+    background-color: #e11d48; /* Исправлен цвет фона */
     border-color: #e11d48;
     box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
     color: #fff;
 }
 
 /* =========================================
-   ЕЛОЧНЫЕ ШАРЫ (Физика и Анимация)
+   ЕЛОЧНЫЕ ШАРЫ (Физика JS)
    ========================================= */
 
-/* Контейнер для шаров (поверх шапки) */
+/* Контейнер для шаров */
 .christmas-balls-container {
     position: absolute;
-    top: 0;
+    top: 100%; /* Вешаем СРАЗУ ПОД шапкой */
     left: 0;
     width: 100%;
-    height: 100%;
-    pointer-events: none; /* Чтобы сквозь них можно было кликать на меню */
-    z-index: 10;
-    overflow: hidden;
+    height: 300px; /* Даем пространство внизу, чтобы шарам было где висеть */
+    pointer-events: none; /* Пропускаем клики сквозь них */
+    z-index: 1000; /* Под шапкой, но над контентом */
+    overflow: visible;
 }
 
 /* Обертка одного шара (Нить + Шар) */
 .ball-wrapper {
     position: absolute;
-    top: -10px; /* Прячем начало нити за пределы экрана */
-    transform-origin: top center; /* Точка вращения (маятник) - сверху */
-    animation: sway ease-in-out infinite alternate; /* Анимация качания */
+    top: 0;
+    transform-origin: top center; /* Точка вращения - самый верх нити */
+    /* ВАЖНО: Мы убрали animation: sway... управляет JS */
+    will-change: transform; /* Оптимизация для JS-анимации */
 }
 
 /* НИТЬ */
 .ball-string {
     width: 2px;
-    height: 100px; /* Базовая высота, переопределяется в JS */
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.6); /* Чуть ярче нить */
     margin: 0 auto;
 }
 
-/* КРЕПЛЕНИЕ (Пипочка сверху шара) */
+/* КРЕПЛЕНИЕ */
 .ball-cap {
     width: 12px;
     height: 10px;
-    background: linear-gradient(to right, #fbbf24, #b45309); /* Золото */
+    background: linear-gradient(to right, #fbbf24, #b45309);
     margin: 0 auto;
     border-radius: 4px 4px 0 0;
     position: relative;
@@ -280,22 +280,15 @@ body.new-year-mode .genre-btn.active {
     border-radius: 50%;
     margin: 0 auto;
     position: relative;
-    top: -2px; /* Чуть наезжает на крепление */
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3); /* Тень от шара */
+    top: -2px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     
-    /* Блик (объем) */
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), transparent 20%), 
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), transparent 20%), 
                 radial-gradient(circle at 40% 40%, rgba(255,255,255,0.4), transparent 40%),
-                var(--ball-color); /* Цвет задается через переменную */
+                var(--ball-color);
 }
 
-/* Цвета шаров */
+/* Цвета */
 .ball-red .ball-body { --ball-color: radial-gradient(circle at 50% 50%, #e11d48, #881337); }
 .ball-gold .ball-body { --ball-color: radial-gradient(circle at 50% 50%, #fbbf24, #b45309); }
 .ball-blue .ball-body { --ball-color: radial-gradient(circle at 50% 50%, #38bdf8, #0369a1); }
-
-/* АНИМАЦИЯ МАЯТНИКА */
-@keyframes sway {
-    0% { transform: rotate(4deg); }
-    100% { transform: rotate(-4deg); }
-}
