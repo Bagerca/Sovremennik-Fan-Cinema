@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
         infoRating.style.color = movie.rating >= 7 ? '#4ade80' : (movie.rating >= 5 ? '#facc15' : '#ef4444');
 
-        // --- ПРОФЕССИОНАЛЬНАЯ ОБРЕЗКА (LIBRARY) ---
+        // --- ОПИСАНИЕ С КНОПКОЙ ЧИТАТЬ ДАЛЕЕ ---
         infoDesc.innerHTML = ''; 
         
         const containerWidth = infoDesc.clientWidth || Math.min(600, window.innerWidth - 60);
@@ -248,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
             p.textContent = movie.description || '';
             infoDesc.appendChild(p);
         }
-        // ------------------------------------------
 
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
@@ -271,52 +270,65 @@ document.addEventListener('DOMContentLoaded', () => {
             nextMediaBtn.style.display = 'none';
         }
 
-        // ГЕНЕРАЦИЯ БИЛЕТОВ (ОБНОВЛЕННАЯ ЛОГИКА - СКРЫВАЕМ ПРОШЕДШИЕ)
+        // =========================================================================
+        // ИСПРАВЛЕННАЯ ГЕНЕРАЦИЯ БИЛЕТОВ (ИЩЕМ ПО ВСЕМ БЛОКАМ РАСПИСАНИЯ)
+        // =========================================================================
         if (typeof miniContainer !== 'undefined' && miniContainer) {
             miniContainer.innerHTML = '';
-            const scheduleEntry = allSchedule.find(s => s.movieId === movie.id || s.movieId === movie.movieId);
+            
+            // Используем filter вместо find, чтобы найти ВСЕ блоки расписания для этого фильма
+            const scheduleEntries = allSchedule.filter(s => s.movieId === movie.id || s.movieId === movie.movieId);
 
-            if (scheduleEntry && scheduleEntry.sessions) {
-                const now = new Date(); // Текущее время
-                
-                // Сортируем даты по возрастанию
-                const sortedDates = scheduleEntry.dates.sort();
-                let sessionsCount = 0;
+            if (scheduleEntries.length > 0) {
+                const now = new Date(); 
+                let allFutureSessions = [];
 
-                sortedDates.forEach(date => {
-                    if (sessionsCount >= 4) return; // Лимит показа кнопок
-
-                    const dateObj = new Date(date);
-                    const day = dateObj.getDate();
-                    const month = dateObj.toLocaleDateString('ru-RU', { month: 'short' });
-                    
-                    scheduleEntry.sessions.forEach(session => {
-                        if (sessionsCount >= 4) return;
-
-                        // 1. Проверяем время сеанса
-                        const sessionDateTime = new Date(`${date}T${session.time}`);
-                        
-                        // Если сеанс прошел - пропускаем
-                        if (sessionDateTime < now) return;
-
-                        const btn = document.createElement('button');
-                        btn.className = 'mini-ticket-btn';
-                        btn.onclick = () => window.location.href = 'schedule.html'; 
-                        btn.innerHTML = `
-                            <div class="ticket-time-col">
-                                <span class="ticket-time">${session.time}</span>
-                                <span class="ticket-date">${day} ${month}</span>
-                            </div>
-                            <div class="ticket-price-col">
-                                <div class="ticket-price">${session.price} ₽</div>
-                                <span class="ticket-format">${session.format}</span>
-                            </div>
-                        `;
-                        miniContainer.appendChild(btn);
-                        sessionsCount++;
+                // Собираем все сеансы в одну кучу
+                scheduleEntries.forEach(entry => {
+                    entry.dates.forEach(date => {
+                        entry.sessions.forEach(session => {
+                            const sessionDateTime = new Date(`${date}T${session.time}`);
+                            // Если сеанс в будущем — добавляем в список
+                            if (sessionDateTime > now) {
+                                allFutureSessions.push({
+                                    dateObj: sessionDateTime,
+                                    dateStr: date,
+                                    time: session.time,
+                                    price: session.price,
+                                    format: session.format
+                                });
+                            }
+                        });
                     });
                 });
+
+                // Сортируем все найденные сеансы по времени (от ближайшего)
+                allFutureSessions.sort((a, b) => a.dateObj - b.dateObj);
+
+                // Берем первые 4 (или меньше)
+                const sessionsToShow = allFutureSessions.slice(0, 4);
+
+                sessionsToShow.forEach(item => {
+                    const day = item.dateObj.getDate();
+                    const month = item.dateObj.toLocaleDateString('ru-RU', { month: 'short' });
+
+                    const btn = document.createElement('button');
+                    btn.className = 'mini-ticket-btn';
+                    btn.onclick = () => window.location.href = 'schedule.html'; 
+                    btn.innerHTML = `
+                        <div class="ticket-time-col">
+                            <span class="ticket-time">${item.time}</span>
+                            <span class="ticket-date">${day} ${month}</span>
+                        </div>
+                        <div class="ticket-price-col">
+                            <div class="ticket-price">${item.price} ₽</div>
+                            <span class="ticket-format">${item.format}</span>
+                        </div>
+                    `;
+                    miniContainer.appendChild(btn);
+                });
             } 
+            
             if (miniContainer.children.length === 0) {
                 miniContainer.innerHTML = `<div class="no-sessions-stub"><span>Актуальных сеансов нет</span></div>`;
             }
