@@ -3,13 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('header');
     if (!navContainer) return;
 
-    // Кнопка
+    // --- 1. КНОПКА И КОНТЕЙНЕРЫ ---
     const toggleBtn = document.createElement('button');
     toggleBtn.className = 'theme-toggle-btn';
     toggleBtn.title = 'Переключить тему';
     navContainer.appendChild(toggleBtn);
 
-    // Контейнеры
     const body = document.body;
     const snowContainer = document.createElement('div');
     snowContainer.id = 'snow-container';
@@ -19,12 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     batContainer.id = 'halloween-container';
     body.appendChild(batContainer);
 
-    // Переменные для шаров
     let ballsContainer = null;
-    let ballsElements = []; // Массив объектов с физикой { element, angle, velocity, length }
+    let ballsElements = []; 
     let animationFrameId = null;
     let lastScrollY = window.scrollY;
-    let scrollVelocity = 0;
+    let currentScrollVelocity = 0; // Текущая скорость скролла для сглаживания
 
     const faviconLink = document.querySelector("link[rel~='icon']");
 
@@ -41,31 +39,23 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(currentTheme);
     });
 
-    // --- СЛУШАТЕЛЬ СКРОЛЛА ДЛЯ ФИЗИКИ ---
+    // --- 2. ОБРАБОТКА СКРОЛЛА (СГЛАЖИВАНИЕ) ---
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
-        // Вычисляем скорость скролла (разница между текущей и прошлой позицией)
-        // Делим на коэффициент, чтобы сила удара не была слишком дикой
-        const delta = (currentScrollY - lastScrollY) * 0.15;
-        
-        scrollVelocity = delta;
+        // Разница в скролле
+        const delta = currentScrollY - lastScrollY;
         lastScrollY = currentScrollY;
 
-        // Если включен Новый год, передаем импульс шарам
-        if (currentTheme === 'newyear' && ballsElements.length > 0) {
-            ballsElements.forEach(ball => {
-                // Добавляем импульс к текущей скорости шара
-                // ball.mass - чтобы тяжелые (длинные) шары реагировали медленнее
-                ball.velocity += scrollVelocity / ball.mass; 
-            });
-        }
+        // Вместо мгновенного удара мы накапливаем скорость плавно.
+        // Коэффициент 0.05 делает реакцию "ленивой" (тяжелой).
+        currentScrollVelocity += delta * 0.05;
     });
 
     function applyTheme(themeName) {
         body.classList.remove('new-year-mode', 'halloween-mode');
         snowContainer.innerHTML = '';
         batContainer.innerHTML = '';
-        removeOrnaments(); // Удаляем старые шары и останавливаем физику
+        removeOrnaments();
         
         localStorage.setItem('theme', themeName);
 
@@ -80,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleBtn.innerHTML = '🎅';
                 setFavicon('assets/images/favicon-red.svg');
                 createSnow();
-                createOrnaments(); // Создаем шары с физикой
+                createOrnaments();
                 break;
 
             case 'halloween':
@@ -96,26 +86,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (faviconLink) faviconLink.href = path;
     }
 
-    // --- ФИЗИКА ЕЛОЧНЫХ ШАРОВ ---
+    // --- 3. СОЗДАНИЕ ШАРОВ ---
     function createOrnaments() {
         if (!header) return;
         
         ballsContainer = document.createElement('div');
         ballsContainer.className = 'christmas-balls-container';
         
-        // Конфигурация шаров
-        // mass: чем больше, тем тяжелее раскачать и дольше останавливается
+        // Настройки "веса" и длины
+        // mass: чем больше, тем медленнее разгоняется и медленнее тормозит
         const ballsConfig = [
-            { left: '10%', height: 60, color: 'ball-red', mass: 1.5 },
-            { left: '25%', height: 100, color: 'ball-gold', mass: 2.2 },
-            { left: '40%', height: 80, color: 'ball-blue', mass: 1.8 },
-            { left: '70%', height: 120, color: 'ball-gold', mass: 2.5 },
-            { left: '85%', height: 70, color: 'ball-red', mass: 1.6 }
+            { left: '10%', height: 70, color: 'ball-red', mass: 4 },
+            { left: '25%', height: 120, color: 'ball-gold', mass: 6 }, // Самый тяжелый
+            { left: '40%', height: 90, color: 'ball-blue', mass: 4.5 },
+            { left: '60%', height: 110, color: 'ball-red', mass: 5.5 },
+            { left: '80%', height: 80, color: 'ball-gold', mass: 4.2 },
+            { left: '92%', height: 130, color: 'ball-blue', mass: 6.5 }
         ];
 
-        ballsElements = []; // Очищаем массив
+        ballsElements = [];
 
-        ballsConfig.forEach(config => {
+        ballsConfig.forEach((config, index) => {
             const wrapper = document.createElement('div');
             wrapper.className = `ball-wrapper ${config.color}`;
             wrapper.style.left = config.left;
@@ -128,19 +119,17 @@ document.addEventListener('DOMContentLoaded', () => {
             
             ballsContainer.appendChild(wrapper);
 
-            // Сохраняем объект для физики
             ballsElements.push({
                 el: wrapper,
-                angle: 0,       // Текущий угол
-                velocity: 0,    // Текущая скорость
-                mass: config.mass, // "Вес" шара (влияет на инерцию)
-                damping: 0.98   // Коэффициент затухания (трение воздуха)
+                angle: 0,
+                velocity: 0,
+                mass: config.mass,
+                // Добавляем фазу для фонового покачивания, чтобы они не качались синхронно
+                phase: Math.random() * Math.PI * 2 
             });
         });
 
         header.appendChild(ballsContainer);
-        
-        // Запускаем цикл анимации
         startPhysicsLoop();
     }
 
@@ -156,37 +145,47 @@ document.addEventListener('DOMContentLoaded', () => {
         ballsElements = [];
     }
 
-    // Главный цикл физики (60 FPS)
+    // --- 4. ФИЗИЧЕСКИЙ ДВИЖОК ---
     function startPhysicsLoop() {
         if (currentTheme !== 'newyear') return;
 
+        // Постепенно гасим "глобальную скорость скролла", имитируя сопротивление воздуха
+        currentScrollVelocity *= 0.9;
+
         ballsElements.forEach(ball => {
-            // 1. Сила возврата (Гравитация)
-            // Чем больше угол, тем сильнее тянет обратно к 0
-            const force = -0.05 * ball.angle; 
+            // 1. ВЛИЯНИЕ СКРОЛЛА (ИМПУЛЬС)
+            // Делим на массу: тяжелые шары реагируют слабее
+            // Ограничиваем силу удара (clamp), чтобы шар не сделал "солнышко" при бешеном скролле
+            let force = Math.max(-2, Math.min(2, currentScrollVelocity)) / ball.mass;
 
-            // 2. Ускорение = Сила
-            ball.velocity += force;
+            // 2. ГРАВИТАЦИЯ (ВОЗВРАТ К ЦЕНТРУ)
+            // Было -0.05, ставим -0.015. 
+            // Это делает возвращение очень плавным и "тягучим"
+            const gravity = -0.015 * ball.angle;
 
-            // 3. Трение (Затухание)
-            ball.velocity *= ball.damping;
+            // 3. ФОНОВОЕ ПОКАЧИВАНИЕ (ВЕТЕР)
+            // Добавляем микро-силу по синусоиде, чтобы они "жили"
+            const time = Date.now() / 1000;
+            const wind = Math.sin(time + ball.phase) * 0.02;
 
-            // 4. Обновляем угол
+            // Суммируем силы
+            ball.velocity += force + gravity + wind;
+
+            // 4. ТРЕНИЕ (ЗАТУХАНИЕ)
+            // 0.995 - очень скользко, они будут долго качаться по инерции
+            ball.velocity *= 0.995;
+
+            // 5. Обновляем угол
             ball.angle += ball.velocity;
 
-            // 5. Ограничиваем максимальный угол (чтобы не крутились солнышком)
-            if (ball.angle > 60) { ball.angle = 60; ball.velocity *= -0.5; }
-            if (ball.angle < -60) { ball.angle = -60; ball.velocity *= -0.5; }
-
-            // 6. Применяем к DOM элементу
-            // Используем rotate3d для плавности
+            // 6. Рендер
             ball.el.style.transform = `rotate(${ball.angle}deg)`;
         });
 
         animationFrameId = requestAnimationFrame(startPhysicsLoop);
     }
 
-    // --- ЭФФЕКТЫ ---
+    // --- ЭФФЕКТЫ СНЕГА И МЫШЕЙ ---
     function createSnow() {
         const count = 30;
         let html = '';
