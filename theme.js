@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themes = ['default', 'newyear', 'halloween'];
     let currentTheme = localStorage.getItem('theme') || 'default';
 
-    // Проверка на валидность темы (вдруг в storage мусор)
+    // Проверка на валидность темы
     if (!themes.includes(currentTheme)) currentTheme = 'default';
 
     // Применяем тему при загрузке
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Логика для каждой темы
         switch (themeName) {
             case 'default':
-                toggleBtn.innerHTML = '❄️'; // Иконка кнопки (синяя снежинка)
+                toggleBtn.innerHTML = '❄️';
                 setFavicon('assets/images/favicon.svg');
                 break;
 
@@ -82,33 +82,45 @@ document.addEventListener('DOMContentLoaded', () => {
         if (faviconLink) faviconLink.href = path;
     }
 
-    // Снег (Новый год)
+    // Снег (Новый год) — ИСПРАВЛЕНО
     function createSnow() {
         const count = 30;
         let html = '';
         for (let i = 0; i < count; i++) {
             const left = Math.random() * 100;
-            const animDuration = Math.random() * 5 + 5;
+            const animDelay = Math.random() * 10; // Случайная задержка до 10 сек
+            const animDuration = Math.random() * 5 + 5; // Скорость падения
             const size = Math.random() * 10 + 10;
             const opacity = Math.random() * 0.5 + 0.3;
-            html += `<div class="snowflake" style="left: ${left}%; animation-duration: ${animDuration}s, 3s; font-size: ${size}px; opacity: ${opacity};">❅</div>`;
+            
+            // ВЕРНУЛ animation-delay
+            html += `<div class="snowflake" style="
+                left: ${left}%; 
+                animation-delay: ${animDelay}s, ${Math.random() * 3}s; 
+                animation-duration: ${animDuration}s, 3s; 
+                font-size: ${size}px; 
+                opacity: ${opacity};
+            ">❅</div>`;
         }
         snowContainer.innerHTML = html;
     }
 
     // Летучие мыши (Хэллоуин)
     function createBats() {
-        const count = 15; // Мышей поменьше, они крупные
+        const count = 15;
         let html = '';
         for (let i = 0; i < count; i++) {
-            // Случайная задержка и позиция старта
             const left = Math.random() * 100; 
-            const animDelay = Math.random() * 10;
-            const animDuration = Math.random() * 10 + 10; // Медленнее
-            const size = Math.random() * 20 + 20; // 20-40px
+            const animDelay = Math.random() * 10; // Тут задержка тоже нужна
+            const animDuration = Math.random() * 10 + 10;
+            const size = Math.random() * 20 + 20;
             
-            // Emoji летучей мыши
-            html += `<div class="bat" style="left: ${left}%; animation-delay: ${animDelay}s; animation-duration: ${animDuration}s; font-size: ${size}px;">🦇</div>`;
+            html += `<div class="bat" style="
+                left: ${left}%; 
+                animation-delay: ${animDelay}s; 
+                animation-duration: ${animDuration}s; 
+                font-size: ${size}px;
+            ">🦇</div>`;
         }
         batContainer.innerHTML = html;
     }
