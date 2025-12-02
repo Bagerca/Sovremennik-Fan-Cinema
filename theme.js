@@ -10,19 +10,24 @@ document.addEventListener('DOMContentLoaded', () => {
     navContainer.appendChild(toggleBtn);
 
     const body = document.body;
+    
+    // Контейнер снега
     const snowContainer = document.createElement('div');
     snowContainer.id = 'snow-container';
     body.appendChild(snowContainer);
 
+    // Контейнер летучих мышей
     const batContainer = document.createElement('div');
     batContainer.id = 'halloween-container';
     body.appendChild(batContainer);
 
+    // Переменные для шаров
     let ballsContainer = null;
     let svgLayer = null;
     let ropes = []; 
     let animationFrameId = null;
     
+    // Переменные скролла
     let lastScrollY = window.scrollY;
     let scrollVelocity = 0;
 
@@ -41,13 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(currentTheme);
     });
 
-    // --- 2. СЛУШАТЕЛЬ СКРОЛЛА ---
+    // --- 2. ОБРАБОТКА СКРОЛЛА ---
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
         const delta = currentScrollY - lastScrollY;
         lastScrollY = currentScrollY;
         
-        // Накапливаем скорость скролла (коэффициент 0.2 для веса)
+        // Накапливаем скорость скролла (коэффициент 0.2 для тяжести)
         scrollVelocity += delta * 0.2;
     });
 
@@ -93,6 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
         ballsContainer = document.createElement('div');
         ballsContainer.className = 'christmas-balls-container';
         
+        // Вычисляем высоту шапки, чтобы повесить шары ровно под ней
+        const headerHeight = header.offsetHeight;
+        ballsContainer.style.top = `${headerHeight}px`;
+        
         svgLayer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svgLayer.classList.add('balls-svg-layer');
         ballsContainer.appendChild(svgLayer);
@@ -110,15 +119,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const width = window.innerWidth;
 
         configs.forEach(conf => {
+            // DOM элемента шара
             const ballEl = document.createElement('div');
             ballEl.className = `ball-wrapper ${conf.color}`;
             ballEl.innerHTML = `<div class="ball-cap"></div><div class="ball-body"></div>`;
             ballsContainer.appendChild(ballEl);
 
+            // SVG путь
             const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
             pathEl.classList.add('rope-path');
             svgLayer.appendChild(pathEl);
 
+            // Генерация сегментов веревки
             const segmentCount = 25; 
             const segmentLength = conf.length / segmentCount;
             const points = [];
@@ -140,11 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 ballEl: ballEl,
                 pathEl: pathEl,
                 anchorXPercent: conf.offset,
-                currentRotation: 0 // Храним текущий угол для плавности
+                currentRotation: 0 // Для сглаживания поворота
             });
         });
 
-        header.appendChild(ballsContainer);
+        // ВАЖНО: Крепим к body, чтобы управлять z-index относительно контента
+        document.body.appendChild(ballsContainer);
+        
         updatePhysics();
     }
 
@@ -172,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const wind = Math.sin(Date.now() / 2000) * 0.02;
 
         ropes.forEach(rope => {
-            // A. Verlet Integration (Движение точек)
+            // A. Verlet Integration
             for (let i = 0; i < rope.points.length; i++) {
                 const p = rope.points[i];
                 if (p.pinned) continue; 
@@ -193,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 p.x += chaos; 
             }
 
-            // B. Constraints (Ограничения длины) - 20 итераций для жесткости веревки
+            // B. Constraints (20 итераций для жесткости)
             for (let iter = 0; iter < 20; iter++) {
                 for (let i = 0; i < rope.points.length - 1; i++) {
                     const p1 = rope.points[i];
@@ -218,32 +232,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // C. Render (Отрисовка)
+            // C. Render
             let d = `M ${rope.points[0].x} ${rope.points[0].y}`;
             
-            // Кривые Безье для гладкости
+            // Кривые Безье
             for (let i = 1; i < rope.points.length - 1; i++) {
                 const xc = (rope.points[i].x + rope.points[i + 1].x) / 2;
                 const yc = (rope.points[i].y + rope.points[i + 1].y) / 2;
                 d += ` Q ${rope.points[i].x} ${rope.points[i].y}, ${xc} ${yc}`;
             }
             
-            // --- ХИТРОСТЬ №1: Визуальное удлинение ---
-            // Рисуем линию к последней точке, но добавляем +10px по Y (вниз).
-            // Линия зайдет внутрь шарика, и разрыва не будет видно.
+            // Продлеваем линию внутрь шара (+10px), чтобы не было дырки
             const lastP = rope.points[rope.points.length - 1];
             d += ` L ${lastP.x} ${lastP.y + 10}`;
             
             rope.pathEl.setAttribute('d', d);
 
-            // Поворот шара
+            // Поворот шара с инерцией (Lerp)
             const prevP = rope.points[rope.points.length - 2];
             const angleRad = Math.atan2(lastP.y - prevP.y, lastP.x - prevP.x);
             let targetRotation = (angleRad * 180 / Math.PI) - 90;
 
-            // --- ХИТРОСТЬ №2: Плавный поворот (Lerp) ---
-            // Вместо мгновенного присвоения угла, мы плавно приближаем текущий угол к целевому.
-            // 0.1 - коэффициент плавности (чем меньше, тем медленнее реакция)
             rope.currentRotation += (targetRotation - rope.currentRotation) * 0.1;
 
             rope.ballEl.style.transform = `translate(${lastP.x}px, ${lastP.y}px) rotate(${rope.currentRotation}deg)`;
