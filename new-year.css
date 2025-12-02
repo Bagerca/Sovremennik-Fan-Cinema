@@ -229,3 +229,73 @@ body.new-year-mode .genre-btn.active {
     box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
     color: #fff;
 }
+
+/* =========================================
+   ЕЛОЧНЫЕ ШАРЫ (Физика и Анимация)
+   ========================================= */
+
+/* Контейнер для шаров (поверх шапки) */
+.christmas-balls-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Чтобы сквозь них можно было кликать на меню */
+    z-index: 10;
+    overflow: hidden;
+}
+
+/* Обертка одного шара (Нить + Шар) */
+.ball-wrapper {
+    position: absolute;
+    top: -10px; /* Прячем начало нити за пределы экрана */
+    transform-origin: top center; /* Точка вращения (маятник) - сверху */
+    animation: sway ease-in-out infinite alternate; /* Анимация качания */
+}
+
+/* НИТЬ */
+.ball-string {
+    width: 2px;
+    height: 100px; /* Базовая высота, переопределяется в JS */
+    background: rgba(255, 255, 255, 0.4);
+    margin: 0 auto;
+}
+
+/* КРЕПЛЕНИЕ (Пипочка сверху шара) */
+.ball-cap {
+    width: 12px;
+    height: 10px;
+    background: linear-gradient(to right, #fbbf24, #b45309); /* Золото */
+    margin: 0 auto;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    z-index: 2;
+}
+
+/* САМ ШАР */
+.ball-body {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 0 auto;
+    position: relative;
+    top: -2px; /* Чуть наезжает на крепление */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3); /* Тень от шара */
+    
+    /* Блик (объем) */
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), transparent 20%), 
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.4), transparent 40%),
+                var(--ball-color); /* Цвет задается через переменную */
+}
+
+/* Цвета шаров */
+.ball-red .ball-body { --ball-color: radial-gradient(circle at 50% 50%, #e11d48, #881337); }
+.ball-gold .ball-body { --ball-color: radial-gradient(circle at 50% 50%, #fbbf24, #b45309); }
+.ball-blue .ball-body { --ball-color: radial-gradient(circle at 50% 50%, #38bdf8, #0369a1); }
+
+/* АНИМАЦИЯ МАЯТНИКА */
+@keyframes sway {
+    0% { transform: rotate(4deg); }
+    100% { transform: rotate(-4deg); }
+}
