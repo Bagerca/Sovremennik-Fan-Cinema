@@ -12,7 +12,6 @@ body.new-year-mode {
 
 /* --- ЦВЕТА И ЭЛЕМЕНТЫ ИНТЕРФЕЙСА --- */
 
-/* Градиент заголовков: красно-золотой */
 body.new-year-mode .page-title,
 body.new-year-mode .gradient-text {
     background: linear-gradient(90deg, #fff 0%, #fbbf24 40%, #e11d48 50%, #fbbf24 60%, #fff 100%);
@@ -22,21 +21,17 @@ body.new-year-mode .gradient-text {
     filter: drop-shadow(0 0 25px rgba(225, 29, 72, 0.4));
 }
 
-/* Активные ссылки в меню */
 body.new-year-mode .nav-links a.active {
     background-color: rgba(225, 29, 72, 0.1);
     box-shadow: 0 0 20px rgba(225, 29, 72, 0.2);
 }
 
-/* Шапка сайта */
 body.new-year-mode header {
     border-bottom: 2px solid #e11d48;
     box-shadow: 0 5px 30px rgba(225, 29, 72, 0.2);
-    /* Шапка должна быть выше снега (1), но ниже модалки (2000) */
     z-index: 1001; 
 }
 
-/* Бейджики (золотой стиль) */
 body.new-year-mode .intro-badge, 
 body.new-year-mode .year-badge,
 body.new-year-mode .promo-badge {
@@ -46,7 +41,6 @@ body.new-year-mode .promo-badge {
     box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
 }
 
-/* Кнопки (золотое свечение) */
 body.new-year-mode .red-glow-btn {
     box-shadow: 0 0 30px rgba(251, 191, 36, 0.4); 
 }
@@ -84,30 +78,25 @@ body.new-year-mode .theme-toggle-btn {
    СНЕГ И СЛОИ (Z-INDEX)
    ========================================= */
 
-/* 1. Контейнер для снега */
 #snow-container {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none;
-    z-index: 1; /* Слой 1: Поверх фона body, но ниже контента */
+    z-index: 1; 
 }
 
-/* 2. Поднимаем контент сайта выше снега */
 body.new-year-mode main,
 body.new-year-mode footer {
     position: relative;
     z-index: 10; 
 }
 
-/* 3. Модальное окно должно перекрывать шапку (1001) */
+/* Модальное окно выше шапки */
 body.new-year-mode .modal {
     z-index: 2000;
 }
 
-/* 4. Фон для карточек, чтобы снег не просвечивал */
+/* Фон карточек */
 body.new-year-mode .stat-box,
 body.new-year-mode .game-zone-card,
 body.new-year-mode .lib-card,
@@ -118,16 +107,14 @@ body.new-year-mode details {
     z-index: 11;
 }
 
-/* 5. Анимация снежинок */
 .snowflake {
     position: absolute; 
-    top: -20%; /* Старт выше экрана */
+    top: -20%;
     color: #fff;
     font-family: Arial;
     text-shadow: 0 0 2px #000;
     user-select: none;
     pointer-events: none;
-    
     animation-name: snowflakes-fall, snowflakes-shake;
     animation-timing-function: linear, ease-in-out;
     animation-iteration-count: infinite, infinite;
@@ -146,7 +133,7 @@ body.new-year-mode details {
 }
 
 /* =========================================
-   ЛОГОТИП (Красный фильтр)
+   ЛОГОТИП
    ========================================= */
 
 body.new-year-mode .logo-link:hover {
@@ -200,9 +187,16 @@ body.new-year-mode .date-card:hover {
     background: rgba(225, 29, 72, 0.1);
 }
 
-/* Кнопки фильтров */
-body.new-year-mode .filter-btn:hover,
-body.new-year-mode .filter-btn.active {
+/* --- ИСПРАВЛЕННЫЕ КНОПКИ ФИЛЬТРОВ --- */
+body.new-year-mode .filter-btn:hover {
     border-color: #e11d48;
+    background: rgba(225, 29, 72, 0.1);
     color: #fff;
+}
+
+body.new-year-mode .filter-btn.active {
+    background-color: #e11d48; /* Красный фон вместо белого */
+    border-color: #e11d48;
+    color: #fff; /* Белый текст */
+    box-shadow: 0 0 15px rgba(225, 29, 72, 0.4);
 }
