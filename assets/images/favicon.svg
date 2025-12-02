@@ -1,15 +1,18 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Бобины (Круги сверху) -->
-    <circle cx="22" cy="20" r="10" stroke="#0ea5e9" stroke-width="6"/>
-    <circle cx="42" cy="20" r="10" stroke="#0ea5e9" stroke-width="6"/>
-    
-    <!-- Корпус (Квадрат) -->
-    <rect x="12" y="32" width="40" height="24" rx="4" fill="#0ea5e9"/>
-    
-    <!-- Объектив (Трапеция справа) -->
-    <path d="M52 38L60 34V54L52 50V38Z" fill="#0ea5e9"/>
-    
-    <!-- Детали внутри бобин (спицы) -->
-    <circle cx="22" cy="20" r="3" fill="#0ea5e9"/>
-    <circle cx="42" cy="20" r="3" fill="#0ea5e9"/>
+    <!-- Группа сдвинута в центр холста -->
+    <g transform="translate(11, 10)">
+        <!-- Бобины (верхние круги) -->
+        <circle cx="8" cy="8" r="5" stroke="#0ea5e9" stroke-width="3"/>
+        <circle cx="22" cy="8" r="5" stroke="#0ea5e9" stroke-width="3"/>
+        
+        <!-- Корпус -->
+        <rect x="0" y="14" width="30" height="18" rx="3" fill="#0ea5e9"/>
+        
+        <!-- Объектив (луч) -->
+        <path d="M30 18 L42 12 V34 L30 28 Z" fill="#0ea5e9"/>
+        
+        <!-- Подставка -->
+        <rect x="4" y="36" width="22" height="3" fill="#0ea5e9"/>
+        <rect x="8" y="41" width="14" height="3" fill="#0ea5e9"/>
+    </g>
 </svg>
