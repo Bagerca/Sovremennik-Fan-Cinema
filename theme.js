@@ -10,24 +10,19 @@ document.addEventListener('DOMContentLoaded', () => {
     navContainer.appendChild(toggleBtn);
 
     const body = document.body;
-    
-    // Контейнер снега
     const snowContainer = document.createElement('div');
     snowContainer.id = 'snow-container';
     body.appendChild(snowContainer);
 
-    // Контейнер летучих мышей
     const batContainer = document.createElement('div');
     batContainer.id = 'halloween-container';
     body.appendChild(batContainer);
 
-    // Переменные для шаров
     let ballsContainer = null;
     let svgLayer = null;
     let ropes = []; 
     let animationFrameId = null;
     
-    // Переменные скролла
     let lastScrollY = window.scrollY;
     let scrollVelocity = 0;
 
@@ -46,13 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(currentTheme);
     });
 
-    // --- 2. ОБРАБОТКА СКРОЛЛА ---
+    // --- 2. СЛУШАТЕЛЬ СКРОЛЛА ---
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
         const delta = currentScrollY - lastScrollY;
         lastScrollY = currentScrollY;
         
-        // Накапливаем скорость скролла (коэффициент 0.2 для тяжести)
+        // Накапливаем скорость скролла (коэффициент 0.2 для веса)
         scrollVelocity += delta * 0.2;
     });
 
@@ -98,7 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ballsContainer = document.createElement('div');
         ballsContainer.className = 'christmas-balls-container';
         
-        // Вычисляем высоту шапки, чтобы повесить шары ровно под ней
         const headerHeight = header.offsetHeight;
         ballsContainer.style.top = `${headerHeight}px`;
         
@@ -106,11 +100,12 @@ document.addEventListener('DOMContentLoaded', () => {
         svgLayer.classList.add('balls-svg-layer');
         ballsContainer.appendChild(svgLayer);
 
-        // Конфигурация (тяжелые параметры массы)
+        // Конфигурация
         const configs = [
             { offset: 10, length: 150, color: 'ball-red', mass: 2.5 },
             { offset: 25, length: 220, color: 'ball-gold', mass: 3.5 },
-            { offset: 45, length: 180, color: 'ball-blue', mass: 3.0 },
+            // ИЗМЕНЕНИЕ: Укоротили синий шар (было 180 -> стало 120)
+            { offset: 45, length: 120, color: 'ball-blue', mass: 3.0 }, 
             { offset: 70, length: 200, color: 'ball-red', mass: 3.2 },
             { offset: 88, length: 140, color: 'ball-gold', mass: 2.0 }
         ];
@@ -119,18 +114,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const width = window.innerWidth;
 
         configs.forEach(conf => {
-            // DOM элемента шара
             const ballEl = document.createElement('div');
             ballEl.className = `ball-wrapper ${conf.color}`;
             ballEl.innerHTML = `<div class="ball-cap"></div><div class="ball-body"></div>`;
             ballsContainer.appendChild(ballEl);
 
-            // SVG путь
             const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
             pathEl.classList.add('rope-path');
             svgLayer.appendChild(pathEl);
 
-            // Генерация сегментов веревки
             const segmentCount = 25; 
             const segmentLength = conf.length / segmentCount;
             const points = [];
@@ -152,11 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ballEl: ballEl,
                 pathEl: pathEl,
                 anchorXPercent: conf.offset,
-                currentRotation: 0 // Для сглаживания поворота
+                currentRotation: 0 
             });
         });
 
-        // ВАЖНО: Крепим к body, чтобы управлять z-index относительно контента
         document.body.appendChild(ballsContainer);
         
         updatePhysics();
@@ -178,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function updatePhysics() {
         if (!ropes.length) return;
 
-        // Гашение скорости скролла
         scrollVelocity *= 0.85;
 
         const gravity = 0.8; 
@@ -207,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 p.x += chaos; 
             }
 
-            // B. Constraints (20 итераций для жесткости)
+            // B. Constraints
             for (let iter = 0; iter < 20; iter++) {
                 for (let i = 0; i < rope.points.length - 1; i++) {
                     const p1 = rope.points[i];
@@ -235,20 +225,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // C. Render
             let d = `M ${rope.points[0].x} ${rope.points[0].y}`;
             
-            // Кривые Безье
             for (let i = 1; i < rope.points.length - 1; i++) {
                 const xc = (rope.points[i].x + rope.points[i + 1].x) / 2;
                 const yc = (rope.points[i].y + rope.points[i + 1].y) / 2;
                 d += ` Q ${rope.points[i].x} ${rope.points[i].y}, ${xc} ${yc}`;
             }
             
-            // Продлеваем линию внутрь шара (+10px), чтобы не было дырки
             const lastP = rope.points[rope.points.length - 1];
             d += ` L ${lastP.x} ${lastP.y + 10}`;
             
             rope.pathEl.setAttribute('d', d);
 
-            // Поворот шара с инерцией (Lerp)
             const prevP = rope.points[rope.points.length - 2];
             const angleRad = Math.atan2(lastP.y - prevP.y, lastP.x - prevP.x);
             let targetRotation = (angleRad * 180 / Math.PI) - 90;
@@ -261,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
         animationFrameId = requestAnimationFrame(updatePhysics);
     }
 
-    // --- ЭФФЕКТЫ ---
     function createSnow() {
         const count = 30;
         let html = '';
