@@ -18,11 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
     batContainer.id = 'halloween-container';
     body.appendChild(batContainer);
 
+    // Переменные для шаров
     let ballsContainer = null;
+    let svgLayer = null; // Слой для рисования нитей
     let ballsElements = []; 
     let animationFrameId = null;
+    
+    // Переменные скролла
     let lastScrollY = window.scrollY;
-    let currentScrollVelocity = 0; // Текущая скорость скролла для сглаживания
+    let scrollVelocity = 0;
 
     const faviconLink = document.querySelector("link[rel~='icon']");
 
@@ -39,16 +43,17 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(currentTheme);
     });
 
-    // --- 2. ОБРАБОТКА СКРОЛЛА (СГЛАЖИВАНИЕ) ---
+    // --- 2. ОБРАБОТКА СКРОЛЛА ---
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
-        // Разница в скролле
         const delta = currentScrollY - lastScrollY;
         lastScrollY = currentScrollY;
 
-        // Вместо мгновенного удара мы накапливаем скорость плавно.
-        // Коэффициент 0.05 делает реакцию "ленивой" (тяжелой).
-        currentScrollVelocity += delta * 0.05;
+        // Копим скорость. 
+        // delta > 0 (крутим вниз) -> контент едет вверх -> воздух толкает шар ВВЕРХ (минус Y)
+        // Но для инерции "подпрыгивания" нам нужно, чтобы при резком скролле вниз 
+        // шар сначала оставался на месте (визуально летел вверх относительно хедера).
+        scrollVelocity += delta * 0.5; 
     });
 
     function applyTheme(themeName) {
@@ -90,42 +95,60 @@ document.addEventListener('DOMContentLoaded', () => {
     function createOrnaments() {
         if (!header) return;
         
+        // Главный контейнер
         ballsContainer = document.createElement('div');
         ballsContainer.className = 'christmas-balls-container';
         
-        // Настройки "веса" и длины
-        // mass: чем больше, тем медленнее разгоняется и медленнее тормозит
+        // SVG слой для веревок
+        svgLayer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svgLayer.classList.add('balls-svg-layer');
+        ballsContainer.appendChild(svgLayer);
+
+        // Конфиг шаров: offset (процент от ширины), length (длина нити)
         const ballsConfig = [
-            { left: '10%', height: 70, color: 'ball-red', mass: 4 },
-            { left: '25%', height: 120, color: 'ball-gold', mass: 6 }, // Самый тяжелый
-            { left: '40%', height: 90, color: 'ball-blue', mass: 4.5 },
-            { left: '60%', height: 110, color: 'ball-red', mass: 5.5 },
-            { left: '80%', height: 80, color: 'ball-gold', mass: 4.2 },
-            { left: '92%', height: 130, color: 'ball-blue', mass: 6.5 }
+            { offset: 10, length: 100, color: 'ball-red', mass: 1.0 },
+            { offset: 25, length: 160, color: 'ball-gold', mass: 1.2 },
+            { offset: 45, length: 120, color: 'ball-blue', mass: 1.1 },
+            { offset: 70, length: 150, color: 'ball-red', mass: 1.3 },
+            { offset: 85, length: 90, color: 'ball-gold', mass: 0.9 }
         ];
 
         ballsElements = [];
 
-        ballsConfig.forEach((config, index) => {
+        ballsConfig.forEach((config) => {
+            // Создаем DOM элемент шара
             const wrapper = document.createElement('div');
             wrapper.className = `ball-wrapper ${config.color}`;
-            wrapper.style.left = config.left;
             
+            // Внутренности шара
             wrapper.innerHTML = `
-                <div class="ball-string" style="height: ${config.height}px;"></div>
                 <div class="ball-cap"></div>
                 <div class="ball-body"></div>
             `;
-            
             ballsContainer.appendChild(wrapper);
 
+            // Создаем SVG линию (нить)
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.classList.add('rope-path');
+            svgLayer.appendChild(path);
+
+            // Физическая модель
             ballsElements.push({
                 el: wrapper,
-                angle: 0,
-                velocity: 0,
+                path: path,
+                anchorXPercent: config.offset, // % от ширины экрана
+                length: config.length,
+                
+                // Координаты шара (относительно контейнера)
+                x: 0, // Вычислим при старте
+                y: config.length,
+                
+                // Скорость
+                vx: 0,
+                vy: 0,
+                
                 mass: config.mass,
-                // Добавляем фазу для фонового покачивания, чтобы они не качались синхронно
-                phase: Math.random() * Math.PI * 2 
+                phase: Math.random() * 10 // Для случайного покачивания
             });
         });
 
@@ -145,41 +168,94 @@ document.addEventListener('DOMContentLoaded', () => {
         ballsElements = [];
     }
 
-    // --- 4. ФИЗИЧЕСКИЙ ДВИЖОК ---
+    // --- 4. ФИЗИЧЕСКИЙ ДВИЖОК ВЕРЕВКИ ---
     function startPhysicsLoop() {
         if (currentTheme !== 'newyear') return;
 
-        // Постепенно гасим "глобальную скорость скролла", имитируя сопротивление воздуха
-        currentScrollVelocity *= 0.9;
+        const width = window.innerWidth;
+        
+        // Глобальное замедление скролла (сопротивление среды)
+        scrollVelocity *= 0.9; 
 
         ballsElements.forEach(ball => {
-            // 1. ВЛИЯНИЕ СКРОЛЛА (ИМПУЛЬС)
-            // Делим на массу: тяжелые шары реагируют слабее
-            // Ограничиваем силу удара (clamp), чтобы шар не сделал "солнышко" при бешеном скролле
-            let force = Math.max(-2, Math.min(2, currentScrollVelocity)) / ball.mass;
+            // 1. Вычисляем точку крепления (Anchor) в пикселях
+            const anchorX = (width * ball.anchorXPercent) / 100;
+            const anchorY = 0;
 
-            // 2. ГРАВИТАЦИЯ (ВОЗВРАТ К ЦЕНТРУ)
-            // Было -0.05, ставим -0.015. 
-            // Это делает возвращение очень плавным и "тягучим"
-            const gravity = -0.015 * ball.angle;
+            // Если это первый кадр, ставим шар сразу в нужное место
+            if (ball.x === 0) ball.x = anchorX;
 
-            // 3. ФОНОВОЕ ПОКАЧИВАНИЕ (ВЕТЕР)
-            // Добавляем микро-силу по синусоиде, чтобы они "жили"
-            const time = Date.now() / 1000;
-            const wind = Math.sin(time + ball.phase) * 0.02;
+            // 2. Применяем силы к скорости
+            
+            // Гравитация (тянет вниз)
+            ball.vy += 0.5; 
 
-            // Суммируем силы
-            ball.velocity += force + gravity + wind;
+            // Скролл (Инерция). 
+            // Если крутим вниз, scrollVelocity > 0. 
+            // Воздух должен толкать шар ВВЕРХ, поэтому вычитаем.
+            ball.vy -= scrollVelocity * 0.15 / ball.mass;
 
-            // 4. ТРЕНИЕ (ЗАТУХАНИЕ)
-            // 0.995 - очень скользко, они будут долго качаться по инерции
-            ball.velocity *= 0.995;
+            // Ветер (легкое покачивание X)
+            ball.vx += Math.sin(Date.now() / 1000 + ball.phase) * 0.05;
 
-            // 5. Обновляем угол
-            ball.angle += ball.velocity;
+            // Сопротивление воздуха (затухание)
+            ball.vx *= 0.98;
+            ball.vy *= 0.98;
 
-            // 6. Рендер
-            ball.el.style.transform = `rotate(${ball.angle}deg)`;
+            // 3. Обновляем позицию
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+
+            // 4. ОГРАНИЧЕНИЕ ВЕРЕВКИ (Constraint)
+            const dx = ball.x - anchorX;
+            const dy = ball.y - anchorY;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+
+            if (dist > ball.length) {
+                // Если шар улетел дальше длины нити — натягиваем нить
+                // Это создает эффект жесткого рывка при натяжении
+                const angle = Math.atan2(dy, dx);
+                const tension = (dist - ball.length) * 0.1; // Сила пружины
+
+                // Возвращаем шар к радиусу веревки
+                const targetX = anchorX + Math.cos(angle) * ball.length;
+                const targetY = anchorY + Math.sin(angle) * ball.length;
+
+                ball.vx -= (ball.x - targetX) * 0.2; // Гасим скорость при натяжении
+                ball.vy -= (ball.y - targetY) * 0.2;
+                
+                ball.x = targetX;
+                ball.y = targetY;
+            } 
+            // Если dist < ball.length, нить провисает (шар летит свободно вверх)
+
+            // 5. Рендер Шара
+            ball.el.style.transform = `translate(${ball.x}px, ${ball.y}px)`;
+
+            // 6. Рендер Нити (Кривая Безье для провисания)
+            // Если нить натянута — прямая линия.
+            // Если провисла — кривая.
+            
+            let pathString = "";
+            if (dist >= ball.length - 1) {
+                // Натянута: Прямая линия
+                pathString = `M ${anchorX} ${anchorY} L ${ball.x} ${ball.y}`;
+            } else {
+                // Провисает: Кривая
+                // Контрольная точка прогибается вниз под гравитацией
+                // Середина отрезка
+                const midX = (anchorX + ball.x) / 2;
+                const midY = (anchorY + ball.y) / 2;
+                
+                // Насколько сильно провисает (зависит от того, насколько шар поднялся)
+                const sag = (ball.length - dist) * 0.5;
+                
+                // Рисуем кривую (Q - Quadratic Bezier)
+                // Контрольная точка смещается вниз (+sag)
+                pathString = `M ${anchorX} ${anchorY} Q ${midX} ${midY + sag} ${ball.x} ${ball.y}`;
+            }
+            
+            ball.path.setAttribute("d", pathString);
         });
 
         animationFrameId = requestAnimationFrame(startPhysicsLoop);
