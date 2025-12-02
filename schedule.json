@@ -1,80 +1,190 @@
 [
     {
         "movieId": "1",
-        "comment": "Дикий робот",
+        "comment": "Дикий робот: Утром в выходные, днем после школы в будни",
         "schedule": [
             {
-                "comment": "Будни",
-                "dates": ["2025-12-02", "2025-12-03", "2025-12-04", "2025-12-05"],
+                "dates": ["2025-11-29"],
                 "sessions": [
                     { "time": "10:00", "format": "2D", "price": 250 },
-                    { "time": "14:30", "format": "2D", "price": 300 },
-                    { "time": "16:40", "format": "3D", "price": 350 }
+                    { "time": "14:15", "format": "3D", "price": 350 }
                 ]
             },
             {
-                "comment": "Выходные",
-                "dates": ["2025-12-06", "2025-12-07"],
+                "dates": ["2025-11-30"],
                 "sessions": [
-                    { "time": "10:00", "format": "2D", "price": 300 },
-                    { "time": "12:15", "format": "3D", "price": 400 },
-                    { "time": "14:30", "format": "2D", "price": 350 },
-                    { "time": "16:40", "format": "3D", "price": 400 }
+                    { "time": "10:00", "format": "2D", "price": 250 },
+                    { "time": "14:00", "format": "2D", "price": 300 }
+                ]
+            },
+            {
+                "dates": ["2025-12-01", "2025-12-02", "2025-12-03"],
+                "sessions": [
+                    { "time": "13:30", "format": "2D", "price": 250 }
+                ]
+            },
+            {
+                "dates": ["2025-12-04", "2025-12-05"],
+                "sessions": [
+                    { "time": "15:00", "format": "3D", "price": 350 }
                 ]
             }
         ]
     },
     {
         "movieId": "2",
-        "comment": "Иллюзия обмана 3",
+        "comment": "Иллюзия обмана 3: Главный блокбастер, разное вечернее время",
         "schedule": [
             {
-                "dates": ["2025-12-02", "2025-12-03", "2025-12-04", "2025-12-05", "2025-12-06", "2025-12-07"],
+                "dates": ["2025-11-29"],
                 "sessions": [
-                    { "time": "18:00", "format": "2D", "price": 450 },
-                    { "time": "20:30", "format": "Atmos", "price": 600, "isSpecial": true }
+                    { "time": "16:30", "format": "2D", "price": 450 },
+                    { "time": "21:00", "format": "Atmos", "price": 600, "isSpecial": true }
+                ]
+            },
+            {
+                "dates": ["2025-11-30"],
+                "sessions": [
+                    { "time": "18:45", "format": "2D", "price": 450 }
+                ]
+            },
+            {
+                "dates": ["2025-12-01", "2025-12-03"],
+                "sessions": [
+                    { "time": "19:00", "format": "2D", "price": 400 }
+                ]
+            },
+            {
+                "dates": ["2025-12-02", "2025-12-04"],
+                "sessions": [
+                    { "time": "20:15", "format": "Atmos", "price": 500 }
+                ]
+            },
+            {
+                "dates": ["2025-12-05"],
+                "sessions": [
+                    { "time": "18:00", "format": "2D", "price": 500 },
+                    { "time": "22:30", "format": "2D", "price": 450 }
                 ]
             }
         ]
     },
     {
         "movieId": "3",
-        "comment": "Пять ночей с Фредди",
+        "comment": "ФНАФ: Ночные сеансы через день",
         "schedule": [
             {
-                "dates": ["2025-12-02", "2025-12-04", "2025-12-06"],
+                "dates": ["2025-11-29"],
                 "sessions": [
-                    { "time": "22:45", "format": "2D", "price": 400 }
+                    { "time": "23:30", "format": "2D", "price": 400 }
+                ]
+            },
+            {
+                "dates": ["2025-12-02", "2025-12-04"],
+                "sessions": [
+                    { "time": "22:45", "format": "2D", "price": 350 }
                 ]
             }
         ]
     },
     {
         "movieId": "4",
-        "comment": "Kingsman",
+        "comment": "Kingsman: Дневные и ранний вечер",
         "schedule": [
             {
-                "dates": ["2025-12-03", "2025-12-05", "2025-12-07"],
+                "dates": ["2025-11-30"],
                 "sessions": [
-                    { "time": "19:30", "format": "2D", "price": 450 }
+                    { "time": "16:00", "format": "2D", "price": 400 }
+                ]
+            },
+            {
+                "dates": ["2025-12-01", "2025-12-05"],
+                "sessions": [
+                    { "time": "16:00", "format": "2D", "price": 350 }
+                ]
+            }
+        ]
+    },
+    {
+        "movieId": "5",
+        "comment": "ВАЛЛ-И: Только один сеанс в субботу и воскресенье утром",
+        "schedule": [
+            {
+                "dates": ["2025-11-29"],
+                "sessions": [
+                    { "time": "12:15", "format": "2D", "price": 250 }
+                ]
+            },
+            {
+                "dates": ["2025-11-30"],
+                "sessions": [
+                    { "time": "10:00", "format": "2D", "price": 200 }
+                ]
+            }
+        ]
+    },
+    {
+        "movieId": "6",
+        "comment": "Кошмар перед Рождеством",
+        "schedule": [
+            {
+                "dates": ["2025-11-30"],
+                "sessions": [
+                    { "time": "12:15", "format": "2D", "price": 300 }
+                ]
+            },
+            {
+                "dates": ["2025-12-03"],
+                "sessions": [
+                    { "time": "11:00", "format": "2D", "price": 200 }
                 ]
             }
         ]
     },
     {
         "movieId": "7",
-        "comment": "Человек-бензопила",
+        "comment": "Человек-бензопила: Альтернатива ФНАФу",
         "schedule": [
             {
-                "dates": ["2025-12-02", "2025-12-03"],
+                "dates": ["2025-11-29"],
                 "sessions": [
-                    { "time": "21:40", "format": "2D", "price": 400 }
+                    { "time": "19:00", "format": "2D", "price": 450 }
                 ]
             },
             {
-                "dates": ["2025-12-06", "2025-12-07"],
+                "dates": ["2025-12-01"],
                 "sessions": [
-                    { "time": "23:00", "format": "2D", "price": 500 }
+                    { "time": "21:30", "format": "2D", "price": 350 }
+                ]
+            },
+            {
+                "dates": ["2025-12-05"],
+                "sessions": [
+                    { "time": "20:30", "format": "2D", "price": 500 }
+                ]
+            }
+        ]
+    },
+    {
+        "movieId": "8",
+        "comment": "МиГ: Будни днем",
+        "schedule": [
+            {
+                "dates": ["2025-12-02", "2025-12-04"],
+                "sessions": [
+                    { "time": "16:00", "format": "2D", "price": 300 }
+                ]
+            }
+        ]
+    },
+    {
+        "movieId": "9",
+        "comment": "1+1: Спецпоказ посреди недели",
+        "schedule": [
+            {
+                "dates": ["2025-12-03"],
+                "sessions": [
+                    { "time": "16:30", "format": "2D", "price": 350 }
                 ]
             }
         ]
