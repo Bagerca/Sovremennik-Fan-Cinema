@@ -3,13 +3,13 @@
    ========================================= */
 
 body.halloween-mode {
-    --accent-blue: #f97316; /* Оранжевый (Тыква) */
+    --accent-blue: #f97316; /* Оранжевый */
     --accent-dark: #c2410c;
-    --card-bg: #1a0b1e;     /* Темно-фиолетовый фон карточек */
-    --border-color: #4c1d95; /* Фиолетовые рамки */
+    --card-bg: #1a0b1e;     /* Темно-фиолетовый фон */
+    --border-color: #4c1d95; 
 }
 
-/* --- ЦВЕТА ИНТЕРФЕЙСА --- */
+/* --- ЦВЕТА И ЭЛЕМЕНТЫ ИНТЕРФЕЙСА --- */
 
 /* Градиент: Оранжевый + Фиолетовый */
 body.halloween-mode .page-title,
@@ -18,7 +18,7 @@ body.halloween-mode .gradient-text {
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
-    filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.6)); /* Фиолетовое свечение */
+    filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.6));
 }
 
 /* Активные ссылки */
@@ -28,7 +28,7 @@ body.halloween-mode .nav-links a.active {
     color: #f97316;
 }
 
-/* Шапка */
+/* Шапка сайта */
 body.halloween-mode header {
     border-bottom: 2px solid #f97316;
     box-shadow: 0 5px 30px rgba(249, 115, 22, 0.2);
@@ -54,7 +54,7 @@ body.halloween-mode .red-glow-btn:hover {
     background-color: #ea580c;
 }
 
-/* --- КНОПКА ТЕМЫ В МЕНЮ --- */
+/* Кнопка темы */
 body.halloween-mode .theme-toggle-btn {
     background: #f97316;
     border-color: #f97316;
@@ -62,20 +62,11 @@ body.halloween-mode .theme-toggle-btn {
     transform: rotate(-15deg) scale(1.1);
 }
 
-/* --- ЛОГОТИП (Фильтр для оранжевого) --- */
-body.halloween-mode .logo-link:hover {
-    filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.8));
-    transform: scale(1.05);
-}
-body.halloween-mode .logo-link:hover .logo-img {
-    /* Фильтр для цвета #f97316 */
-    filter: brightness(0) saturate(100%) invert(60%) sepia(55%) saturate(4644%) hue-rotate(359deg) brightness(101%) contrast(96%);
-}
-
 /* =========================================
-   ЭФФЕКТЫ (Летучие мыши)
+   ЛЕТУЧИЕ МЫШИ И СЛОИ
    ========================================= */
 
+/* 1. Контейнер для мышей */
 #halloween-container {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -84,13 +75,15 @@ body.halloween-mode .logo-link:hover .logo-img {
     overflow: hidden;
 }
 
-/* Поднимаем контент (как и в НГ теме) */
+/* 2. Поднимаем контент выше мышей */
+/* header и .modal не трогаем */
 body.halloween-mode main,
 body.halloween-mode footer {
     position: relative;
     z-index: 10;
 }
 
+/* 3. Фон для карточек */
 body.halloween-mode .stat-box,
 body.halloween-mode .game-zone-card,
 body.halloween-mode .lib-card,
@@ -101,7 +94,7 @@ body.halloween-mode details {
     z-index: 11;
 }
 
-/* Летучая мышь */
+/* 4. Анимация мышей */
 .bat {
     position: absolute;
     font-size: 24px;
@@ -114,4 +107,45 @@ body.halloween-mode details {
     10% { opacity: 0.8; }
     90% { opacity: 0.8; }
     100% { transform: translate(100vw, -100px) rotate(-20deg) scale(1.2); opacity: 0; }
+}
+
+/* =========================================
+   ЛОГОТИП (Оранжевый фильтр)
+   ========================================= */
+
+body.halloween-mode .logo-link:hover {
+    filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.8));
+    transform: scale(1.05);
+}
+
+body.halloween-mode .logo-link:hover .logo-img {
+    /* Фильтр для цвета #f97316 */
+    filter: brightness(0) saturate(100%) invert(60%) sepia(55%) saturate(4644%) hue-rotate(359deg) brightness(101%) contrast(96%);
+}
+
+/* =========================================
+   МИНИ-БИЛЕТЫ (В окне фильма)
+   ========================================= */
+
+/* При наведении: Оранжевая рамка и свечение */
+body.halloween-mode .mini-ticket-btn:hover {
+    border-color: #f97316;
+    background: rgba(249, 115, 22, 0.15);
+    box-shadow: 0 5px 20px rgba(249, 115, 22, 0.4);
+}
+
+/* Вырезы */
+body.halloween-mode .mini-ticket-btn:hover::before,
+body.halloween-mode .mini-ticket-btn:hover::after {
+    border-color: #f97316;
+}
+
+/* Пунктир */
+body.halloween-mode .mini-ticket-btn:hover .ticket-price-col {
+    border-left-color: #f97316;
+}
+
+/* Цена фиолетовая */
+body.halloween-mode .ticket-price {
+    color: #a855f7;
 }
