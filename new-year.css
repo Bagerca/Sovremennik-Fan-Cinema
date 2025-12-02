@@ -32,7 +32,6 @@ body.new-year-mode .nav-links a.active {
 body.new-year-mode header {
     border-bottom: 2px solid #e11d48;
     box-shadow: 0 5px 30px rgba(225, 29, 72, 0.2);
-    /* Шапка должна быть выше снега и эффектов */
     z-index: 1001; 
 }
 
@@ -84,26 +83,19 @@ body.new-year-mode .theme-toggle-btn {
    СНЕГ И СЛОИ (Z-INDEX)
    ========================================= */
 
-/* 1. Контейнер для снега */
 #snow-container {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Пропускает клики */
-    z-index: 1; /* Слой 1: Поверх фона body, но ниже контента */
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1; 
 }
 
-/* 2. Поднимаем контент сайта выше снега */
-/* ВАЖНО: header и .modal здесь НЕ трогаем, чтобы они оставались fixed */
 body.new-year-mode main,
 body.new-year-mode footer {
     position: relative;
     z-index: 10; 
 }
 
-/* 3. Фон для карточек, чтобы снег не просвечивал сквозь них */
 body.new-year-mode .stat-box,
 body.new-year-mode .game-zone-card,
 body.new-year-mode .lib-card,
@@ -114,16 +106,14 @@ body.new-year-mode details {
     z-index: 11;
 }
 
-/* 4. Анимация снежинок */
 .snowflake {
     position: absolute; 
-    top: -20%; /* Старт выше экрана */
+    top: -20%;
     color: #fff;
     font-family: Arial;
     text-shadow: 0 0 2px #000;
     user-select: none;
     pointer-events: none;
-    
     animation-name: snowflakes-fall, snowflakes-shake;
     animation-timing-function: linear, ease-in-out;
     animation-iteration-count: infinite, infinite;
@@ -151,33 +141,33 @@ body.new-year-mode .logo-link:hover {
 }
 
 body.new-year-mode .logo-link:hover .logo-img {
-    /* Фильтр превращает белый в #e11d48 */
     filter: brightness(0) saturate(100%) invert(18%) sepia(90%) saturate(5456%) hue-rotate(340deg) brightness(92%) contrast(96%);
 }
 
 /* =========================================
-   МИНИ-БИЛЕТЫ (В окне фильма)
+   БИЛЕТЫ (Library & Schedule)
    ========================================= */
 
-/* При наведении: Красная рамка и свечение */
+/* Мини-билеты в Library */
 body.new-year-mode .mini-ticket-btn:hover {
     border-color: #e11d48;
     background: rgba(225, 29, 72, 0.15);
     box-shadow: 0 5px 20px rgba(225, 29, 72, 0.4);
 }
-
-/* Вырезы */
 body.new-year-mode .mini-ticket-btn:hover::before,
 body.new-year-mode .mini-ticket-btn:hover::after {
     border-color: #e11d48;
 }
-
-/* Пунктир */
 body.new-year-mode .mini-ticket-btn:hover .ticket-price-col {
     border-left-color: #e11d48;
 }
-
-/* Цена золотая */
 body.new-year-mode .ticket-price {
     color: #fbbf24;
+}
+
+/* Кнопки сеансов в Schedule (Красное свечение) */
+body.new-year-mode .session-btn:hover {
+    background: #e11d48;
+    border-color: #e11d48;
+    box-shadow: 0 5px 20px rgba(225, 29, 72, 0.5); /* Было синее, стало красное */
 }
