@@ -107,13 +107,16 @@ body.new-year-mode .modal {
     z-index: 2000;
 }
 
-/* 4. Фон для карточек, чтобы снег не просвечивал */
+/* 4. Непрозрачный фон для элементов, чтобы снег не просвечивал */
 body.new-year-mode .stat-box,
 body.new-year-mode .game-zone-card,
 body.new-year-mode .lib-card,
 body.new-year-mode .movie-row,
 body.new-year-mode .promo-card,
-body.new-year-mode details {
+body.new-year-mode details,
+body.new-year-mode .date-card,  /* Кнопки дат */
+body.new-year-mode .filter-btn, /* Кнопки фильтров */
+body.new-year-mode .genre-btn { /* Кнопки жанров */
     background-color: var(--card-bg); 
     z-index: 11;
 }
@@ -220,7 +223,7 @@ body.new-year-mode .genre-btn:hover {
     color: #fff;
 }
 body.new-year-mode .genre-btn.active {
-    background: #e11d48;
+    background-color: #e11d48;
     border-color: #e11d48;
     box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
     color: #fff;
