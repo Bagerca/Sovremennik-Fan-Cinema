@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const moviesContainer = document.getElementById('movies-container');
     const dateSlider = document.getElementById('date-slider');
     
-    // Modals
+    // Modals & UI Elements
     const ticketModal = document.getElementById('ticketModal');
     const closeTicketBtn = document.querySelector('.close-btn');
     const filmNameSpan = document.getElementById('filmName');
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentMediaList = [];
     let currentMediaIndex = 0;
 
-    // 1. DATES (Генерация дат)
+    // 1. DATES GENERATOR
     function generateDates() {
         dateSlider.innerHTML = '';
         const today = new Date();
@@ -63,12 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedDate = today.toISOString().split('T')[0];
     }
 
-    // 2. DATA LOADING (Загрузка данных)
+    // 2. DATA LOADING
     Promise.all([
         fetch('library.json').then(res => res.json()),
         fetch('schedule.json').then(res => res.json())
     ])
     .then(([libraryData, scheduleData]) => {
+        // Объединяем данные: берем расписание и добавляем инфо о фильме
         allMovies = scheduleData.map(item => {
             const movieInfo = libraryData[item.movieId];
             if (!movieInfo) return item; 
@@ -83,42 +84,50 @@ document.addEventListener('DOMContentLoaded', () => {
         moviesContainer.innerHTML = '<p style="color:red; text-align:center;">Ошибка загрузки расписания.</p>';
     });
 
-    // 3. RENDER CARDS (Отрисовка карточек фильмов)
+    // 3. RENDER MOVIES (ОБНОВЛЕННАЯ ЛОГИКА ДЛЯ НОВОГО JSON)
     function renderMovies(dateToFilter) {
         moviesContainer.innerHTML = '';
-        const filteredMovies = allMovies.filter(movie => {
-            if (!movie.dates) return true; 
-            return movie.dates.includes(dateToFilter);
-        });
 
-        if (filteredMovies.length === 0) {
+        // Проходим по всем фильмам и ищем тот блок расписания, который подходит под выбранную дату
+        const moviesOnDate = allMovies.map(movie => {
+            if (!movie.schedule) return null;
+
+            // Ищем блок внутри schedule, где dates включает нашу дату
+            const activeBlock = movie.schedule.find(block => block.dates && block.dates.includes(dateToFilter));
+
+            if (activeBlock) {
+                // Если нашли, возвращаем фильм, но подменяем sessions на те, что в этом блоке
+                return { 
+                    ...movie, 
+                    sessions: activeBlock.sessions 
+                };
+            }
+            return null;
+        }).filter(item => item !== null); // Убираем пустые (фильмы, которых нет в этот день)
+
+        if (moviesOnDate.length === 0) {
             moviesContainer.innerHTML = '<div style="text-align:center; padding: 40px; color: #64748b;">На эту дату сеансов нет</div>';
             return;
         }
 
-        filteredMovies.forEach(movie => {
+        moviesOnDate.forEach(movie => {
             moviesContainer.insertAdjacentHTML('beforeend', createMovieCard(movie));
         });
+
+        // Сброс фильтров
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
     }
 
     function createMovieCard(movie) {
-        const tagsHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
+        const tagsHTML = movie.tags ? movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('') : '';
         const rating = movie.rating || 0;
         let ratingClass = rating < 5 ? 'rating-low' : (rating < 7 ? 'rating-mid' : '');
-
-        // --- ЛОГИКА ВРЕМЕНИ (ОБНОВЛЕНИЕ) ---
-        const now = new Date(); // Текущее время пользователя
+        const now = new Date(); 
 
         const sessionsHTML = movie.sessions.map(session => {
-            // 1. Собираем дату и время сеанса
             const sessionDateTime = new Date(`${selectedDate}T${session.time}`);
-            
-            // 2. Проверяем, прошел ли сеанс
             const isPast = sessionDateTime < now;
-            
-            // 3. Добавляем класс disabled
             const disabledClass = isPast ? 'disabled' : '';
 
             return `
@@ -134,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </button>
             `;
         }).join('');
-        // ----------------------------------
 
         return `
             <div class="movie-row" data-category="${movie.category}">
@@ -171,10 +179,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 5. CLICKS DELEGATION
+    // 5. CLICKS & MODALS
     moviesContainer.addEventListener('click', (e) => {
         const buyBtn = e.target.closest('.buy-ticket-btn');
-        // Проверяем, не заблокирована ли кнопка
         if (buyBtn && !buyBtn.classList.contains('disabled')) {
             const title = buyBtn.getAttribute('data-film');
             const time = buyBtn.getAttribute('data-time');
@@ -195,47 +202,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 6. HALL RENDER
+    // 6. HALL RENDER (STATIC)
     function renderHall() {
         const seatsArea = document.getElementById('seatsArea');
         seatsArea.innerHTML = ''; 
-
-        const startRow = 2;
-        const endRow = 16;
-
+        const startRow = 2; const endRow = 16;
         for (let rowNum = startRow; rowNum <= endRow; rowNum++) {
             const rowDiv = document.createElement('div');
             rowDiv.className = 'seat-row';
-
+            
             const rowLabelLeft = document.createElement('div');
             rowLabelLeft.className = 'row-number row-left';
             rowLabelLeft.innerText = rowNum;
             rowDiv.appendChild(rowLabelLeft);
 
             let seatsInRow = 24; 
-            if (rowNum === 2) {
-                seatsInRow = 22; 
-            } else if (rowNum === 16) {
-                seatsInRow = 29; 
-            }
+            if (rowNum === 2) seatsInRow = 22; 
+            else if (rowNum === 16) seatsInRow = 29; 
 
             for (let j = 0; j < seatsInRow; j++) {
                 const seat = document.createElement('div');
                 seat.className = 'seat';
                 seat.title = `Ряд ${rowNum}, Место ${j + 1}`; 
-                
                 seat.addEventListener('click', () => {
                     seat.classList.toggle('selected');
                     updateSelectedCount();
                 });
                 rowDiv.appendChild(seat);
             }
-
             const rowLabelRight = document.createElement('div');
             rowLabelRight.className = 'row-number row-right';
             rowLabelRight.innerText = rowNum;
             rowDiv.appendChild(rowLabelRight);
-
             seatsArea.appendChild(rowDiv);
         }
     }
@@ -255,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else alert('Пожалуйста, выберите хотя бы одно место.');
     });
 
-    // 7. INFO MODAL (С ОБНОВЛЕННОЙ ЛОГИКОЙ ТЕКСТА)
+    // 7. INFO MODAL
     function updateMediaSlider() {
         mediaContainer.innerHTML = '';
         const item = currentMediaList[currentMediaIndex];
@@ -265,7 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
             element = document.createElement('iframe');
             element.className = 'media-content active';
             element.src = `https://www.youtube.com/embed/${item.src}?autoplay=0`;
-            element.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
             element.allowFullscreen = true;
         } else {
             element = document.createElement('img');
@@ -293,66 +290,55 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.modal-backdrop-blur').style.backgroundImage = `url('${movie.poster}')`;
         infoPoster.src = movie.poster;
         infoTitle.textContent = movie.title;
-        infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
+        infoTags.innerHTML = movie.tags ? movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('') : '';
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
         infoRating.style.color = movie.rating >= 7 ? '#4ade80' : (movie.rating >= 5 ? '#facc15' : '#ef4444');
         
-        // --- ПРОФЕССИОНАЛЬНАЯ ОБРЕЗКА (ДЛЯ РАСПИСАНИЯ - 5 СТРОК) ---
         infoDesc.innerHTML = ''; 
-        
         const containerWidth = infoDesc.clientWidth || Math.min(600, window.innerWidth - 60);
         const charsPerLine = Math.floor(containerWidth / 9); 
-        
         const dynamicLimit = (charsPerLine * 5) - 40; 
 
         if (movie.description && movie.description.length > dynamicLimit) {
             let cutIndex = movie.description.lastIndexOf(' ', dynamicLimit);
             if (cutIndex === -1) cutIndex = dynamicLimit; 
-
             const shortHTML = movie.description.substring(0, cutIndex) + '...';
             const fullHTML = movie.description;
-
             const contentWrapper = document.createElement('span');
             contentWrapper.className = 'description-text';
-            
             const renderState = (isExpanded) => {
                 contentWrapper.classList.remove('fade-in-effect');
                 void contentWrapper.offsetWidth; 
                 contentWrapper.classList.add('fade-in-effect');
-
                 if (isExpanded) {
                     contentWrapper.innerHTML = `${fullHTML} <button class="read-more-btn" id="toggleDescBtn">СВЕРНУТЬ</button>`;
                 } else {
                     contentWrapper.innerHTML = `${shortHTML}<button class="read-more-btn" id="toggleDescBtn">ЧИТАТЬ ДАЛЕЕ</button>`;
                 }
-
                 setTimeout(() => {
                     const btn = document.getElementById('toggleDescBtn');
-                    if(btn) {
-                        btn.onclick = (e) => { e.stopPropagation(); renderState(!isExpanded); };
-                    }
+                    if(btn) btn.onclick = (e) => { e.stopPropagation(); renderState(!isExpanded); };
                 }, 0);
             };
-
             renderState(false);
             infoDesc.appendChild(contentWrapper);
-
         } else {
             const p = document.createElement('p');
             p.className = 'description-text';
             p.textContent = movie.description || '';
             infoDesc.appendChild(p);
         }
-        // -----------------------------------------------------------
 
         infoYear.textContent = movie.year || '-';
         infoCountry.textContent = movie.country || '-';
         infoDirector.textContent = movie.director || '-';
         infoDuration.textContent = movie.duration || '-';
         infoMpaa.textContent = movie.mpaa || 'N/A';
+
         currentMediaList = movie.media || [];
         if (currentMediaList.length === 0 && movie.trailer) currentMediaList.push({ type: 'video', src: movie.trailer });
         currentMediaIndex = 0;
+        
         if (currentMediaList.length > 0) {
             updateMediaSlider();
             prevMediaBtn.style.display = currentMediaList.length > 1 ? 'flex' : 'none';
