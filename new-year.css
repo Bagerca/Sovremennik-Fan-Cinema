@@ -32,7 +32,7 @@ body.new-year-mode .nav-links a.active {
 body.new-year-mode header {
     border-bottom: 2px solid #e11d48;
     box-shadow: 0 5px 30px rgba(225, 29, 72, 0.2);
-    /* Шапка выше снега (1), но ниже модалки (2000) */
+    /* Шапка выше снега и шаров (1001), но ниже модалки (2000) */
     z-index: 1001; 
 }
 
@@ -92,10 +92,10 @@ body.new-year-mode .theme-toggle-btn {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 1; /* Слой 1: Поверх фона body, но ниже контента */
+    z-index: 1; /* Слой 1: Самый нижний (фон) */
 }
 
-/* 2. Поднимаем контент сайта выше снега */
+/* 2. Поднимаем контент сайта выше снега и шаров */
 body.new-year-mode main,
 body.new-year-mode footer {
     position: relative;
@@ -119,7 +119,7 @@ body.new-year-mode .filter-btn, /* Кнопки фильтров */
 body.new-year-mode .genre-btn { /* Кнопки жанров */
     background: var(--card-bg); /* Сплошной цвет фона */
     position: relative;         /* Чтобы z-index сработал */
-    z-index: 11;                /* Выше снега */
+    z-index: 11;                /* Выше снега и шаров */
 }
 
 /* 5. Анимация снежинок */
@@ -236,13 +236,13 @@ body.new-year-mode .genre-btn.active {
 
 /* Контейнер */
 .christmas-balls-container {
-    position: absolute;
-    top: 100%; /* Начинается сразу под шапкой */
+    position: fixed; /* FIXED, чтобы висело на экране */
+    /* Top задается через JS (равен высоте шапки) */
     left: 0;
     width: 100%;
-    height: 400px; /* Большой запас высоты для полета шаров */
+    height: 400px; /* Большой запас высоты */
     pointer-events: none;
-    z-index: 1000;
+    z-index: 5; /* Слой 5: Выше снега (1), но НИЖЕ контента (10) */
     overflow: visible;
 }
 
