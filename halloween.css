@@ -79,13 +79,16 @@ body.halloween-mode .modal {
     z-index: 2000;
 }
 
-/* Фон карточек */
+/* Непрозрачный фон для элементов */
 body.halloween-mode .stat-box,
 body.halloween-mode .game-zone-card,
 body.halloween-mode .lib-card,
 body.halloween-mode .movie-row,
 body.halloween-mode .promo-card,
-body.halloween-mode details {
+body.halloween-mode details,
+body.halloween-mode .date-card,  /* Кнопки дат */
+body.halloween-mode .filter-btn, /* Кнопки фильтров */
+body.halloween-mode .genre-btn { /* Кнопки жанров */
     background-color: var(--card-bg); 
     z-index: 11;
 }
@@ -118,7 +121,7 @@ body.halloween-mode .logo-link:hover .logo-img {
 }
 
 /* =========================================
-   ЭЛЕМЕНТЫ РАСПИСАНИЯ И БИБЛИОТЕКИ
+   БИЛЕТЫ И КНОПКИ
    ========================================= */
 
 /* Мини-билеты (Library) */
@@ -179,7 +182,7 @@ body.halloween-mode .genre-btn:hover {
     color: #fff;
 }
 body.halloween-mode .genre-btn.active {
-    background: #f97316;
+    background-color: #f97316;
     border-color: #f97316;
     box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
     color: #fff;
