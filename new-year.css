@@ -4,14 +4,15 @@
 
 /* Активируется только при наличии класса new-year-mode у body */
 body.new-year-mode {
-    --accent-blue: #e11d48; /* Рождественский красный */
+    --accent-blue: #e11d48; /* Рождественский красный вместо голубого */
     --accent-dark: #be123c;
-    --card-bg: #1c1315;     
+    --card-bg: #1c1315;     /* Более теплый темный фон карточек */
     --border-color: #4a1818; 
 }
 
-/* --- ЦВЕТОВЫЕ ИЗМЕНЕНИЯ --- */
+/* --- ЦВЕТОВЫЕ ИЗМЕНЕНИЯ ИНТЕРФЕЙСА --- */
 
+/* Градиент заголовков: красно-золотой */
 body.new-year-mode .page-title,
 body.new-year-mode .gradient-text {
     background: linear-gradient(90deg, #fff 0%, #fbbf24 40%, #e11d48 50%, #fbbf24 60%, #fff 100%);
@@ -21,18 +22,22 @@ body.new-year-mode .gradient-text {
     filter: drop-shadow(0 0 25px rgba(225, 29, 72, 0.4));
 }
 
+/* Активные ссылки в меню */
 body.new-year-mode .nav-links a.active {
     background-color: rgba(225, 29, 72, 0.1);
     box-shadow: 0 0 20px rgba(225, 29, 72, 0.2);
 }
 
+/* Шапка сайта: красная граница и тень */
 body.new-year-mode header {
     border-bottom: 2px solid #e11d48;
     box-shadow: 0 5px 30px rgba(225, 29, 72, 0.2);
-    /* Убеждаемся, что хедер остается фиксированным и выше снега */
+    /* Шапка остается fixed из style.css, здесь мы просто гарантируем, 
+       что она выше снега и модалок */
     z-index: 1001; 
 }
 
+/* Бейджики (золотой стиль) */
 body.new-year-mode .intro-badge, 
 body.new-year-mode .year-badge,
 body.new-year-mode .promo-badge {
@@ -42,6 +47,7 @@ body.new-year-mode .promo-badge {
     box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
 }
 
+/* Кнопки (золотое свечение) */
 body.new-year-mode .red-glow-btn {
     box-shadow: 0 0 30px rgba(251, 191, 36, 0.4); 
 }
@@ -68,6 +74,7 @@ body.new-year-mode .red-glow-btn {
     transform: rotate(15deg);
 }
 
+/* Активная кнопка темы */
 body.new-year-mode .theme-toggle-btn {
     background: #e11d48;
     border-color: #e11d48;
@@ -76,7 +83,7 @@ body.new-year-mode .theme-toggle-btn {
 }
 
 /* =========================================
-   ИСПРАВЛЕННЫЙ СНЕГ (ЗА ЭЛЕМЕНТАМИ)
+   СНЕГ (Слои Z-Index)
    ========================================= */
 
 /* 1. Контейнер для снега */
@@ -86,20 +93,19 @@ body.new-year-mode .theme-toggle-btn {
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none; 
-    z-index: 1; /* Слой 1: Над фоном body */
+    pointer-events: none; /* Пропускает клики сквозь себя */
+    z-index: 1; /* Слой 1: Поверх фона body, но ниже контента */
 }
 
 /* 2. Поднимаем контент сайта выше снега */
-/* HEADER УБРАН ОТСЮДА, чтобы он оставался fixed из style.css */
+/* ВАЖНО: Мы НЕ трогаем здесь header и .modal, чтобы они оставались fixed */
 body.new-year-mode main,
-body.new-year-mode footer,
-body.new-year-mode .modal {
+body.new-year-mode footer {
     position: relative;
-    z-index: 10; /* Слой 10: Всё это будет ПОВЕРХ снега */
+    z-index: 10; /* Слой 10: Контент лежит НАД снегом */
 }
 
-/* Карточки внутри main тоже должны иметь фон */
+/* 3. Задаем фон карточкам, чтобы снег не просвечивал сквозь них */
 body.new-year-mode .stat-box,
 body.new-year-mode .game-zone-card,
 body.new-year-mode .lib-card,
@@ -110,10 +116,10 @@ body.new-year-mode details {
     z-index: 11;
 }
 
-/* 3. Сами снежинки */
+/* 4. Сами снежинки */
 .snowflake {
     position: absolute; 
-    top: -20%; 
+    top: -20%; /* Начинаем падение ВЫШЕ экрана, чтобы не было рывков */
     color: #fff;
     font-family: Arial;
     text-shadow: 0 0 2px #000;
@@ -129,11 +135,25 @@ body.new-year-mode details {
 
 @keyframes snowflakes-fall {
     0% { top: -20%; } 
-    100% { top: 110%; } 
+    100% { top: 110%; } /* Падают ниже экрана */
 }
 
 @keyframes snowflakes-shake {
     0% { transform: translateX(0px); }
     50% { transform: translateX(80px); }
     100% { transform: translateX(0px); }
+}
+
+/* =========================================
+   ЛОГОТИП ПРИ НАВЕДЕНИИ (Фильтр)
+   ========================================= */
+
+body.new-year-mode .logo-link:hover {
+    filter: drop-shadow(0 0 15px rgba(225, 29, 72, 0.8)); /* Красная тень */
+    transform: scale(1.05);
+}
+
+body.new-year-mode .logo-link:hover .logo-img {
+    /* Фильтр превращает белый цвет в красный #e11d48 */
+    filter: brightness(0) saturate(100%) invert(18%) sepia(90%) saturate(5456%) hue-rotate(340deg) brightness(92%) contrast(96%);
 }
