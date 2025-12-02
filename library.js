@@ -169,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
             element = document.createElement('iframe');
             element.className = 'media-content active';
             element.src = `https://www.youtube.com/embed/${item.src}?autoplay=0`;
-            element.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
             element.allowFullscreen = true;
         } else {
             element = document.createElement('img');
@@ -198,14 +197,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.modal-backdrop-blur').style.backgroundImage = `url('${movie.poster}')`;
         infoPoster.src = movie.poster;
         infoTitle.textContent = movie.title;
-        infoTags.innerHTML = movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('');
-        
+        infoTags.innerHTML = movie.tags ? movie.tags.map(tag => `<span class="meta-tag">${tag}</span>`).join('') : '';
         infoRating.textContent = movie.rating ? `${movie.rating} / 10` : 'Нет оценки';
         infoRating.style.color = movie.rating >= 7 ? '#4ade80' : (movie.rating >= 5 ? '#facc15' : '#ef4444');
 
-        // --- ОПИСАНИЕ С КНОПКОЙ ЧИТАТЬ ДАЛЕЕ ---
         infoDesc.innerHTML = ''; 
-        
         const containerWidth = infoDesc.clientWidth || Math.min(600, window.innerWidth - 60);
         const charsPerLine = Math.floor(containerWidth / 9); 
         const dynamicLimit = (charsPerLine * 2) - 40; 
@@ -213,35 +209,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (movie.description && movie.description.length > dynamicLimit) {
             let cutIndex = movie.description.lastIndexOf(' ', dynamicLimit);
             if (cutIndex === -1) cutIndex = dynamicLimit; 
-
             const shortHTML = movie.description.substring(0, cutIndex) + '...';
             const fullHTML = movie.description;
-
             const contentWrapper = document.createElement('span');
             contentWrapper.className = 'description-text';
-            
             const renderState = (isExpanded) => {
                 contentWrapper.classList.remove('fade-in-effect');
                 void contentWrapper.offsetWidth; 
                 contentWrapper.classList.add('fade-in-effect');
-
                 if (isExpanded) {
                     contentWrapper.innerHTML = `${fullHTML} <button class="read-more-btn" id="toggleDescBtn">СВЕРНУТЬ</button>`;
                 } else {
                     contentWrapper.innerHTML = `${shortHTML}<button class="read-more-btn" id="toggleDescBtn">ЧИТАТЬ ДАЛЕЕ</button>`;
                 }
-
                 setTimeout(() => {
                     const btn = document.getElementById('toggleDescBtn');
-                    if(btn) {
-                        btn.onclick = (e) => { e.stopPropagation(); renderState(!isExpanded); };
-                    }
+                    if(btn) btn.onclick = (e) => { e.stopPropagation(); renderState(!isExpanded); };
                 }, 0);
             };
-
             renderState(false);
             infoDesc.appendChild(contentWrapper);
-
         } else {
             const p = document.createElement('p');
             p.className = 'description-text';
@@ -271,41 +258,41 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // =========================================================================
-        // ИСПРАВЛЕННАЯ ГЕНЕРАЦИЯ БИЛЕТОВ (ИЩЕМ ПО ВСЕМ БЛОКАМ РАСПИСАНИЯ)
+        // ЛОГИКА ДЛЯ НОВОГО JSON (С ВЛОЖЕННОСТЬЮ)
         // =========================================================================
         if (typeof miniContainer !== 'undefined' && miniContainer) {
             miniContainer.innerHTML = '';
             
-            // Используем filter вместо find, чтобы найти ВСЕ блоки расписания для этого фильма
-            const scheduleEntries = allSchedule.filter(s => s.movieId === movie.id || s.movieId === movie.movieId);
+            // Находим ОДНУ запись для фильма (теперь нет дублей)
+            const scheduleEntry = allSchedule.find(s => s.movieId === movie.id || s.movieId === movie.movieId);
 
-            if (scheduleEntries.length > 0) {
+            if (scheduleEntry && scheduleEntry.schedule) {
                 const now = new Date(); 
                 let allFutureSessions = [];
 
-                // Собираем все сеансы в одну кучу
-                scheduleEntries.forEach(entry => {
-                    entry.dates.forEach(date => {
-                        entry.sessions.forEach(session => {
-                            const sessionDateTime = new Date(`${date}T${session.time}`);
-                            // Если сеанс в будущем — добавляем в список
-                            if (sessionDateTime > now) {
-                                allFutureSessions.push({
-                                    dateObj: sessionDateTime,
-                                    dateStr: date,
-                                    time: session.time,
-                                    price: session.price,
-                                    format: session.format
+                // "Ныряем" вглубь структуры schedule -> dates -> sessions
+                scheduleEntry.schedule.forEach(block => {
+                    if (block.dates) {
+                        block.dates.forEach(date => {
+                            if (block.sessions) {
+                                block.sessions.forEach(session => {
+                                    const sessionDateTime = new Date(`${date}T${session.time}`);
+                                    if (sessionDateTime > now) {
+                                        allFutureSessions.push({
+                                            dateObj: sessionDateTime,
+                                            dateStr: date,
+                                            time: session.time,
+                                            price: session.price,
+                                            format: session.format
+                                        });
+                                    }
                                 });
                             }
                         });
-                    });
+                    }
                 });
 
-                // Сортируем все найденные сеансы по времени (от ближайшего)
                 allFutureSessions.sort((a, b) => a.dateObj - b.dateObj);
-
-                // Берем первые 4 (или меньше)
                 const sessionsToShow = allFutureSessions.slice(0, 4);
 
                 sessionsToShow.forEach(item => {
