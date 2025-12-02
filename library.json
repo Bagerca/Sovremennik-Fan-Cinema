@@ -236,5 +236,26 @@
         "duration": "2 ч 20 мин",
         "director": "Жуакин Душ Сантуш, Кемп Пауэрс, Джастин Томпсон",
         "mpaa": "PG"
+    },
+    "13": {
+        "title": "Аркейн",
+        "rating": 8.8,
+        "poster": "assets/images/Аркейн (сериал 2021 – 2024).jpg",
+        "age": "16+",
+        "ageClass": "age-orange",
+        "category": "action",
+        "tags": ["Мультфильм", "Фантастика", "Фэнтези", "Боевик", "Драма"],
+        "description": "История разворачивается в утопическом краю Пилтовер и жестоком подземном мире Заун и рассказывает о становлении двух легендарных чемпионов Лиги и о той силе, что разведёт их по разные стороны баррикад.",
+        "media": [
+            { "type": "video", "src": "PilxSMg5Y4E" },
+            { "type": "video", "src": "tELnewx29S8" },
+            { "type": "video", "src": "OltEoCie0Fg" },
+            { "type": "image", "src": "https://i.ytimg.com/vi/PilxSMg5Y4E/maxresdefault.jpg" }
+        ],
+        "year": "2021 – 2024",
+        "country": "США, Франция",
+        "duration": "42 мин",
+        "director": "Паскаль Шаррю, Арно Делорд",
+        "mpaa": "TV-14"
     }
 }
