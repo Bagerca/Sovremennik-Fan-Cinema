@@ -1,20 +1,13 @@
 [
     {
         "movieId": "1",
-        "comment": "Дикий робот: Утром в выходные, днем после школы в будни",
+        "comment": "Дикий робот: Детские утренники и дневные сеансы",
         "schedule": [
             {
-                "dates": ["2025-11-29"],
+                "dates": ["2025-11-30", "2025-12-06"],
                 "sessions": [
                     { "time": "10:00", "format": "2D", "price": 250 },
-                    { "time": "14:15", "format": "3D", "price": 350 }
-                ]
-            },
-            {
-                "dates": ["2025-11-30"],
-                "sessions": [
-                    { "time": "10:00", "format": "2D", "price": 250 },
-                    { "time": "14:00", "format": "2D", "price": 300 }
+                    { "time": "12:00", "format": "3D", "price": 350 }
                 ]
             },
             {
@@ -33,19 +26,13 @@
     },
     {
         "movieId": "2",
-        "comment": "Иллюзия обмана 3: Главный блокбастер, разное вечернее время",
+        "comment": "Иллюзия обмана 3: Главный хит, вечерний прайм-тайм",
         "schedule": [
             {
-                "dates": ["2025-11-29"],
+                "dates": ["2025-11-30", "2025-12-06"],
                 "sessions": [
-                    { "time": "16:30", "format": "2D", "price": 450 },
-                    { "time": "21:00", "format": "Atmos", "price": 600, "isSpecial": true }
-                ]
-            },
-            {
-                "dates": ["2025-11-30"],
-                "sessions": [
-                    { "time": "18:45", "format": "2D", "price": 450 }
+                    { "time": "16:00", "format": "2D", "price": 450 },
+                    { "time": "19:00", "format": "Atmos", "price": 600 }
                 ]
             },
             {
@@ -64,32 +51,32 @@
                 "dates": ["2025-12-05"],
                 "sessions": [
                     { "time": "18:00", "format": "2D", "price": 500 },
-                    { "time": "22:30", "format": "2D", "price": 450 }
+                    { "time": "21:00", "format": "2D", "price": 450 }
                 ]
             }
         ]
     },
     {
         "movieId": "3",
-        "comment": "ФНАФ: Ночные сеансы через день",
+        "comment": "ФНАФ: Ночные сеансы для молодежи",
         "schedule": [
-            {
-                "dates": ["2025-11-29"],
-                "sessions": [
-                    { "time": "23:30", "format": "2D", "price": 400 }
-                ]
-            },
             {
                 "dates": ["2025-12-02", "2025-12-04"],
                 "sessions": [
                     { "time": "22:45", "format": "2D", "price": 350 }
+                ]
+            },
+            {
+                "dates": ["2025-12-05", "2025-12-06"],
+                "sessions": [
+                    { "time": "23:00", "format": "2D", "price": 400 }
                 ]
             }
         ]
     },
     {
         "movieId": "4",
-        "comment": "Kingsman: Дневные и ранний вечер",
+        "comment": "Kingsman: Дневные сеансы",
         "schedule": [
             {
                 "dates": ["2025-11-30"],
@@ -107,16 +94,10 @@
     },
     {
         "movieId": "5",
-        "comment": "ВАЛЛ-И: Только один сеанс в субботу и воскресенье утром",
+        "comment": "ВАЛЛ-И: Утренняя классика",
         "schedule": [
             {
-                "dates": ["2025-11-29"],
-                "sessions": [
-                    { "time": "12:15", "format": "2D", "price": 250 }
-                ]
-            },
-            {
-                "dates": ["2025-11-30"],
+                "dates": ["2025-11-30", "2025-12-06"],
                 "sessions": [
                     { "time": "10:00", "format": "2D", "price": 200 }
                 ]
@@ -143,14 +124,8 @@
     },
     {
         "movieId": "7",
-        "comment": "Человек-бензопила: Альтернатива ФНАФу",
+        "comment": "Человек-бензопила (Фильм): Вечер пятницы и выходные",
         "schedule": [
-            {
-                "dates": ["2025-11-29"],
-                "sessions": [
-                    { "time": "19:00", "format": "2D", "price": 450 }
-                ]
-            },
             {
                 "dates": ["2025-12-01"],
                 "sessions": [
@@ -161,6 +136,12 @@
                 "dates": ["2025-12-05"],
                 "sessions": [
                     { "time": "20:30", "format": "2D", "price": 500 }
+                ]
+            },
+            {
+                "dates": ["2025-12-06"],
+                "sessions": [
+                    { "time": "22:00", "format": "2D", "price": 450 }
                 ]
             }
         ]
@@ -179,12 +160,96 @@
     },
     {
         "movieId": "9",
-        "comment": "1+1: Спецпоказ посреди недели",
+        "comment": "1+1: Спецпоказ",
         "schedule": [
             {
                 "dates": ["2025-12-03"],
                 "sessions": [
                     { "time": "16:30", "format": "2D", "price": 350 }
+                ]
+            }
+        ]
+    },
+    {
+        "movieId": "10",
+        "comment": "Человек-бензопила (Сериал): Ночной марафон",
+        "schedule": [
+            {
+                "dates": ["2025-12-03"],
+                "sessions": [
+                    { "time": "21:00", "format": "2D", "price": 300 }
+                ]
+            },
+            {
+                "dates": ["2025-12-06"],
+                "sessions": [
+                    { "time": "23:50", "format": "2D", "price": 300 }
+                ]
+            }
+        ]
+    },
+    {
+        "movieId": "11",
+        "comment": "Паук: Через вселенные: Семейное время",
+        "schedule": [
+            {
+                "dates": ["2025-11-30"],
+                "sessions": [
+                    { "time": "14:00", "format": "2D", "price": 350 }
+                ]
+            },
+            {
+                "dates": ["2025-12-02", "2025-12-05"],
+                "sessions": [
+                    { "time": "17:30", "format": "2D", "price": 400 }
+                ]
+            },
+            {
+                "dates": ["2025-12-06"],
+                "sessions": [
+                    { "time": "14:00", "format": "2D", "price": 400, "isSpecial": true }
+                ]
+            }
+        ]
+    },
+    {
+        "movieId": "12",
+        "comment": "Паук: Паутина вселенных: Вечерний слот",
+        "schedule": [
+            {
+                "dates": ["2025-11-30"],
+                "sessions": [
+                    { "time": "17:00", "format": "2D", "price": 400 }
+                ]
+            },
+            {
+                "dates": ["2025-12-04"],
+                "sessions": [
+                    { "time": "18:00", "format": "Atmos", "price": 500 }
+                ]
+            },
+            {
+                "dates": ["2025-12-06"],
+                "sessions": [
+                    { "time": "16:30", "format": "Atmos", "price": 550, "isSpecial": true }
+                ]
+            }
+        ]
+    },
+    {
+        "movieId": "13",
+        "comment": "Аркейн: Вечерние показы для фанатов",
+        "schedule": [
+            {
+                "dates": ["2025-12-01", "2025-12-03"],
+                "sessions": [
+                    { "time": "20:00", "format": "2D", "price": 400 }
+                ]
+            },
+            {
+                "dates": ["2025-12-05", "2025-12-06"],
+                "sessions": [
+                    { "time": "19:30", "format": "2D", "price": 500 }
                 ]
             }
         ]
