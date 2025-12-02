@@ -11,6 +11,7 @@ body.halloween-mode {
 
 /* --- ЦВЕТА И ЭЛЕМЕНТЫ ИНТЕРФЕЙСА --- */
 
+/* Градиент: Оранжевый + Фиолетовый */
 body.halloween-mode .page-title,
 body.halloween-mode .gradient-text {
     background: linear-gradient(90deg, #f97316 0%, #a855f7 50%, #f97316 100%);
@@ -20,18 +21,21 @@ body.halloween-mode .gradient-text {
     filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.6));
 }
 
+/* Активные ссылки */
 body.halloween-mode .nav-links a.active {
     background-color: rgba(249, 115, 22, 0.1);
     box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
     color: #f97316;
 }
 
+/* Шапка сайта */
 body.halloween-mode header {
     border-bottom: 2px solid #f97316;
     box-shadow: 0 5px 30px rgba(249, 115, 22, 0.2);
     z-index: 1001; 
 }
 
+/* Бейджики */
 body.halloween-mode .intro-badge, 
 body.halloween-mode .year-badge, 
 body.halloween-mode .promo-badge {
@@ -41,6 +45,7 @@ body.halloween-mode .promo-badge {
     box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
 }
 
+/* Кнопки */
 body.halloween-mode .red-glow-btn {
     background-color: #f97316;
     box-shadow: 0 0 30px rgba(249, 115, 22, 0.4); 
@@ -49,6 +54,7 @@ body.halloween-mode .red-glow-btn:hover {
     background-color: #ea580c;
 }
 
+/* Кнопка темы */
 body.halloween-mode .theme-toggle-btn {
     background: #f97316;
     border-color: #f97316;
@@ -74,6 +80,12 @@ body.halloween-mode footer {
     z-index: 10;
 }
 
+/* Модальное окно выше шапки */
+body.halloween-mode .modal {
+    z-index: 2000;
+}
+
+/* Фон карточек */
 body.halloween-mode .stat-box,
 body.halloween-mode .game-zone-card,
 body.halloween-mode .lib-card,
@@ -82,11 +94,6 @@ body.halloween-mode .promo-card,
 body.halloween-mode details {
     background-color: var(--card-bg); 
     z-index: 11;
-}
-
-/* --- ВАЖНОЕ ИСПРАВЛЕНИЕ: МОДАЛЬНОЕ ОКНО ПОВЕРХ ШАПКИ --- */
-body.halloween-mode .modal {
-    z-index: 2000;
 }
 
 .bat {
@@ -104,7 +111,7 @@ body.halloween-mode .modal {
 }
 
 /* =========================================
-   ЛОГОТИП
+   ЛОГОТИП (Оранжевый фильтр)
    ========================================= */
 
 body.halloween-mode .logo-link:hover {
@@ -144,4 +151,21 @@ body.halloween-mode .session-btn:hover {
 }
 body.halloween-mode .session-btn:hover .session-price {
     color: #fff;
+}
+
+/* Карточки дат (Schedule) */
+body.halloween-mode .date-card.active {
+    background: #f97316;
+    border-color: #f97316;
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.6);
+}
+body.halloween-mode .date-card:hover {
+    border-color: #f97316;
+    background: rgba(249, 115, 22, 0.1);
+}
+
+/* Кнопки фильтров */
+body.halloween-mode .filter-btn:hover,
+body.halloween-mode .filter-btn.active {
+    border-color: #f97316;
 }
