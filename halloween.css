@@ -1,0 +1,117 @@
+/* =========================================
+   HALLOWEEN THEME (Хэллоуин)
+   ========================================= */
+
+body.halloween-mode {
+    --accent-blue: #f97316; /* Оранжевый (Тыква) */
+    --accent-dark: #c2410c;
+    --card-bg: #1a0b1e;     /* Темно-фиолетовый фон карточек */
+    --border-color: #4c1d95; /* Фиолетовые рамки */
+}
+
+/* --- ЦВЕТА ИНТЕРФЕЙСА --- */
+
+/* Градиент: Оранжевый + Фиолетовый */
+body.halloween-mode .page-title,
+body.halloween-mode .gradient-text {
+    background: linear-gradient(90deg, #f97316 0%, #a855f7 50%, #f97316 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.6)); /* Фиолетовое свечение */
+}
+
+/* Активные ссылки */
+body.halloween-mode .nav-links a.active {
+    background-color: rgba(249, 115, 22, 0.1);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    color: #f97316;
+}
+
+/* Шапка */
+body.halloween-mode header {
+    border-bottom: 2px solid #f97316;
+    box-shadow: 0 5px 30px rgba(249, 115, 22, 0.2);
+    z-index: 1001; 
+}
+
+/* Бейджики */
+body.halloween-mode .intro-badge, 
+body.halloween-mode .year-badge, 
+body.halloween-mode .promo-badge {
+    color: #a855f7; /* Фиолетовый текст */
+    border-color: #a855f7;
+    background: rgba(168, 85, 247, 0.1);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+}
+
+/* Кнопки */
+body.halloween-mode .red-glow-btn {
+    background-color: #f97316;
+    box-shadow: 0 0 30px rgba(249, 115, 22, 0.4); 
+}
+body.halloween-mode .red-glow-btn:hover {
+    background-color: #ea580c;
+}
+
+/* --- КНОПКА ТЕМЫ В МЕНЮ --- */
+body.halloween-mode .theme-toggle-btn {
+    background: #f97316;
+    border-color: #f97316;
+    box-shadow: 0 0 15px #f97316;
+    transform: rotate(-15deg) scale(1.1);
+}
+
+/* --- ЛОГОТИП (Фильтр для оранжевого) --- */
+body.halloween-mode .logo-link:hover {
+    filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.8));
+    transform: scale(1.05);
+}
+body.halloween-mode .logo-link:hover .logo-img {
+    /* Фильтр для цвета #f97316 */
+    filter: brightness(0) saturate(100%) invert(60%) sepia(55%) saturate(4644%) hue-rotate(359deg) brightness(101%) contrast(96%);
+}
+
+/* =========================================
+   ЭФФЕКТЫ (Летучие мыши)
+   ========================================= */
+
+#halloween-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Поднимаем контент (как и в НГ теме) */
+body.halloween-mode main,
+body.halloween-mode footer {
+    position: relative;
+    z-index: 10;
+}
+
+body.halloween-mode .stat-box,
+body.halloween-mode .game-zone-card,
+body.halloween-mode .lib-card,
+body.halloween-mode .movie-row,
+body.halloween-mode .promo-card,
+body.halloween-mode details {
+    background-color: var(--card-bg); 
+    z-index: 11;
+}
+
+/* Летучая мышь */
+.bat {
+    position: absolute;
+    font-size: 24px;
+    opacity: 0.7;
+    animation: batFly 15s linear infinite;
+}
+
+@keyframes batFly {
+    0% { transform: translate(-100px, 100vh) rotate(20deg) scale(0.5); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.8; }
+    100% { transform: translate(100vw, -100px) rotate(-20deg) scale(1.2); opacity: 0; }
+}
