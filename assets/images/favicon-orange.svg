@@ -1,0 +1,28 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(11, 10)">
+        <!-- Бобины (Оранжевые) -->
+        <circle cx="8" cy="8" r="5" stroke="#f97316" stroke-width="3"/>
+        <circle cx="22" cy="8" r="5" stroke="#f97316" stroke-width="3"/>
+        
+        <!-- Корпус -->
+        <rect x="0" y="14" width="30" height="18" rx="3" fill="#f97316"/>
+        
+        <!-- Объектив -->
+        <path d="M30 18 L42 12 V34 L30 28 Z" fill="#f97316"/>
+        
+        <!-- Подставка -->
+        <rect x="4" y="36" width="22" height="3" fill="#f97316"/>
+        <rect x="8" y="41" width="14" height="3" fill="#f97316"/>
+
+        <!-- ТЫКВА (на левой бобине) -->
+        <!-- Основа тыквы -->
+        <ellipse cx="8" cy="1" rx="6" ry="5" fill="#f97316" stroke="black" stroke-width="0.5"/>
+        <!-- Глаза -->
+        <path d="M6 0 L8 2 L6 2 Z" fill="black"/> <!-- Левый -->
+        <path d="M10 0 L12 2 L10 2 Z" fill="black"/> <!-- Правый -->
+        <!-- Рот -->
+        <path d="M6 3 L8 4 L10 3 L8 5 Z" fill="black"/>
+        <!-- Хвостик -->
+        <path d="M8 -4 L9 -2 L7 -2 Z" fill="#65a30d"/>
+    </g>
+</svg>
