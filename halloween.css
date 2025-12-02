@@ -11,7 +11,6 @@ body.halloween-mode {
 
 /* --- ЦВЕТА И ЭЛЕМЕНТЫ ИНТЕРФЕЙСА --- */
 
-/* Градиент: Оранжевый + Фиолетовый */
 body.halloween-mode .page-title,
 body.halloween-mode .gradient-text {
     background: linear-gradient(90deg, #f97316 0%, #a855f7 50%, #f97316 100%);
@@ -21,21 +20,18 @@ body.halloween-mode .gradient-text {
     filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.6));
 }
 
-/* Активные ссылки */
 body.halloween-mode .nav-links a.active {
     background-color: rgba(249, 115, 22, 0.1);
     box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
     color: #f97316;
 }
 
-/* Шапка сайта */
 body.halloween-mode header {
     border-bottom: 2px solid #f97316;
     box-shadow: 0 5px 30px rgba(249, 115, 22, 0.2);
     z-index: 1001; 
 }
 
-/* Бейджики */
 body.halloween-mode .intro-badge, 
 body.halloween-mode .year-badge, 
 body.halloween-mode .promo-badge {
@@ -45,7 +41,6 @@ body.halloween-mode .promo-badge {
     box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
 }
 
-/* Кнопки */
 body.halloween-mode .red-glow-btn {
     background-color: #f97316;
     box-shadow: 0 0 30px rgba(249, 115, 22, 0.4); 
@@ -54,7 +49,6 @@ body.halloween-mode .red-glow-btn:hover {
     background-color: #ea580c;
 }
 
-/* Кнопка темы */
 body.halloween-mode .theme-toggle-btn {
     background: #f97316;
     border-color: #f97316;
@@ -118,12 +112,13 @@ body.halloween-mode .logo-link:hover {
     filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.8));
     transform: scale(1.05);
 }
+
 body.halloween-mode .logo-link:hover .logo-img {
     filter: brightness(0) saturate(100%) invert(60%) sepia(55%) saturate(4644%) hue-rotate(359deg) brightness(101%) contrast(96%);
 }
 
 /* =========================================
-   БИЛЕТЫ И КНОПКИ
+   ЭЛЕМЕНТЫ РАСПИСАНИЯ И БИБЛИОТЕКИ
    ========================================= */
 
 /* Мини-билеты (Library) */
@@ -164,15 +159,28 @@ body.halloween-mode .date-card:hover {
     background: rgba(249, 115, 22, 0.1);
 }
 
-/* Кнопки фильтров Halloween */
+/* Кнопки фильтров (Schedule) */
 body.halloween-mode .filter-btn:hover {
     border-color: #f97316;
     background: rgba(249, 115, 22, 0.1);
     color: #fff;
 }
 body.halloween-mode .filter-btn.active {
-    background-color: #f97316; /* Оранжевый фон */
+    background-color: #f97316;
     border-color: #f97316;
     color: #fff;
     box-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
+}
+
+/* Кнопки жанров (Library) */
+body.halloween-mode .genre-btn:hover {
+    border-color: #f97316;
+    background: rgba(249, 115, 22, 0.1);
+    color: #fff;
+}
+body.halloween-mode .genre-btn.active {
+    background: #f97316;
+    border-color: #f97316;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+    color: #fff;
 }
