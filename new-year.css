@@ -211,9 +211,9 @@ body.new-year-mode .filter-btn:hover {
     color: #fff;
 }
 body.new-year-mode .filter-btn.active {
-    background-color: #e11d48; /* Исправлен цвет фона */
+    background-color: #e11d48; /* Фон */
     border-color: #e11d48;
-    color: #fff;               /* Исправлен цвет текста */
+    color: #fff;               /* Текст */
     box-shadow: 0 0 15px rgba(225, 29, 72, 0.4);
 }
 
@@ -224,14 +224,14 @@ body.new-year-mode .genre-btn:hover {
     color: #fff;
 }
 body.new-year-mode .genre-btn.active {
-    background-color: #e11d48; /* Исправлен цвет фона */
+    background-color: #e11d48; /* Фон */
     border-color: #e11d48;
     box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
     color: #fff;
 }
 
 /* =========================================
-   ЕЛОЧНЫЕ ШАРЫ (SVG + Physics)
+   ЕЛОЧНЫЕ ШАРЫ (SVG Веревки + Физика)
    ========================================= */
 
 /* Контейнер */
@@ -262,21 +262,20 @@ body.new-year-mode .genre-btn.active {
     stroke: rgba(255, 255, 255, 0.6);
     stroke-width: 2;
     stroke-linecap: round;
+    stroke-linejoin: round; /* Плавные сгибы */
 }
 
-/* Обертка шара (теперь тут только сам шар и крепление) */
+/* Обертка шара */
 .ball-wrapper {
     position: absolute;
     top: 0;
     left: 0;
-    width: 50px; /* Ширина шара */
+    width: 50px;
     z-index: 2;
     will-change: transform;
-    /* Центрируем, чтобы координаты JS указывали на центр верха крепления */
-    margin-left: -25px; 
+    margin-left: -25px; /* Центрируем относительно конца веревки */
+    pointer-events: none;
 }
-
-/* Мы убрали .ball-string, так как теперь это SVG */
 
 /* КРЕПЛЕНИЕ */
 .ball-cap {
