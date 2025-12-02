@@ -1,0 +1,105 @@
+/* =========================================
+   NEW YEAR THEME (Новогодняя тема)
+   ========================================= */
+
+/* Активируется только при наличии класса new-year-mode у body */
+body.new-year-mode {
+    /* Переопределяем основные цвета проекта */
+    --accent-blue: #e11d48; /* Меняем фирменный голубой на Рождественский Красный */
+    --accent-dark: #be123c;
+    --card-bg: #1c1315;     /* Карточки чуть теплее/краснее */
+    --border-color: #4a1818; 
+}
+
+/* --- ИЗМЕНЕНИЯ ИНТЕРФЕЙСА --- */
+
+/* Градиент заголовков меняем на красно-золотой */
+body.new-year-mode .page-title,
+body.new-year-mode .gradient-text {
+    background: linear-gradient(90deg, #fff 0%, #fbbf24 40%, #e11d48 50%, #fbbf24 60%, #fff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    filter: drop-shadow(0 0 25px rgba(225, 29, 72, 0.4));
+}
+
+/* Кнопки меняют свечение */
+body.new-year-mode .nav-links a.active {
+    background-color: rgba(225, 29, 72, 0.1);
+    box-shadow: 0 0 20px rgba(225, 29, 72, 0.2);
+}
+
+/* Гирлянда под шапкой */
+body.new-year-mode header {
+    border-bottom: 2px solid #e11d48;
+    box-shadow: 0 5px 30px rgba(225, 29, 72, 0.2);
+}
+
+/* Бейджи и иконки */
+body.new-year-mode .intro-badge, 
+body.new-year-mode .year-badge,
+body.new-year-mode .promo-badge {
+    color: #fbbf24; /* Золотой текст */
+    border-color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+}
+
+/* --- КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ --- */
+.theme-toggle-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 15px;
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(15deg);
+}
+
+/* Активное состояние кнопки (когда тема включена) */
+body.new-year-mode .theme-toggle-btn {
+    background: #e11d48;
+    border-color: #e11d48;
+    box-shadow: 0 0 15px #e11d48;
+    transform: rotate(360deg);
+}
+
+/* --- ЭФФЕКТ СНЕГА --- */
+.snowflake {
+    position: fixed;
+    top: -10px;
+    color: #fff;
+    font-size: 1em;
+    font-family: Arial;
+    text-shadow: 0 0 1px #000;
+    user-select: none;
+    z-index: 9999;
+    pointer-events: none; /* Чтобы снег не мешал кликать */
+    animation-name: snowflakes-fall, snowflakes-shake;
+    animation-duration: 10s, 3s;
+    animation-timing-function: linear, ease-in-out;
+    animation-iteration-count: infinite, infinite;
+    animation-play-state: running, running;
+}
+
+@keyframes snowflakes-fall {
+    0% { top: -10%; }
+    100% { top: 100%; }
+}
+
+@keyframes snowflakes-shake {
+    0% { transform: translateX(0px); }
+    50% { transform: translateX(80px); }
+    100% { transform: translateX(0px); }
+}
