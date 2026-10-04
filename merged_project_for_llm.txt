@@ -151,7 +151,12 @@ File: index.html
     <link rel="stylesheet" href="css/schedule.css">
     <link rel="stylesheet" href="css/library.css">
     <link rel="stylesheet" href="css/rules.css">
-    <link rel="stylesheet" href="css/modal.css">
+    
+    <!-- Модальные окна (Разделенные) -->
+    <link rel="stylesheet" href="css/modal-base.css">
+    <link rel="stylesheet" href="css/modal-info.css">
+    <link rel="stylesheet" href="css/modal-hall.css">
+    
     <link rel="stylesheet" href="css/theme-effects.css">
 
     <!-- Динамический Favicon управляется через JS -->
@@ -475,7 +480,7 @@ File: css/global.css
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-    overflow-x: hidden; /* Блокируем случайный горизонтальный скролл сайта */
+    overflow-x: hidden;
     width: 100%;
 }
 
@@ -625,7 +630,6 @@ footer { background-color: var(--bg-footer); padding: 40px 0; border-top: 1px so
 
 @media (max-width: 768px) {
     .container { padding: 0 15px; }
-    /* ИСПРАВЛЕНИЕ: Увеличил отступ сверху до 200px, чтобы высокая мобильная шапка не перекрывала контент */
     main.container { padding: 200px 15px 40px 15px; } 
     
     .header-fluid, .footer-container { 
@@ -642,6 +646,10 @@ footer { background-color: var(--bg-footer); padding: 40px 0; border-top: 1px so
         gap: 8px;
     }
     .nav-links a { padding: 8px 16px; font-size: 11px; }
+    
+    /* СКРЫВАЕМ ССЫЛКУ "БИБЛИОТЕКА" НА ТЕЛЕФОНАХ */
+    .nav-links a[data-route="/library"] { display: none; }
+
     .theme-toggle-btn { margin-left: 5px; width: 34px; height: 34px; font-size: 16px; }
 
     .address-link { justify-content: center; text-align: center; flex-direction: column; gap: 4px; }
@@ -652,7 +660,6 @@ footer { background-color: var(--bg-footer); padding: 40px 0; border-top: 1px so
 }
 
 @media (max-width: 480px) {
-    /* На очень узких экранах меню может стать еще выше, подстрахуем еще на 10px */
     main.container { padding-top: 210px; } 
     .nav-links a { padding: 8px 12px; font-size: 10px; }
     .page-title { font-size: 1.8rem; }
@@ -929,18 +936,26 @@ File: css/library.css
     border-radius: 16px; padding: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
     opacity: 0; visibility: hidden; transform: translateY(-10px);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    display: flex; flex-direction: column; gap: 12px; min-width: 320px;
+    display: flex; flex-direction: column; gap: 12px; 
+    min-width: 240px; /* Сделали более аккуратным и узким */
 }
 .modern-sort-wrapper.open .modern-sort-popover { opacity: 1; visibility: visible; transform: translateY(0); }
 
 .sort-segment-group { display: flex; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 4px; border: 1px solid rgba(255,255,255,0.05); }
 .sort-segment-btn {
     flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
-    padding: 10px 12px; background: transparent; border: none; border-radius: 8px;
+    padding: 8px 10px; /* Чуть компактнее */
+    background: transparent; border: none; border-radius: 8px;
     color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer;
     transition: all 0.2s ease;
 }
-.sort-segment-btn svg { opacity: 0.7; transition: 0.2s; }
+.sort-segment-btn svg { 
+    width: 20px; /* ЖЕСТКАЯ ФИКСАЦИЯ ИКОНОК */
+    height: 20px; 
+    flex-shrink: 0; 
+    opacity: 0.7; 
+    transition: 0.2s; 
+}
 .sort-segment-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
 .sort-segment-btn.active {
     background: var(--bg-card); color: var(--accent-primary);
@@ -1094,7 +1109,6 @@ File: css/library.css
     .modern-sort-container { width: 100%; }
     .modern-sort-trigger { width: 100%; justify-content: space-between; }
     .modern-sort-popover { right: 0; left: 0; min-width: 100%; }
-    .sort-segment-btn { font-size: 0.8rem; padding: 8px 6px; }
     
     .lib-card-wrapper.stack-2 .layer-front { transform: scale(0.96) translate(-4px, 4px); }
     .lib-card-wrapper.stack-2 .layer-back { transform: scale(0.96) translate(4px, -4px); }
@@ -1110,12 +1124,13 @@ File: css/library.css
 }
 
 ================================================================================
-File: css/modal.css
+File: css/modal-base.css
 ================================================================================
 
 /* =========================================
-   MODALS (Movie Info & Booking)
+   BASE MODAL STYLES (Основа и общие элементы)
    ========================================= */
+
 .modal-overlay { 
     position: fixed; 
     inset: 0; 
@@ -1129,246 +1144,163 @@ File: css/modal.css
     margin: 0; 
     overflow-y: auto; 
     z-index: 2000;
-    color: var(--text-primary); /* Принудительно возвращаем белый текст, перебивая дефолт <dialog> */
+    color: var(--text-primary);
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
 }
+
 .modal-overlay::backdrop {
     background: var(--bg-overlay);
     backdrop-filter: blur(8px);
     animation: fadeIn 0.3s;
 }
+
 .modal-overlay[open] { 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
     animation: fadeIn 0.3s; 
 }
 
-.modal-content { background: var(--bg-card); padding: 40px; border-radius: 16px; border: 1px solid var(--border-color); position: relative; width: 100%; margin: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-.close-btn { position: absolute; top: 15px; right: 20px; font-size: 32px; color: var(--text-muted); cursor: pointer; z-index: 30; line-height: 1; border: none; background: transparent; transition: 0.2s; }
-.close-btn:hover { color: var(--text-primary); transform: scale(1.1); }
+.modal-content { 
+    background: var(--bg-card); 
+    border-radius: 16px; 
+    border: 1px solid var(--border-color); 
+    position: relative; 
+    width: 100%; 
+    margin: auto; 
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+}
 
-/* --- ОБНОВЛЕННЫЙ INFO MODAL --- */
-.info-modal-content { max-width: 1440px; width: 95vw; padding: 0; overflow: hidden; border-radius: 24px; }
+/* Универсальный красивый крестик закрытия */
+.close-btn { 
+    position: absolute; 
+    top: 20px; right: 20px; 
+    width: 44px; height: 44px; 
+    border-radius: 50%; 
+    background: rgba(15,23,42,0.6); 
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--text-primary); 
+    cursor: pointer; z-index: 100; 
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.3s ease;
+    padding: 0;
+}
 
-/* Плавные переходы для бесшовного обновления модалки */
-.modal-backdrop-blur { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center top; filter: blur(80px) brightness(0.35); z-index: 0; transform: scale(1.2); transition: background-image 0.4s ease, opacity 0.3s ease; }
-.modal-gradient-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(15,23,42,0.3) 0%, rgba(15,23,42,0.85) 60%, var(--bg-card) 100%); z-index: 1; }
-.info-modal-body { position: relative; z-index: 2; padding: 50px; }
+.close-btn svg { width: 24px; height: 24px; transition: 0.3s ease; }
+.close-btn:hover { 
+    background: var(--accent-primary); 
+    border-color: var(--accent-primary); 
+    transform: scale(1.1); 
+    box-shadow: 0 0 15px var(--shadow-glow); 
+}
 
+/* Универсальная ручка для свайпа (Bottom Sheet на мобильных) */
+.mobile-drag-handle { display: none; }
+
+/* Общие анимации */
 .fade-transition { opacity: 0; transform: translateY(10px); transition: opacity 0.25s ease, transform 0.25s ease; }
 .fade-transition.active { opacity: 1; transform: translateY(0); }
 
-/* Сетка: 3 колонки */
-.info-layout { display: grid; grid-template-columns: 300px 1fr 340px; gap: 35px; align-items: start; }
-
-/* =========================================
-   3D СТЕК ПОСТЕРОВ В МОДАЛКЕ
-   ========================================= */
-.modal-poster-wrapper { 
-    position: relative; 
-    width: 100%; 
-    aspect-ratio: 2/3; 
-    z-index: 5; 
-    perspective: 1200px; 
-    transform-style: preserve-3d;
-}
-
-.modal-poster-img { 
-    position: absolute; inset: 0; width: 100%; height: 100%; 
-    object-fit: cover; border-radius: 16px; 
-    background-color: var(--bg-card); 
-    
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background-clip: padding-box;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-    
-    transition: 
-        transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), 
-        box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1), 
-        border-color 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-        filter 0.5s ease, opacity 0.3s ease; 
-        
-    opacity: 0; 
-    transform-origin: center center;
-    backface-visibility: hidden;
-    will-change: transform, box-shadow, border-color;
-}
-
-/* Базовые позиции */
-.modal-poster-img.is-front { opacity: 1; z-index: 30; transform: translate3d(0, 0, 0); }
-.modal-poster-img.is-back { opacity: 1; z-index: 20; transform: translate3d(0, -15px, -50px); filter: brightness(0.6); }
-.modal-poster-img.is-back-2 { opacity: 1; z-index: 10; transform: translate3d(0, -30px, -100px); filter: brightness(0.3); }
-.modal-poster-img.is-hidden { opacity: 0; z-index: 0; pointer-events: none; transform: translate3d(0, 20px, -150px) scale(0.8); }
-
-/* Ховеры и интерактив */
-.modal-poster-wrapper.is-interactive { cursor: pointer; }
-
-.modal-poster-wrapper:hover .modal-poster-img {
-    border-color: var(--accent-primary);
-    box-shadow: 0 0 15px var(--shadow-glow), 0 20px 40px rgba(0,0,0,0.8);
-    filter: brightness(1); 
-}
-
-.modal-poster-wrapper:hover .modal-poster-img.is-front { 
-    z-index: 35;
-    border-color: var(--accent-primary);
-    box-shadow: 0 0 30px var(--shadow-glow), 0 30px 60px rgba(0,0,0,0.9);
-}
-
-.modal-poster-wrapper.stack-1:hover .modal-poster-img.is-front { transform: translate3d(0, -8px, 30px) scale(1.02); }
-
-.modal-poster-wrapper.stack-2:hover .modal-poster-img.is-front { transform: translate3d(-12px, 4px, 25px) rotateZ(-2deg); }
-.modal-poster-wrapper.stack-2:hover .modal-poster-img.is-back { transform: translate3d(12px, -4px, -25px) rotateZ(2deg); z-index: 25; }
-
-.modal-poster-wrapper.stack-3:hover .modal-poster-img.is-front { transform: translate3d(-18px, 6px, 25px) rotateZ(-2deg); }
-.modal-poster-wrapper.stack-3:hover .modal-poster-img.is-back { transform: translate3d(0, 0, 0) rotateZ(0deg); z-index: 25; }
-.modal-poster-wrapper.stack-3:hover .modal-poster-img.is-back-2 { transform: translate3d(18px, -6px, -25px) rotateZ(2deg); z-index: 15; }
-
-/* Фоновое свечение */
-.modal-poster-glow { 
-    position: absolute; inset: -30px; 
-    background: radial-gradient(circle at center, transparent 30%, var(--accent-primary) 100%); 
-    opacity: 0.1; pointer-events: none; mix-blend-mode: screen; filter: blur(40px); 
-    transition: opacity 0.5s ease;
-}
-.modal-poster-wrapper:hover .modal-poster-glow { opacity: 0.25; }
-
-/* =========================================
-   МИНИАТЮРЫ ФРАНШИЗЫ
-   ========================================= */
-.poster-thumbnails {
-    display: flex; gap: 8px; margin-top: 20px;
-    justify-content: center; flex-wrap: wrap;
-}
-.thumb-item {
-    width: 50px; height: 75px; border-radius: 6px; overflow: hidden;
-    cursor: pointer; opacity: 0.5; border: 2px solid transparent;
-    transition: all 0.3s ease; background: #000;
-}
-.thumb-item img { width: 100%; height: 100%; object-fit: cover; }
-.thumb-item:hover { opacity: 0.8; transform: translateY(-3px); }
-.thumb-item.active { 
-    opacity: 1; border-color: var(--accent-primary); 
-    box-shadow: 0 0 10px var(--shadow-glow); transform: translateY(-3px);
+@keyframes sheetSlideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
 }
 
 /* =========================================
-   ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ INFO MODAL
+   АДАПТИВНОСТЬ БАЗЫ
    ========================================= */
-.centered-meta { display: flex; flex-wrap: wrap; gap: 8px; }
-.modal-meta-left { justify-content: flex-start; margin-bottom: 20px; }
-.panel-no-margin { margin-bottom: 0 !important; }
-
-/* Базовый стиль для всех основных табличек */
-.glass-panel { 
-    background: var(--bg-glass); 
-    backdrop-filter: blur(16px); 
-    border: 1px solid rgba(255, 255, 255, 0.1); 
-    border-radius: 20px; 
-    padding: 25px; 
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+@media (max-width: 768px) {
+    .modal-overlay { 
+        align-items: flex-end; 
+        padding: 0; 
+    }
+    .close-btn { 
+        top: 15px; right: 15px; 
+        width: 36px; height: 36px; 
+    }
+    .close-btn svg { 
+        width: 20px; height: 20px; 
+    }
+    .mobile-drag-handle {
+        display: block; 
+        width: 40px; height: 4px; 
+        background: rgba(255,255,255,0.4); 
+        border-radius: 2px; 
+        position: absolute; 
+        top: 12px; left: 50%; 
+        transform: translateX(-50%);
+        z-index: 50;
+    }
 }
 
-.main-info-panel { position: relative; z-index: 20; margin-bottom: 25px; }
+================================================================================
+File: css/modal-hall.css
+================================================================================
 
-.title-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 15px; }
-.info-main-title { font-size: 2rem; font-weight: 900; text-transform: uppercase; line-height: 1.15; margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+/* =========================================
+   HALL SCHEME MODAL (Бронирование мест и чек)
+   ========================================= */
 
-/* Крупный динамический бейдж рейтинга */
-.rating-badge-large {
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 1.5rem; font-weight: 900; padding: 6px 16px; border-radius: 12px;
-    background: rgba(0,0,0,0.5); border: 2px solid; backdrop-filter: blur(8px);
-    text-shadow: 0 2px 4px rgba(0,0,0,0.8); flex-shrink: 0;
+.hall-modal-content { 
+    max-width: 800px; 
+    padding: 50px 40px 40px 40px; 
+    text-align: center; 
+    display: flex;
+    flex-direction: column;
 }
-.rating-badge-large.rating-high { color: var(--rating-high); border-color: rgba(74, 222, 128, 0.4); box-shadow: 0 0 20px rgba(74, 222, 128, 0.15); }
-.rating-badge-large.rating-mid { color: var(--rating-mid); border-color: rgba(250, 204, 21, 0.4); box-shadow: 0 0 20px rgba(250, 204, 21, 0.15); }
-.rating-badge-large.rating-low { color: var(--rating-low); border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 0 20px rgba(239, 68, 68, 0.15); }
-.rating-badge-large.rating-upcoming { color: var(--rating-upcoming); border-color: rgba(192, 132, 252, 0.4); box-shadow: 0 0 20px rgba(192, 132, 252, 0.15); font-size: 1.1rem; letter-spacing: 1px; }
-.rating-badge-large:not(.rating-upcoming)::after { content: '/ 10'; font-size: 0.85rem; color: var(--text-muted); margin-left: 6px; font-weight: 700; }
 
-/* Вложенная табличка специально для описания */
-.desc-inner-panel {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px; padding: 16px 20px; position: relative;
-    transition: background 0.3s, border-color 0.3s;
-}
-.desc-inner-panel:hover { background: var(--bg-glass-hover); border-color: rgba(255, 255, 255, 0.2); }
-
-.desc-clamp {
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-    color: var(--text-primary); font-size: 0.95rem; line-height: 1.6; cursor: help; opacity: 0.9;
-}
-.desc-tooltip {
-    position: absolute; top: calc(100% + 12px); left: 0; right: 0;
-    background: var(--bg-overlay); backdrop-filter: blur(20px);
-    border: 1px solid var(--accent-primary); padding: 20px 25px; border-radius: 16px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 20px var(--shadow-glow); 
-    color: var(--text-primary); font-size: 1rem; line-height: 1.7;
-    z-index: 100; opacity: 0; visibility: hidden; 
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    pointer-events: none; transform: translateY(-10px);
-}
-.desc-tooltip-wrapper:hover .desc-tooltip { opacity: 1; visibility: visible; transform: translateY(0); }
-
-/* --- ОБНОВЛЕННЫЙ БЛОК ПЛЕЕРА И ГАЛЕРЕИ --- */
-.info-col-trailer { position: relative; z-index: 5; width: 100%; display: flex; flex-direction: column; gap: 15px; }
-.media-container { width: 100%; height: 360px; position: relative; overflow: hidden; background: #000; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-.media-content { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; border: none; }
-.media-content.active { display: block; animation: fadeIn 0.4s; }
-
-.slider-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: var(--bg-glass); color: var(--text-primary); border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; cursor: pointer; z-index: 10; backdrop-filter: blur(8px); font-size: 18px; transition: 0.2s; }
-.slider-arrow:hover { background: var(--accent-primary); border-color: var(--accent-primary); transform: translateY(-50%) scale(1.1); box-shadow: 0 0 15px var(--shadow-glow); }
-.slider-arrow.prev { left: -22px; } .slider-arrow.next { right: -22px; }
-
-/* Лента миниатюр */
-.media-gallery {
-    display: flex; gap: 12px; overflow-x: auto; 
-    padding: 8px 4px 16px 4px; margin: -8px -4px 0 -4px; 
-    scrollbar-width: thin; scrollbar-color: var(--accent-primary) rgba(255,255,255,0.05);
-}
-.media-gallery::-webkit-scrollbar { height: 6px; }
-.media-gallery::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; }
-.media-gallery::-webkit-scrollbar-thumb { background: var(--accent-primary); border-radius: 4px; }
-
-.gallery-item {
-    width: 140px; height: 80px; flex-shrink: 0; border-radius: 12px; overflow: hidden;
-    position: relative; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease;
-    opacity: 0.5; background: #000;
-}
-.gallery-item:hover { opacity: 1; transform: translateY(-4px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-.gallery-item.active { opacity: 1; border-color: var(--accent-primary); box-shadow: 0 0 15px var(--shadow-glow); }
-.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
-.gallery-item.active img { transform: scale(1.05); filter: brightness(1.1); }
-
-.play-icon-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); transition: 0.3s; }
-.play-icon-overlay::after { content: '▶'; color: #fff; font-size: 18px; background: rgba(225, 29, 72, 0.9); width: 36px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 8px; backdrop-filter: blur(4px); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-.gallery-item:hover .play-icon-overlay { background: rgba(0,0,0,0.1); }
-.gallery-item:hover .play-icon-overlay::after { background: red; transform: scale(1.1); transition: 0.2s; }
-
-.spec-row { display: flex; justify-content: space-between; font-size: 0.95rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 12px; margin-bottom: 12px; }
-.spec-row:last-child { border: none; margin: 0; padding: 0; }
-.spec-label { color: var(--text-muted); font-weight: 600; text-align: left; }
-.spec-value { color: var(--text-primary); font-weight: 600; text-align: right; }
-.spec-badge { display: inline-block; border: 1px solid rgba(255, 255, 255, 0.3); padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; background: rgba(255, 255, 255, 0.1); }
-
-.sessions-header { font-size: 1.15rem; font-weight: 800; text-transform: uppercase; color: var(--text-primary); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-.sessions-header::before { content: ''; display: block; width: 4px; height: 20px; background: var(--accent-primary); border-radius: 4px; box-shadow: 0 0 10px var(--shadow-glow); }
-
-/* Booking Modal (Бронь зала) */
-.hall-modal-content { max-width: 800px; padding: 30px; text-align: center; }
 .hall-title { color: var(--accent-primary); margin-bottom: 5px; }
 .hall-subtitle { font-size: 1.1em; font-weight: 700; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
 .hall-subtitle-time { font-weight: 400; color: var(--text-muted); }
+
 .showcase { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; }
 .showcase li { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
-.screen { background: linear-gradient(180deg, rgba(255,255,255,0.3), transparent); height: 40px; margin: 10px 0 25px; transform: perspective(400px) rotateX(-10deg); border-radius: 8px; color: rgba(255,255,255,0.3); font-size: 10px; display: flex; align-items: center; justify-content: center; letter-spacing: 5px; }
-.seats-area { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+
+/* --- ОБЕРТКИ ДЛЯ ИДЕАЛЬНОГО СКРОЛЛА --- */
+.hall-container {
+    overflow: auto;
+    flex: 1;
+    -webkit-overflow-scrolling: touch;
+}
+
+.hall-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    min-width: max-content; 
+    margin: 0 auto;
+    padding-bottom: 20px;
+}
+
+.screen { 
+    background: linear-gradient(180deg, rgba(255,255,255,0.3), transparent); 
+    height: 40px; 
+    margin: 10px 0 25px 0; 
+    width: 100%;
+    max-width: 600px; 
+    transform: perspective(1000px) rotateX(-10deg); 
+    border-radius: 8px; 
+    color: rgba(255,255,255,0.3); 
+    font-size: 10px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    letter-spacing: 5px; 
+}
+
+.seats-area { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 6px; 
+    padding: 0 10px;
+}
+
 .seat-row { display: flex; gap: 4px; align-items: center; justify-content: center; }
 .row-number { color: var(--text-muted); font-size: 12px; font-weight: 700; width: 25px; display: flex; align-items: center; }
 .row-left { justify-content: flex-end; margin-right: 12px; } .row-right { justify-content: flex-start; margin-left: 12px; }
-.seat { background: var(--seat-bg); height: 16px; width: 18px; border-radius: 6px 6px 0 0; cursor: pointer; transition: 0.2s; }
+
+.seat { background: var(--seat-bg); height: 16px; width: 18px; border-radius: 6px 6px 0 0; cursor: pointer; transition: 0.2s; flex-shrink: 0; }
 .seat:not(.occupied):hover { transform: scale(1.3); background: var(--text-muted); z-index: 2; }
 .seat.selected { background: var(--accent-primary); box-shadow: 0 0 8px var(--accent-primary); }
 .seat.occupied { background: var(--text-muted); cursor: not-allowed; opacity: 0.6; position: relative; pointer-events: none;}
@@ -1376,29 +1308,21 @@ File: css/modal.css
 .seat.occupied::after { transform: translate(-50%, -50%) rotate(45deg); }
 .seat.occupied::before { transform: translate(-50%, -50%) rotate(-45deg); }
 
-.ticket-footer { margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 20px; }
+.ticket-footer { margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px; flex-shrink: 0; }
 .ticket-info { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 700; font-size: 1.1em; color: var(--text-primary);}
 .ticket-info span { color: var(--accent-primary); }
 .buy-btn { background: var(--accent-primary); color: var(--text-primary); padding: 12px 30px; border: none; border-radius: 8px; font-weight: 700; width: 100%; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
 .buy-btn:hover { background: var(--accent-dark); }
 
-/* --- ЭКРАН УСПЕШНОЙ ПОКУПКИ (ЧЕК-БИЛЕТ) --- */
+/* --- УСПЕШНАЯ ПОКУПКА (ЧЕК) --- */
 .success-ticket-wrapper { text-align: center; padding: 10px 0; animation: fadeIn 0.4s ease; display: flex; flex-direction: column; align-items: center; }
 .success-icon { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 50%; background: rgba(34, 197, 94, 0.15); color: #22c55e; margin-bottom: 15px; border: 2px solid #22c55e; box-shadow: 0 0 25px rgba(34, 197, 94, 0.2); }
 .success-icon svg { width: 32px; height: 32px; }
 .success-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 30px; color: var(--text-primary); }
 
-.receipt-card { 
-    background: var(--bg-glass); border: 1px solid var(--border-color); 
-    border-radius: 16px; position: relative; overflow: hidden; 
-    text-align: left; width: 100%; max-width: 400px; 
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
-}
+.receipt-card { background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: 16px; position: relative; overflow: hidden; text-align: left; width: 100%; max-width: 400px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
 .receipt-header { padding: 25px 25px 20px; border-bottom: 2px dashed rgba(255,255,255,0.15); position: relative; }
-.receipt-header::before, .receipt-header::after { 
-    content: ''; position: absolute; bottom: -10px; width: 20px; height: 20px; 
-    background: var(--bg-card); border-radius: 50%; z-index: 10; 
-}
+.receipt-header::before, .receipt-header::after { content: ''; position: absolute; bottom: -10px; width: 20px; height: 20px; background: var(--bg-card); border-radius: 50%; z-index: 10; }
 .receipt-header::before { left: -10px; box-shadow: inset -1px 0 0 var(--border-color); }
 .receipt-header::after { right: -10px; box-shadow: inset 1px 0 0 var(--border-color); }
 .receipt-header h3 { font-size: 1.3rem; font-weight: 900; text-transform: uppercase; color: var(--accent-primary); margin-bottom: 5px; line-height: 1.2; }
@@ -1413,34 +1337,211 @@ File: css/modal.css
 .receipt-total strong { color: var(--text-primary); font-size: 1.5rem; font-weight: 900; }
 .barcode { height: 40px; border-radius: 4px; opacity: 0.6; background: repeating-linear-gradient(90deg, var(--text-primary) 0, var(--text-primary) 2px, transparent 2px, transparent 5px, var(--text-primary) 5px, var(--text-primary) 8px, transparent 8px, transparent 10px, var(--text-primary) 10px, var(--text-primary) 11px, transparent 11px, transparent 14px); }
 
-/* --- ИДЕАЛЬНЫЙ ДИЗАЙН МИНИ-БИЛЕТОВ (С МАСКАМИ И ПОЛУКРУГАМИ) --- */
+/* =========================================
+   АДАПТИВНОСТЬ HALL MODAL
+   ========================================= */
+
+@media (max-width: 768px) {
+    .hall-modal-content {
+        padding: 20px 0 0 0; 
+        max-height: 95vh; 
+        width: 100%;
+        border-radius: 24px 24px 0 0; 
+        margin: 0;
+        margin-top: auto; 
+        animation: sheetSlideUp 0.35s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .hall-title { font-size: 1.5rem; padding: 0 20px; }
+    .hall-subtitle { padding: 0 20px 15px 20px; margin-bottom: 10px;}
+    .showcase { margin: 0 20px 15px 20px; }
+
+    .hall-container {
+        width: 100%;
+        padding: 0; 
+        display: block; 
+    }
+
+    .hall-inner {
+        padding: 0 20px 20px 20px;
+        align-items: stretch; 
+    }
+
+    .screen {
+        max-width: none; 
+        width: auto;
+        margin: 10px 0 25px 0;
+    }
+
+    .seats-area {
+        min-width: max-content; 
+        padding: 0;
+        margin: 0; 
+    }
+
+    .seat { width: 20px; height: 20px; }
+
+    .ticket-footer {
+        position: sticky;
+        bottom: 0;
+        background: var(--bg-card);
+        padding: 15px 20px;
+        margin: 0;
+        border-top: 1px solid var(--border-color);
+        box-shadow: 0 -10px 20px rgba(0,0,0,0.5);
+        z-index: 20;
+    }
+}
+
+================================================================================
+File: css/modal-info.css
+================================================================================
+
+/* =========================================
+   MOVIE INFO MODAL (Детали фильма)
+   ========================================= */
+
+.info-modal-content { 
+    max-width: 1440px; 
+    width: 95vw; 
+    padding: 0; 
+    overflow: hidden; 
+    border-radius: 24px; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.modal-backdrop-blur { 
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    background-size: cover; background-position: center top; 
+    filter: blur(80px) brightness(0.35); z-index: 0; 
+    transform: scale(1.2); transition: background-image 0.4s ease, opacity 0.3s ease; 
+}
+
+.modal-gradient-overlay { 
+    position: absolute; inset: 0; 
+    background: linear-gradient(to bottom, rgba(15,23,42,0.3) 0%, rgba(15,23,42,0.85) 60%, var(--bg-card) 100%); 
+    z-index: 1; 
+}
+
+.info-modal-body { 
+    position: relative; z-index: 2; 
+    padding: 60px 60px 50px 60px; 
+    flex: 1; 
+}
+
+/* Сетка: 3 колонки (Desktop) */
+.info-layout { display: grid; grid-template-columns: 300px 1fr 340px; gap: 35px; align-items: center; }
+.info-col-main { display: flex; flex-direction: column; gap: 25px; }
+
+/* 3D СТЕК ПОСТЕРОВ */
+.modal-poster-wrapper { position: relative; width: 100%; aspect-ratio: 2/3; z-index: 5; perspective: 1200px; transform-style: preserve-3d; }
+.modal-poster-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 16px; background-color: var(--bg-card); border: 1px solid rgba(255, 255, 255, 0.1); background-clip: padding-box; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.5s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease, opacity 0.3s ease; opacity: 0; transform-origin: center center; backface-visibility: hidden; will-change: transform, box-shadow, border-color; }
+.modal-poster-img.is-front { opacity: 1; z-index: 30; transform: translate3d(0, 0, 0); }
+.modal-poster-img.is-back { opacity: 1; z-index: 20; transform: translate3d(0, -15px, -50px); filter: brightness(0.6); }
+.modal-poster-img.is-back-2 { opacity: 1; z-index: 10; transform: translate3d(0, -30px, -100px); filter: brightness(0.3); }
+.modal-poster-img.is-hidden { opacity: 0; z-index: 0; pointer-events: none; transform: translate3d(0, 20px, -150px) scale(0.8); }
+
+.modal-poster-wrapper.is-interactive { cursor: pointer; }
+.modal-poster-wrapper:hover .modal-poster-img { border-color: var(--accent-primary); box-shadow: 0 0 15px var(--shadow-glow), 0 20px 40px rgba(0,0,0,0.8); filter: brightness(1); }
+.modal-poster-wrapper:hover .modal-poster-img.is-front { z-index: 35; border-color: var(--accent-primary); box-shadow: 0 0 30px var(--shadow-glow), 0 30px 60px rgba(0,0,0,0.9); }
+.modal-poster-wrapper.stack-1:hover .modal-poster-img.is-front { transform: translate3d(0, -8px, 30px) scale(1.02); }
+.modal-poster-wrapper.stack-2:hover .modal-poster-img.is-front { transform: translate3d(-12px, 4px, 25px) rotateZ(-2deg); }
+.modal-poster-wrapper.stack-2:hover .modal-poster-img.is-back { transform: translate3d(12px, -4px, -25px) rotateZ(2deg); z-index: 25; }
+.modal-poster-wrapper.stack-3:hover .modal-poster-img.is-front { transform: translate3d(-18px, 6px, 25px) rotateZ(-2deg); }
+.modal-poster-wrapper.stack-3:hover .modal-poster-img.is-back { transform: translate3d(0, 0, 0) rotateZ(0deg); z-index: 25; }
+.modal-poster-wrapper.stack-3:hover .modal-poster-img.is-back-2 { transform: translate3d(18px, -6px, -25px) rotateZ(2deg); z-index: 15; }
+.modal-poster-glow { position: absolute; inset: -30px; background: radial-gradient(circle at center, transparent 30%, var(--accent-primary) 100%); opacity: 0.1; pointer-events: none; mix-blend-mode: screen; filter: blur(40px); transition: opacity 0.5s ease; }
+.modal-poster-wrapper:hover .modal-poster-glow { opacity: 0.25; }
+
+/* ПАНЕЛЬ ФРАНШИЗЫ (ЗАЩИТА ОТ ОБРЕЗАНИЯ ПРИ НАВЕДЕНИИ) */
+.franchise-panel { padding: 15px 20px; margin-top: 25px; }
+.poster-thumbnails { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; padding: 10px 5px; }
+.thumb-item { width: 50px; height: 75px; border-radius: 6px; overflow: hidden; cursor: pointer; opacity: 0.5; border: 2px solid transparent; transition: all 0.3s ease; background: #000; }
+.thumb-item img { width: 100%; height: 100%; object-fit: cover; }
+.thumb-item:hover { opacity: 0.8; transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+.thumb-item.active { opacity: 1; border-color: var(--accent-primary); box-shadow: 0 0 10px var(--shadow-glow); transform: translateY(-3px); }
+
+/* ИНФО-ПАНЕЛИ ОБЩЕЕ */
+.glass-panel { background: var(--bg-glass); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); }
+.main-info-panel { position: relative; z-index: 20; }
+.title-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 15px; }
+.info-main-title { font-size: 2rem; font-weight: 900; text-transform: uppercase; line-height: 1.15; margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+
+.rating-badge-large {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; font-weight: 900; padding: 6px 16px; border-radius: 12px;
+    background: rgba(0,0,0,0.5); border: 2px solid; backdrop-filter: blur(8px);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8); flex-shrink: 0;
+}
+.rating-badge-large.rating-high { color: var(--rating-high); border-color: rgba(74, 222, 128, 0.4); box-shadow: 0 0 20px rgba(74, 222, 128, 0.15); }
+.rating-badge-large.rating-mid { color: var(--rating-mid); border-color: rgba(250, 204, 21, 0.4); box-shadow: 0 0 20px rgba(250, 204, 21, 0.15); }
+.rating-badge-large.rating-low { color: var(--rating-low); border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 0 20px rgba(239, 68, 68, 0.15); }
+.rating-badge-large.rating-upcoming { color: var(--rating-upcoming); border-color: rgba(192, 132, 252, 0.4); box-shadow: 0 0 20px rgba(192, 132, 252, 0.15); font-size: 1.1rem; letter-spacing: 1px; }
+.rating-badge-large:not(.rating-upcoming)::after { content: '/ 10'; font-size: 0.85rem; color: var(--text-muted); margin-left: 6px; font-weight: 700; }
+
+.desc-inner-panel { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 16px 20px; position: relative; transition: background 0.3s, border-color 0.3s; }
+.desc-inner-panel:hover { background: var(--bg-glass-hover); border-color: rgba(255, 255, 255, 0.2); }
+
+/* --- ОПИСАНИЕ С ЖЕСТКИМ ОГРАНИЧЕНИЕМ (2 СТРОКИ) --- */
+.description-text { 
+    color: var(--text-primary); 
+    font-size: 0.95rem; 
+    line-height: 1.6; 
+    opacity: 0.9; 
+}
+.desc-clamp { 
+    display: -webkit-box; 
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical; 
+    overflow: hidden; 
+}
+
+/* Tooltip (подсказка при наведении на описание) */
+.desc-tooltip { position: absolute; top: calc(100% + 12px); left: 0; right: 0; background: var(--bg-overlay); backdrop-filter: blur(20px); border: 1px solid var(--accent-primary); padding: 20px 25px; border-radius: 16px; box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 20px var(--shadow-glow); color: var(--text-primary); font-size: 1rem; line-height: 1.7; z-index: 100; opacity: 0; visibility: hidden; transition: all 0.3s ease; pointer-events: none; transform: translateY(-10px); }
+.desc-tooltip-wrapper:hover .desc-tooltip { opacity: 1; visibility: visible; transform: translateY(0); }
+
+/* ПЛЕЕР И ПАНЕЛЬ ГАЛЕРЕИ (ЗАЩИТА ОТ ОБРЕЗАНИЯ ПРИ НАВЕДЕНИИ) */
+.info-col-trailer { position: relative; z-index: 5; width: 100%; display: flex; flex-direction: column; gap: 15px; }
+.media-container { width: 100%; height: auto; aspect-ratio: 16/9; position: relative; overflow: hidden; background: #000; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+.media-content { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; border: none; }
+.media-content.active { display: block; animation: fadeIn 0.4s; }
+
+.slider-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: var(--bg-glass); color: var(--text-primary); border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; cursor: pointer; z-index: 10; backdrop-filter: blur(8px); font-size: 18px; transition: 0.2s; }
+.slider-arrow:hover { background: var(--accent-primary); border-color: var(--accent-primary); transform: translateY(-50%) scale(1.1); box-shadow: 0 0 15px var(--shadow-glow); }
+.slider-arrow.prev { left: -22px; } .slider-arrow.next { right: -22px; }
+
+.media-gallery-panel { padding: 10px 20px; margin-top: 15px; }
+.media-gallery { display: flex; gap: 12px; overflow-x: auto; padding: 10px 4px 15px 4px; scrollbar-width: thin; scrollbar-color: var(--accent-primary) rgba(255,255,255,0.05); }
+.media-gallery::-webkit-scrollbar { height: 6px; }
+.media-gallery::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; }
+.media-gallery::-webkit-scrollbar-thumb { background: var(--accent-primary); border-radius: 4px; }
+.gallery-item { width: 140px; height: 80px; flex-shrink: 0; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease; opacity: 0.5; background: #000; }
+.gallery-item:hover { opacity: 1; transform: translateY(-4px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+.gallery-item.active { opacity: 1; border-color: var(--accent-primary); box-shadow: 0 0 15px var(--shadow-glow); }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+.gallery-item.active img { transform: scale(1.05); filter: brightness(1.1); }
+.play-icon-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); transition: 0.3s; }
+.play-icon-overlay::after { content: '▶'; color: #fff; font-size: 18px; background: rgba(225, 29, 72, 0.9); width: 36px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 8px; backdrop-filter: blur(4px); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+.gallery-item:hover .play-icon-overlay { background: rgba(0,0,0,0.1); }
+.gallery-item:hover .play-icon-overlay::after { background: red; transform: scale(1.1); transition: 0.2s; }
+
+/* ХАРАКТЕРИСТИКИ */
+.spec-row { display: flex; justify-content: space-between; font-size: 0.95rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 12px; margin-bottom: 12px; }
+.spec-row:last-child { border: none; margin: 0; padding: 0; }
+.spec-label { color: var(--text-muted); font-weight: 600; text-align: left; }
+.spec-value { color: var(--text-primary); font-weight: 600; text-align: right; }
+.spec-badge { display: inline-block; border: 1px solid rgba(255, 255, 255, 0.3); padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; background: rgba(255, 255, 255, 0.1); }
+
+/* МИНИ-РАСПИСАНИЕ */
+.sessions-header { font-size: 1.15rem; font-weight: 800; text-transform: uppercase; color: var(--text-primary); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sessions-header::before { content: ''; display: block; width: 4px; height: 20px; background: var(--accent-primary); border-radius: 4px; box-shadow: 0 0 10px var(--shadow-glow); }
+
 .mini-schedule-list { display: flex; flex-direction: column; gap: 12px; }
-
-.mini-ticket-btn { 
-    display: flex; position: relative; width: 100%; min-height: 64px; 
-    background: transparent; border: none; border-radius: 12px; 
-    cursor: pointer; transition: transform 0.3s ease; text-align: left; z-index: 1; 
-}
+.mini-ticket-btn { display: flex; position: relative; width: 100%; min-height: 64px; background: transparent; border: none; border-radius: 12px; cursor: pointer; transition: transform 0.3s ease; text-align: left; z-index: 1; }
 .mini-ticket-btn:hover { transform: translateY(-3px); }
-
-.mini-ticket-btn::before {
-    content: ''; position: absolute; inset: 0; z-index: -1; border-radius: 12px; 
-    background: rgba(255,255,255,0.03); transition: background 0.3s;
-    -webkit-mask-image: radial-gradient(circle 8px at calc(100% - 95px) 0px, transparent 7.5px, black 8px), radial-gradient(circle 8px at calc(100% - 95px) 100%, transparent 7.5px, black 8px);
-    -webkit-mask-position: top, bottom; -webkit-mask-size: 100% 50%, 100% 50%; -webkit-mask-repeat: no-repeat;
-    mask-image: radial-gradient(circle 8px at calc(100% - 95px) 0px, transparent 7.5px, black 8px), radial-gradient(circle 8px at calc(100% - 95px) 100%, transparent 7.5px, black 8px);
-    mask-position: top, bottom; mask-size: 100% 50%, 100% 50%; mask-repeat: no-repeat;
-}
-
-.mini-ticket-btn::after {
-    content: ''; position: absolute; inset: 0; z-index: 10; pointer-events: none; border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.1); transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    -webkit-mask-image: radial-gradient(circle 8px at calc(100% - 95px) 0px, transparent 7.5px, black 8px), radial-gradient(circle 8px at calc(100% - 95px) 100%, transparent 7.5px, black 8px);
-    -webkit-mask-position: top, bottom; -webkit-mask-size: 100% 50%, 100% 50%; -webkit-mask-repeat: no-repeat;
-    mask-image: radial-gradient(circle 8px at calc(100% - 95px) 0px, transparent 7.5px, black 8px), radial-gradient(circle 8px at calc(100% - 95px) 100%, transparent 7.5px, black 8px);
-    mask-position: top, bottom; mask-size: 100% 50%, 100% 50%; mask-repeat: no-repeat;
-}
-
+.mini-ticket-btn::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: 12px; background: rgba(255,255,255,0.03); transition: background 0.3s; -webkit-mask-image: radial-gradient(circle 8px at calc(100% - 95px) 0px, transparent 7.5px, black 8px), radial-gradient(circle 8px at calc(100% - 95px) 100%, transparent 7.5px, black 8px); -webkit-mask-position: top, bottom; -webkit-mask-size: 100% 50%, 100% 50%; -webkit-mask-repeat: no-repeat; mask-image: radial-gradient(circle 8px at calc(100% - 95px) 0px, transparent 7.5px, black 8px), radial-gradient(circle 8px at calc(100% - 95px) 100%, transparent 7.5px, black 8px); mask-position: top, bottom; mask-size: 100% 50%, 100% 50%; mask-repeat: no-repeat; }
+.mini-ticket-btn::after { content: ''; position: absolute; inset: 0; z-index: 10; pointer-events: none; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); transition: border-color 0.3s ease, box-shadow 0.3s ease; -webkit-mask-image: radial-gradient(circle 8px at calc(100% - 95px) 0px, transparent 7.5px, black 8px), radial-gradient(circle 8px at calc(100% - 95px) 100%, transparent 7.5px, black 8px); -webkit-mask-position: top, bottom; -webkit-mask-size: 100% 50%, 100% 50%; -webkit-mask-repeat: no-repeat; mask-image: radial-gradient(circle 8px at calc(100% - 95px) 0px, transparent 7.5px, black 8px), radial-gradient(circle 8px at calc(100% - 95px) 100%, transparent 7.5px, black 8px); mask-position: top, bottom; mask-size: 100% 50%, 100% 50%; mask-repeat: no-repeat; }
 .mini-ticket-btn:hover::before { background: var(--accent-hover); }
 .mini-ticket-btn:hover::after { border-color: var(--accent-primary); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
 
@@ -1459,19 +1560,58 @@ File: css/modal.css
 .mini-ticket-btn:hover .ticket-date { color: var(--text-primary); }
 .ticket-price { font-size: 0.95rem; font-weight: 800; color: var(--accent-primary); display: block; }
 .ticket-format { font-size: 0.7rem; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 3px; color: #cbd5e1; font-weight: 600;}
-
 .no-sessions-stub { border: 2px dashed rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+
+
+/* =========================================
+   АДАПТИВНОСТЬ INFO MODAL
+   ========================================= */
 
 @media (max-width: 1100px) {
     .info-layout { grid-template-columns: 1fr; gap: 30px; }
     .info-col-visual .modal-poster-wrapper { width: 280px; margin: 0 auto 20px; }
     .title-row { flex-direction: column; align-items: center; text-align: center; }
-    .centered-meta, .modal-meta-left { justify-content: center !important; }
-    .info-col-trailer { order: -1; margin-bottom: 20px; }
     .info-modal-content { width: 95%; height: 95vh; overflow-y: auto; padding-top: 40px; }
     .slider-arrow.prev { left: 10px; } .slider-arrow.next { right: 10px; }
-    .desc-tooltip { display: none; }
-    .desc-clamp { -webkit-line-clamp: 10; }
+    .desc-tooltip { display: none !important; }
+}
+
+@media (max-width: 768px) {
+    .info-modal-content { 
+        width: 100%; 
+        border-radius: 24px 24px 0 0; 
+        max-height: 95vh; 
+        height: auto;
+        margin: 0; 
+        padding: 0; 
+        animation: sheetSlideUp 0.35s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+    
+    .modal-backdrop-blur { border-radius: 24px 24px 0 0; }
+    .info-modal-body { padding: 40px 20px 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .info-layout { display: flex; flex-direction: column; gap: 20px; }
+    
+    .info-col-trailer { order: -1; margin: -40px -20px 0 -20px; width: calc(100% + 40px); background: transparent; gap: 0; }
+    .media-container { border-radius: 0; border: none; box-shadow: none; }
+    .media-gallery-panel { margin: 15px 20px 0 20px; padding: 10px 15px; border-radius: 16px; }
+    .slider-arrow { display: none; }
+
+    .main-info-panel { order: 2; padding: 20px; margin-bottom: 0; }
+    .title-row { flex-direction: row; text-align: left; align-items: flex-start; justify-content: space-between; }
+    .info-main-title { font-size: 1.5rem; }
+    .rating-badge-large { font-size: 1.2rem; padding: 4px 10px; }
+
+    .info-col-sessions { order: 3; }
+    .sessions-header { font-size: 1rem; }
+    .mini-ticket-btn { min-height: 72px; }
+    .ticket-time { font-size: 1.4rem; }
+
+    .info-col-visual { order: 4; }
+    .modal-poster-wrapper { display: none; }
+    .franchise-panel { margin-top: 0; padding: 15px 20px; }
+    .poster-thumbnails { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding: 10px 5px 15px 5px; }
+    .poster-thumbnails::-webkit-scrollbar { display: none; }
+    .thumb-item { width: 90px; height: 135px; flex-shrink: 0; }
 }
 
 ================================================================================
@@ -1590,7 +1730,6 @@ File: css/schedule.css
 .schedule-page-title { font-size: 2.5rem; }
 .schedule-header { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 20px; gap: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
 
-/* Ползунок с датами */
 .date-slider { 
     display: flex; 
     gap: 12px; 
@@ -1607,7 +1746,6 @@ File: css/schedule.css
 .day-number { display: block; font-size: 20px; font-weight: 800; color: inherit; }
 .date-card.active .day-name { color: rgba(255,255,255,0.8); }
 
-/* --- ФИНАЛЬНЫЙ СОВЕРШЕННЫЙ ДИЗАЙН БИЛЕТОВ (MOVIE ROW) --- */
 .schedule-list { 
     display: flex; 
     flex-direction: column; 
@@ -1624,7 +1762,6 @@ File: css/schedule.css
 }
 .movie-row:hover { transform: translateY(-5px); }
 
-/* ДЕСКТОП: Маски для отрывного корешка билета (Справа) */
 .movie-row::before {
     content: ''; position: absolute; inset: 0; z-index: -1; border-radius: 16px; background-color: var(--bg-card);
     background-image: linear-gradient(to right, transparent calc(100% - 440px), rgba(0,0,0,0.2) calc(100% - 440px));
@@ -1642,8 +1779,6 @@ File: css/schedule.css
 }
 
 .movie-primary-content { position: relative; display: flex; flex: 1; cursor: pointer; min-width: 0; }
-
-/* ДЕСКТОП: Вертикальная пунктирная линия с отступами сверху и снизу (14px) */
 .movie-primary-content::after { content: ''; position: absolute; right: -1px; top: 14px; bottom: 14px; border-right: 2px dashed rgba(255,255,255,0.15); transition: border-color 0.3s ease; z-index: 5; pointer-events: none; }
 
 .row-poster { width: 160px; flex-shrink: 0; position: relative; height: 100%; border-radius: 15px 0 0 15px; overflow: hidden; } 
@@ -1714,75 +1849,22 @@ File: css/schedule.css
    ========================================= */
 
 @media (max-width: 950px) {
-    .movie-row { 
-        flex-direction: column; 
-        height: auto; 
-        min-height: 220px;
-    }
-
-    /* МАГИЯ: Поворачиваем логику билета на 90 градусов (отрывается низ) */
+    .movie-row { flex-direction: column; height: auto; min-height: 220px; }
     .movie-row::before, .movie-row::after {
-        -webkit-mask-image:
-            radial-gradient(circle 14px at 0px calc(100% - 90px), transparent 13.5px, black 14px),
-            radial-gradient(circle 14px at 100% calc(100% - 90px), transparent 13.5px, black 14px);
-        -webkit-mask-position: left, right;
-        -webkit-mask-size: 50% 100%, 50% 100%;
-        -webkit-mask-repeat: no-repeat;
-        mask-image:
-            radial-gradient(circle 14px at 0px calc(100% - 90px), transparent 13.5px, black 14px),
-            radial-gradient(circle 14px at 100% calc(100% - 90px), transparent 13.5px, black 14px);
+        -webkit-mask-image: radial-gradient(circle 14px at 0px calc(100% - 90px), transparent 13.5px, black 14px), radial-gradient(circle 14px at 100% calc(100% - 90px), transparent 13.5px, black 14px);
+        -webkit-mask-position: left, right; -webkit-mask-size: 50% 100%, 50% 100%; -webkit-mask-repeat: no-repeat;
+        mask-image: radial-gradient(circle 14px at 0px calc(100% - 90px), transparent 13.5px, black 14px), radial-gradient(circle 14px at 100% calc(100% - 90px), transparent 13.5px, black 14px);
     }
-
-    .movie-row::before {
-        /* Затемнение уходит на нижнюю часть */
-        background-image: linear-gradient(to bottom, transparent calc(100% - 90px), rgba(0,0,0,0.2) calc(100% - 90px));
-    }
-
-    /* Постер и текст остаются в ряд (горизонтально) */
-    .movie-primary-content {
-        flex-direction: row; 
-    }
-
-    /* ПРЕВРАЩЕНИЕ ЛИНИИ: Делаем ее горизонтальной с безопасными отступами! */
-    .movie-primary-content::after { 
-        top: auto;
-        bottom: 0;
-        left: 20px;   /* Отступ, чтобы линия не висела в воздухе над вырезами */
-        right: 20px;  /* Отступ, чтобы линия не висела в воздухе над вырезами */
-        border-right: none;
-        border-bottom: 2px dashed rgba(255,255,255,0.15);
-    }
-
-    .row-poster { 
-        width: 120px; 
-        border-radius: 15px 0 0 0; 
-    }
-
-    .row-info { 
-        padding: 15px 20px; 
-        justify-content: center; 
-    }
+    .movie-row::before { background-image: linear-gradient(to bottom, transparent calc(100% - 90px), rgba(0,0,0,0.2) calc(100% - 90px)); }
+    .movie-primary-content { flex-direction: row; }
+    .movie-primary-content::after { top: auto; bottom: 0; left: 20px; right: 20px; border-right: none; border-bottom: 2px dashed rgba(255,255,255,0.15); }
+    .row-poster { width: 120px; border-radius: 15px 0 0 0; }
+    .row-info { padding: 15px 20px; justify-content: center; }
     .row-title { font-size: 1.2rem; margin-bottom: 8px; }
     .row-desc { -webkit-line-clamp: 3; font-size: 0.85rem; }
-
-    /* Блок сеансов становится отрывным "корешком" снизу */
-    .row-sessions { 
-        width: 100%; 
-        height: 90px; /* Строго 90px для совпадения с вырезами маски */
-        padding: 15px 20px; 
-        justify-content: center;
-    }
-    .row-sessions::before, .row-sessions::after { display: none; } /* Убираем старые полукруги */
-
-    /* Сеансы теперь скроллятся горизонтально */
-    .sessions-grid { 
-        display: flex; 
-        flex-wrap: nowrap; 
-        overflow-x: auto; 
-        gap: 12px; 
-        -ms-overflow-style: none; 
-        scrollbar-width: none; 
-    }
+    .row-sessions { width: 100%; height: 90px; padding: 15px 20px; justify-content: center; }
+    .row-sessions::before, .row-sessions::after { display: none; }
+    .sessions-grid { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 12px; -ms-overflow-style: none; scrollbar-width: none; }
     .sessions-grid::-webkit-scrollbar { display: none; }
     .session-btn { min-width: 100px; flex-shrink: 0; min-height: 56px; }
 }
@@ -1790,29 +1872,24 @@ File: css/schedule.css
 /* Телефоны */
 @media (max-width: 768px) {
     .schedule-page-title { font-size: 2rem; }
-    
-    /* Исправляем ползунок дат на телефонах */
     .date-slider { justify-content: flex-start; padding-left: 5px; padding-right: 5px; }
     .date-slider::-webkit-scrollbar { display: none; }
-    
     .date-card { min-width: 75px; padding: 10px 15px; }
-    
     .promo-section-title { font-size: 1.8rem; }
     .promo-grid { grid-template-columns: 1fr; }
-
-    /* Уменьшаем бейджики на маленьких постерах */
     .rating-badge { top: 8px; left: 8px; padding: 4px 6px; font-size: 10px; }
     .age-badge { top: 8px; right: 8px; padding: 4px 6px; font-size: 10px; }
+    
+    /* СКРЫВАЕМ ХИНТ И КУРСОР НА МОБИЛЬНЫХ ТАК КАК МОДАЛКА ОТКЛЮЧЕНА */
+    .movie-action-hint { display: none; }
+    .movie-primary-content { cursor: default; }
 }
 
-/* Узкие телефоны */
 @media (max-width: 480px) {
     .schedule-page-title { font-size: 1.6rem; }
     .date-card { min-width: 70px; padding: 10px; }
-    
     .row-poster { width: 100px; }
     .row-title { font-size: 1.1rem; }
-    
     .session-btn { min-width: 90px; padding: 6px 10px; }
     .session-btn .session-time { font-size: 16px; }
     .session-btn .session-price { font-size: 12px; }
@@ -2734,6 +2811,7 @@ window.AppComponents = window.AppComponents || {};
 
 window.AppComponents.HallScheme = (function() {
     const root = document.getElementById('modal-root');
+    const svgCloseIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
     let price = 0;
 
     function getPrice(movie, time) {
@@ -2754,7 +2832,6 @@ window.AppComponents.HallScheme = (function() {
         try {
             price = getPrice(movie, time);
             
-            // Генерация/Чтение занятых мест из Store для консистентности
             const sessionKey = `${movie.movieId}_${AppStore.state.scheduleDate}_${time}`;
             let occupied = AppStore.state.occupiedSeats[sessionKey];
             
@@ -2794,19 +2871,21 @@ window.AppComponents.HallScheme = (function() {
             root.innerHTML = `
             <dialog class="modal-overlay active" id="hall-modal" aria-labelledby="hall-title">
                 <div class="modal-content hall-modal-content">
-                    <button class="close-btn" onclick="AppComponents.Modal.close()" aria-label="Закрыть">&times;</button>
+                    <button class="close-btn" onclick="AppComponents.Modal.close()" aria-label="Закрыть">${svgCloseIcon}</button>
                     <h2 id="hall-title" class="hall-title">Выберите места</h2>
                     <p class="hall-subtitle">${movie.title} <span class="hall-subtitle-time">(${time})</span></p>
                     
                     <ul class="showcase" aria-hidden="true">
-                        <li><div class="seat"></div><small>Свободно</small></li>
-                        <li><div class="seat selected"></div><small>Выбрано</small></li>
-                        <li><div class="seat occupied"></div><small>Занято</small></li>
+                        <li><div class="seat showcase-seat"></div><small>Свободно</small></li>
+                        <li><div class="seat showcase-seat selected"></div><small>Выбрано</small></li>
+                        <li><div class="seat showcase-seat occupied"></div><small>Занято</small></li>
                     </ul>
                     
                     <div class="hall-container">
-                        <div class="screen" aria-hidden="true">ЭКРАН</div>
-                        <div class="seats-area" role="group" aria-label="План зала">${seatsHtml}</div>
+                        <div class="hall-inner">
+                            <div class="screen" aria-hidden="true">ЭКРАН</div>
+                            <div class="seats-area" role="group" aria-label="План зала">${seatsHtml}</div>
+                        </div>
                     </div>
                     
                     <div class="ticket-footer">
@@ -2832,10 +2911,10 @@ window.AppComponents.HallScheme = (function() {
     function bindEvents(movie, time) {
         const dialog = document.getElementById('hall-modal');
         dialog.addEventListener('click', e => {
-            // Закрытие при клике по ::backdrop (у dialog клик мимо содержимого триггерит сам dialog)
             if (e.target === dialog) AppComponents.Modal.close();
             
-            if (e.target.classList.contains('seat') && !e.target.classList.contains('occupied')) {
+            // Исключаем клик по местам из легенды (.showcase-seat)
+            if (e.target.classList.contains('seat') && !e.target.classList.contains('occupied') && !e.target.classList.contains('showcase-seat')) {
                 e.target.classList.toggle('selected');
                 const isSelected = e.target.classList.contains('selected');
                 e.target.setAttribute('aria-pressed', isSelected.toString());
@@ -2846,13 +2925,25 @@ window.AppComponents.HallScheme = (function() {
         document.addEventListener('keydown', escHandler);
 
         document.getElementById('confirmBuyBtn').addEventListener('click', () => {
-            const selectedElements = document.querySelectorAll('.seat.selected');
+            // Ищем места ТОЛЬКО внутри зоны зала (.seats-area)
+            const selectedElements = document.querySelectorAll('.seats-area .seat.selected');
             const count = selectedElements.length;
             
             if (count > 0) {
-                const seatsInfo = Array.from(selectedElements).map(el => 
-                    `Ряд ${el.dataset.row}, Место ${el.dataset.seat}`
-                );
+                const newOccupiedIds = [];
+                const seatsInfo = Array.from(selectedElements).map(el => {
+                    const row = el.dataset.row;
+                    const seat = el.dataset.seat;
+                    newOccupiedIds.push(`${row}_${seat}`);
+                    return `Ряд ${row}, Место ${seat}`;
+                });
+
+                // ФИКСИРУЕМ ПОКУПКУ: Записываем места в Store, чтобы они стали занятыми
+                const sessionKey = `${movie.movieId}_${AppStore.state.scheduleDate}_${time}`;
+                let occupied = AppStore.state.occupiedSeats[sessionKey] || [];
+                occupied = [...occupied, ...newOccupiedIds];
+                AppStore.dispatch('SET_OCCUPIED_SEATS', { key: sessionKey, seats: occupied });
+
                 const total = count * price;
                 showSuccessTicket(movie, time, seatsInfo, total);
             } else {
@@ -2865,7 +2956,8 @@ window.AppComponents.HallScheme = (function() {
     }
 
     function updateTotals() {
-        const count = document.querySelectorAll('.seat.selected').length;
+        // Считаем выбранные места ТОЛЬКО внутри зоны зала (.seats-area)
+        const count = document.querySelectorAll('.seats-area .seat.selected').length;
         document.getElementById('t-count').innerText = count;
         document.getElementById('t-total').innerText = count * price;
     }
@@ -2876,7 +2968,7 @@ window.AppComponents.HallScheme = (function() {
         const dateStr = `${dateObj.day} ${dateObj.month}, ${dateObj.weekday}`;
 
         modalContent.innerHTML = `
-            <button class="close-btn" onclick="AppComponents.Modal.close()" aria-label="Закрыть">&times;</button>
+            <button class="close-btn" onclick="AppComponents.Modal.close()" aria-label="Закрыть">${svgCloseIcon}</button>
             <div class="success-ticket-wrapper">
                 <div class="success-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -2925,6 +3017,7 @@ window.AppComponents.Modal = (function() {
     let isTransitioning = false; 
 
     const root = document.getElementById('modal-root');
+    const svgCloseIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
 
     function lockScroll() {
         document.documentElement.classList.add('no-scroll');
@@ -2951,9 +3044,13 @@ window.AppComponents.Modal = (function() {
         const mediaList = movie.media && movie.media.length ? movie.media : [{ type: 'video', src: movie.trailer }];
         const ratingConf = AppHelpers.getRatingConfig(movie.rating);
 
+        /* --- ГАЛЕРЕЯ В ВИДЕ ПАНЕЛЬКИ --- */
         let galleryHtml = '';
         if (mediaList.length > 1) {
-            galleryHtml = '<div class="media-gallery" id="mediaGallery">';
+            galleryHtml = `
+            <div class="glass-panel media-gallery-panel">
+                <div class="media-gallery" id="mediaGallery">`;
+            
             mediaList.forEach((item, idx) => {
                 const thumb = getThumbUrl(item);
                 const playOverlay = item.type === 'video' ? '<div class="play-icon-overlay"></div>' : '';
@@ -2964,7 +3061,7 @@ window.AppComponents.Modal = (function() {
                     </button>
                 `;
             });
-            galleryHtml += '</div>';
+            galleryHtml += `</div></div>`;
         }
 
         const now = new Date();
@@ -3034,8 +3131,12 @@ window.AppComponents.Modal = (function() {
             </div>
         `;
 
+        /* --- ФРАНШИЗА В ВИДЕ ПАНЕЛЬКИ (БЕЗ ЗАГОЛОВКА) --- */
         if (parts.length > 1) {
-            thumbnailsHtml = '<div class="poster-thumbnails">';
+            thumbnailsHtml = `
+            <div class="glass-panel franchise-panel">
+                <div class="poster-thumbnails">
+            `;
             parts.forEach((p, idx) => {
                 const isActive = idx === currentIndex ? 'active' : '';
                 thumbnailsHtml += `
@@ -3044,13 +3145,17 @@ window.AppComponents.Modal = (function() {
                     </div>
                 `;
             });
-            thumbnailsHtml += '</div>';
+            thumbnailsHtml += `</div></div>`;
         }
+
+        let descHtml = `<div class="description-text desc-clamp" id="modal-desc-text">${movie.description || 'Описание отсутствует.'}</div>`;
 
         return `
             <div class="modal-backdrop-blur" style="background-image: url('${movie.poster || ''}')"></div>
             <div class="modal-gradient-overlay"></div>
-            <button class="close-btn" onclick="AppComponents.Modal.close()" aria-label="Закрыть модальное окно">&times;</button>
+            
+            <div class="mobile-drag-handle"></div>
+            <button class="close-btn" onclick="AppComponents.Modal.close()" aria-label="Закрыть модальное окно">${svgCloseIcon}</button>
             
             <div class="info-modal-body fade-transition active">
                 <div class="info-layout">
@@ -3067,7 +3172,7 @@ window.AppComponents.Modal = (function() {
                                 <div class="rating-badge-large ${ratingConf.className}">${ratingConf.text}</div>
                             </div>
                             <div class="desc-inner-panel desc-tooltip-wrapper">
-                                <div class="description-text desc-clamp">${movie.description}</div>
+                                ${descHtml}
                                 <div class="desc-tooltip">${movie.description}</div>
                             </div>
                         </div>
@@ -3197,6 +3302,12 @@ window.AppComponents.Modal = (function() {
                 const bookId = params.get('book');
                 
                 if (movieId) {
+                    if (window.innerWidth <= 768) {
+                        AppHelpers.showToast('Информация о фильме недоступна на мобильных устройствах');
+                        AppRouter.updateParams({ movie: null });
+                        return;
+                    }
+
                     const m = AppStore.state.movies.find(x => x.movieId === movieId);
                     if (m) {
                         const existingModal = document.getElementById('movie-modal');
@@ -3382,15 +3493,11 @@ File: js/core/router.js
 
 window.AppRouter = {
     init() {
-        // Если при загрузке хэш пустой (чистый index.html), 
-        // принудительно прописываем главную страницу без создания лишней истории
         if (!window.location.hash || window.location.hash === '#') {
             window.history.replaceState(null, null, '#/');
         }
         
         window.addEventListener('hashchange', this.handle.bind(this));
-        
-        // Запускаем первичную отрисовку
         this.handle();
     },
 
@@ -3399,19 +3506,27 @@ window.AppRouter = {
             const hash = window.location.hash || '#/';
             let [path, qs] = hash.substring(1).split('?');
             
-            // Защита: если путь оказался пустым, всегда кидаем на главную
             if (!path) path = '/'; 
             
             const params = new URLSearchParams(qs || '');
-
-            // По умолчанию (базовый путь '/') открываем экран 'About'
             let viewName = 'About';
             
             if (path.startsWith('/schedule')) viewName = 'Schedule';
-            if (path.startsWith('/library')) viewName = 'Library';
+            
+            if (path.startsWith('/library')) {
+                // БЛОКИРУЕМ БИБЛИОТЕКУ НА МОБИЛЬНЫХ УСТРОЙСТВАХ
+                if (window.innerWidth <= 768) {
+                    AppHelpers.showToast('Раздел библиотеки недоступен на телефонах');
+                    path = '/';
+                    viewName = 'About';
+                    window.history.replaceState(null, null, '#/');
+                } else {
+                    viewName = 'Library';
+                }
+            }
+
             if (path.startsWith('/rules')) viewName = 'Rules';
 
-            // Безопасный fallback: если View не существует, вернем на главную
             if (!window.AppViews[viewName]) {
                 console.warn(`[Router] Экран "${viewName}" не найден. Возврат на главную.`);
                 viewName = 'About';
@@ -3642,9 +3757,15 @@ File: js/utils/icons.js
 window.AppIcons = {
     get(name) {
         const svgStore = {
+            'alpha': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>`,
+            'asc': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>`,
+            'date': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`,
+            'desc': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>`,
+            'filter': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>`,
             'gamepad': `<svg viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M50.3,80.4c-0.8,0-1.6-0.3-2.2-0.8l-7.3-5.5l-6.6,4.3c-1.2,0.7-2.6,0.8-3.8,0.1c-1.2-0.7-2-1.9-2-3.3V52.7 c0-11.1,8.3-20.4,19.4-21.6c1.6-0.2,3-0.2,4.6,0c4.9,0.5,9.6,2.7,13.1,6.2c4.1,4.1,6.3,9.5,6.3,15.3v22.5c0,1.4-0.8,2.7-2,3.3 c-1.2,0.6-2.7,0.6-3.9-0.2l-6-4.1l-7.3,5.5C51.8,80.2,51,80.4,50.3,80.4z M40.7,71.1c0.6,0,1.1,0.2,1.6,0.5l7.5,5.6 c0.3,0.2,0.6,0.2,0.9,0l7.5-5.6c0.9-0.7,2.2-0.7,3.2,0l6.1,4.2c0.3,0.2,0.7,0.1,0.8,0c0.1-0.1,0.4-0.3,0.4-0.7V52.7 c0-5-1.9-9.7-5.5-13.2c-3-3-7-4.9-11.2-5.4c-1.3-0.1-2.6-0.1-4,0c-9.5,1-16.7,9-16.7,18.6v22.6c0,0.4,0.3,0.6,0.4,0.7 c0.1,0.1,0.4,0.2,0.8,0l6.7-4.4C39.7,71.3,40.2,71.1,40.7,71.1z M29.8,69.3c-0.1,0-0.1,0-0.2,0c-0.7-0.1-1.3-0.3-1.9-0.7l-7.3-5.4 l-6.6,4.3c-1.2,0.7-2.6,0.8-3.8,0.1c-1.2-0.7-2-1.9-2-3.3V41.7c0-12,9.7-21.7,21.7-21.7c5.8,0,11.2,2.3,15.3,6.4 c1.7,1.7,3,3.6,4.1,5.6c0.2,0.4,0.2,1,0,1.4c-0.2,0.4-0.7,0.7-1.2,0.8c-9.5,1-16.7,9-16.7,18.6v15.1c0,0.4-0.2,0.8-0.5,1.1 C30.5,69.2,30.2,69.3,29.8,69.3z M20.5,60.1c0.6,0,1.1,0.2,1.6,0.5l6.2,4.6V52.7c0-10.4,7.2-19.1,17.2-21.2c-0.7-1.1-1.5-2.1-2.5-3 c-3.5-3.5-8.2-5.5-13.2-5.5c-10.3,0-18.7,8.4-18.7,18.7v22.6c0,0.4,0.3,0.6,0.4,0.7c0.1,0.1,0.4,0.2,0.8,0l6.7-4.4 C19.5,60.3,20,60.1,20.5,60.1z M70.5,69.4c-0.2,0-0.3,0-0.5,0c-0.7-0.1-1.3-0.7-1.3-1.5V52.7c0-5-1.9-9.7-5.5-13.2 c-3-3-7-4.9-11.2-5.4c-0.5-0.1-0.9-0.3-1.2-0.8c-0.2-0.4-0.2-1,0-1.4c3.7-7.4,11.1-12,19.4-12c5.8,0,11.3,2.3,15.3,6.4 c4.1,4.1,6.4,9.5,6.4,15.3v22.5c0,1.4-0.8,2.7-2,3.3c-1.2,0.7-2.7,0.6-3.9-0.2l-6-4.1l-7.4,5.4C72,69.1,71.3,69.4,70.5,69.4z M54.5,31.5c4.1,0.9,7.9,2.9,10.8,5.9c4.1,4.1,6.3,9.5,6.3,15.3v12.9l6.7-5c0.9-0.7,2.2-0.7,3.2-0.1l6.2,4.2c0.3,0.2,0.7,0.1,0.8,0 c0.1-0.1,0.4-0.3,0.4-0.7V41.7c0-5-1.9-9.7-5.5-13.2c-3.5-3.5-8.2-5.5-13.2-5.5C63.8,23,57.9,26.2,54.5,31.5z M40.7,58.8 c-3.2,0-5.8-2.6-5.8-5.8s2.6-5.8,5.8-5.8s5.8,2.6,5.8,5.8S43.9,58.8,40.7,58.8z M40.7,50.2c-1.5,0-2.8,1.2-2.8,2.8s1.2,2.8,2.8,2.8 s2.8-1.2,2.8-2.8S42.3,50.2,40.7,50.2z M21.6,47.6c-4.7,0-8.6-3.9-8.6-8.6c0-4.7,3.9-8.6,8.6-8.6s8.6,3.9,8.6,8.6 C30.2,43.7,26.4,47.6,21.6,47.6z M21.6,33.3c-3.1,0-5.6,2.5-5.6,5.6c0,3.1,2.5,5.6,5.6,5.6s5.6-2.5,5.6-5.6 C27.2,35.9,24.7,33.3,21.6,33.3z M58.8,58.8c-3.2,0-5.8-2.6-5.8-5.8s2.6-5.8,5.8-5.8s5.8,2.6,5.8,5.8S61.9,58.8,58.8,58.8z M58.8,50.2c-1.5,0-2.8,1.2-2.8,2.8s1.2,2.8,2.8,2.8s2.8-1.2,2.8-2.8S60.3,50.2,58.8,50.2z M80,49.6c-3.2,0-5.8-2.6-5.8-5.8 S76.8,38,80,38s5.8,2.6,5.8,5.8S83.2,49.6,80,49.6z M80,41c-1.5,0-2.8,1.2-2.8,2.8s1.2,2.8,2.8,2.8s2.8-1.2,2.8-2.8S81.5,41,80,41z M70,38.6c-3.2,0-5.8-2.6-5.8-5.8S66.8,27,70,27s5.8,2.6,5.8,5.8S73.2,38.6,70,38.6z M70,30c-1.5,0-2.8,1.2-2.8,2.8 s1.2,2.8,2.8,2.8s2.8-1.2,2.8-2.8S71.5,30,70,30z"></path></svg>`,
             'location': `<svg viewBox="-4 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="currentColor"> <g transform="translate(-106, -413)"> <path d="M118,422 C116.343,422 115,423.343 115,425 C115,426.657 116.343,428 118,428 C119.657,428 121,426.657 121,425 C121,423.343 119.657,422 118,422 L118,422 Z M118,430 C115.239,430 113,427.762 113,425 C113,422.238 115.239,420 118,420 C120.761,420 123,422.238 123,425 C123,427.762 120.761,430 118,430 L118,430 Z M118,413 C111.373,413 106,418.373 106,425 C106,430.018 116.005,445.011 118,445 C119.964,445.011 130,429.95 130,425 C130,418.373 124.627,413 118,413 L118,413 Z"></path> </g> </svg>`,
             'logo': `<svg width="260" height="55" viewBox="0 -5 260 60" fill="none" xmlns="http://www.w3.org/2000/svg"><g><text x="0" y="24" fill="currentColor" font-family="Arial" font-weight="900" font-size="26" textLength="175" lengthAdjust="spacing">КИНОТЕАТР</text><text x="0" y="46" fill="currentColor" font-family="Arial" font-weight="bold" font-style="italic" font-size="13.5" textLength="175" lengthAdjust="spacing">СОВРЕМЕННИК</text></g><g transform="translate(185, -3) scale(1.1)"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="3"/><circle cx="22" cy="8" r="5" stroke="currentColor" stroke-width="3"/><rect x="0" y="14" width="30" height="18" rx="3" fill="currentColor"/><path d="M30 18 L42 12 V34 L30 28 Z" fill="currentColor"/><rect x="4" y="36" width="22" height="3" fill="currentColor"/><rect x="8" y="41" width="14" height="3" fill="currentColor"/></g></svg>`,
+            'rating': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`,
             'search': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`,
             'tg': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M41.4193 7.30899C41.4193 7.30899 45.3046 5.79399 44.9808 9.47328C44.8729 10.9883 43.9016 16.2908 43.1461 22.0262L40.5559 39.0159C40.5559 39.0159 40.3401 41.5048 38.3974 41.9377C36.4547 42.3705 33.5408 40.4227 33.0011 39.9898C32.5694 39.6652 24.9068 34.7955 22.2086 32.4148C21.4531 31.7655 20.5897 30.4669 22.3165 28.9519L33.6487 18.1305C34.9438 16.8319 36.2389 13.8019 30.8426 17.4812L15.7331 27.7616C15.7331 27.7616 14.0063 28.8437 10.7686 27.8698L3.75342 25.7055C3.75342 25.7055 1.16321 24.0823 5.58815 22.459C16.3807 17.3729 29.6555 12.1786 41.4193 7.30899Z" fill="currentColor"></path></svg>`,
             'vk': `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="m23.456 5.784c-.27.849-.634 1.588-1.09 2.259l.019-.03q-.672 1.12-1.605 2.588-.8 1.159-.847 1.2c-.138.173-.234.385-.267.618l-.001.007c.027.212.125.397.268.535l.4.446q3.21 3.299 3.611 4.548c.035.092.055.198.055.309 0 .194-.062.373-.167.52l.002-.003c-.176.181-.422.293-.694.293-.03 0-.061-.001-.09-.004h.004-2.631c-.001 0-.003 0-.005 0-.337 0-.647-.118-.89-.314l.003.002c-.354-.291-.669-.606-.951-.948l-.009-.012q-.691-.781-1.226-1.315-1.782-1.694-2.63-1.694c-.021-.002-.045-.003-.07-.003-.165 0-.319.051-.446.138l.003-.002c-.104.13-.167.298-.167.479 0 .036.002.07.007.105v-.004c-.027.314-.043.679-.043 1.048 0 .119.002.237.005.355v-.017 1.159c.01.047.016.101.016.156 0 .242-.11.458-.282.601l-.001.001c-.387.177-.839.281-1.316.281-.102 0-.202-.005-.301-.014l.013.001c-1.574-.03-3.034-.491-4.275-1.268l.035.02c-1.511-.918-2.763-2.113-3.717-3.525l-.027-.042c-.906-1.202-1.751-2.56-2.471-3.992l-.07-.154c-.421-.802-.857-1.788-1.233-2.802l-.06-.185c-.153-.456-.264-.986-.31-1.535l-.002-.025q0-.758.892-.758h2.63c.024-.002.052-.003.081-.003.248 0 .477.085.658.228l-.002-.002c.2.219.348.488.421.788l.003.012c.484 1.367.997 2.515 1.587 3.615l-.067-.137c.482.97 1.015 1.805 1.623 2.576l-.023-.031q.8.982 1.248.982c.009.001.02.001.032.001.148 0 .277-.08.347-.2l.001-.002c.074-.19.117-.411.117-.641 0-.049-.002-.098-.006-.146v.006-3.879c-.021-.457-.133-.884-.32-1.267l.008.019c-.124-.264-.273-.492-.45-.695l.003.004c-.164-.164-.276-.379-.311-.619l-.001-.006c0-.17.078-.323.2-.423l.001-.001c.121-.111.283-.178.46-.178h.008 4.146c.022-.003.047-.004.073-.004.195 0 .37.088.486.226l.001.001c.103.188.164.413.164.651 0 .038-.002.075-.005.112v-.005 5.173c-.002.024-.003.052-.003.08 0 .184.051.357.139.504l-.002-.004c.073.108.195.178.333.178h.001c.176-.012.336-.07.471-.162l-.003.002c.272-.187.506-.4.709-.641l.004-.005c.607-.686 1.167-1.444 1.655-2.25l.039-.07c.344-.57.716-1.272 1.053-1.993l.062-.147.446-.892c.155-.446.571-.76 1.06-.76.019 0 .038 0 .057.001h-.003 2.631q1.066 0 .8.981z"></path></svg>`
@@ -4136,9 +4257,10 @@ window.AppViews.Schedule = {
             const computedAgeClass = AppHelpers.getAgeColorClass(m.age);
             const ratingConf = AppHelpers.getRatingConfig(m.rating);
 
+            /* БЛОКИРУЕМ КЛИК НА ТЕЛЕФОНАХ (Только если экран > 768px меняем URL) */
             moviesHtml += `
             <div class="movie-row">
-                <div class="movie-primary-content" onclick="window.location.hash='#/schedule?movie=${m.movieId}'">
+                <div class="movie-primary-content" onclick="if(window.innerWidth > 768) window.location.hash='#/schedule?movie=${m.movieId}'">
                     <div class="row-poster">
                         <span class="rating-badge ${ratingConf.className}">${ratingConf.text}</span>
                         <span class="age-badge ${computedAgeClass}">${m.age}</span>
@@ -4187,7 +4309,6 @@ window.AppViews.Schedule = {
     mount() {
         this._onStateChange = (payload) => {
             if (AppStore.state.activeView === this && payload.scheduleDate !== undefined) {
-                // Оптимизация UX: при обновлении даты сохраняем позицию скролла
                 const scrollPos = window.scrollY;
                 document.getElementById('app-main').innerHTML = this.render();
                 window.scrollTo(0, scrollPos);

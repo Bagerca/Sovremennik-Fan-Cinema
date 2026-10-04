@@ -59,7 +59,7 @@ window.AppViews.Library = {
 
     render() {
         const state = AppStore.state;
-        const sortBy = state.librarySortBy || 'date';
+        const sortBy = state.librarySortBy || 'alpha';
         const sortOrder = state.librarySortOrder || 'desc';
 
         return `
@@ -90,11 +90,11 @@ window.AppViews.Library = {
                         
                         <div class="modern-sort-popover">
                             <div class="sort-segment-group">
-                                <button class="sort-segment-btn ${sortBy === 'date' ? 'active' : ''}" data-sort="date" title="По дате" onclick="AppViews.Library.setSortBy('date')">
-                                    ${AppIcons.get('date')}
-                                </button>
                                 <button class="sort-segment-btn ${sortBy === 'alpha' ? 'active' : ''}" data-sort="alpha" title="По алфавиту" onclick="AppViews.Library.setSortBy('alpha')">
                                     ${AppIcons.get('alpha')}
+                                </button>
+                                <button class="sort-segment-btn ${sortBy === 'date' ? 'active' : ''}" data-sort="date" title="По дате" onclick="AppViews.Library.setSortBy('date')">
+                                    ${AppIcons.get('date')}
                                 </button>
                                 <button class="sort-segment-btn ${sortBy === 'rating' ? 'active' : ''}" data-sort="rating" title="По рейтингу" onclick="AppViews.Library.setSortBy('rating')">
                                     ${AppIcons.get('rating')}
@@ -121,7 +121,7 @@ window.AppViews.Library = {
 
     renderGrid() {
         const state = AppStore.state;
-        const sortBy = state.librarySortBy || 'date';
+        const sortBy = state.librarySortBy || 'alpha';
         const sortOrder = state.librarySortOrder || 'desc';
         
         let filtered = state.movies.filter(m => 
@@ -244,7 +244,7 @@ window.AppViews.Library = {
             }
             
             if (payload.librarySortBy !== undefined || payload.librarySortOrder !== undefined) {
-                const sortBy = AppStore.state.librarySortBy || 'date';
+                const sortBy = AppStore.state.librarySortBy || 'alpha';
                 const sortOrder = AppStore.state.librarySortOrder || 'desc';
                 
                 document.querySelectorAll('#library-sort-dropdown .sort-segment-group:first-child .sort-segment-btn').forEach(btn => {

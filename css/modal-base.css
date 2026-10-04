@@ -1,0 +1,105 @@
+/* =========================================
+   BASE MODAL STYLES (Основа и общие элементы)
+   ========================================= */
+
+.modal-overlay { 
+    position: fixed; 
+    inset: 0; 
+    width: 100vw; 
+    height: 100vh; 
+    max-width: 100vw; 
+    max-height: 100vh; 
+    background: transparent; 
+    border: none; 
+    padding: 20px; 
+    margin: 0; 
+    overflow-y: auto; 
+    z-index: 2000;
+    color: var(--text-primary);
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+.modal-overlay::backdrop {
+    background: var(--bg-overlay);
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.3s;
+}
+
+.modal-overlay[open] { 
+    animation: fadeIn 0.3s; 
+}
+
+.modal-content { 
+    background: var(--bg-card); 
+    border-radius: 16px; 
+    border: 1px solid var(--border-color); 
+    position: relative; 
+    width: 100%; 
+    margin: auto; 
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+}
+
+/* Универсальный красивый крестик закрытия */
+.close-btn { 
+    position: absolute; 
+    top: 20px; right: 20px; 
+    width: 44px; height: 44px; 
+    border-radius: 50%; 
+    background: rgba(15,23,42,0.6); 
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--text-primary); 
+    cursor: pointer; z-index: 100; 
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.3s ease;
+    padding: 0;
+}
+
+.close-btn svg { width: 24px; height: 24px; transition: 0.3s ease; }
+.close-btn:hover { 
+    background: var(--accent-primary); 
+    border-color: var(--accent-primary); 
+    transform: scale(1.1); 
+    box-shadow: 0 0 15px var(--shadow-glow); 
+}
+
+/* Универсальная ручка для свайпа (Bottom Sheet на мобильных) */
+.mobile-drag-handle { display: none; }
+
+/* Общие анимации */
+.fade-transition { opacity: 0; transform: translateY(10px); transition: opacity 0.25s ease, transform 0.25s ease; }
+.fade-transition.active { opacity: 1; transform: translateY(0); }
+
+@keyframes sheetSlideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+/* =========================================
+   АДАПТИВНОСТЬ БАЗЫ
+   ========================================= */
+@media (max-width: 768px) {
+    .modal-overlay { 
+        align-items: flex-end; 
+        padding: 0; 
+    }
+    .close-btn { 
+        top: 15px; right: 15px; 
+        width: 36px; height: 36px; 
+    }
+    .close-btn svg { 
+        width: 20px; height: 20px; 
+    }
+    .mobile-drag-handle {
+        display: block; 
+        width: 40px; height: 4px; 
+        background: rgba(255,255,255,0.4); 
+        border-radius: 2px; 
+        position: absolute; 
+        top: 12px; left: 50%; 
+        transform: translateX(-50%);
+        z-index: 50;
+    }
+}

@@ -33,9 +33,13 @@ window.AppComponents.Modal = (function() {
         const mediaList = movie.media && movie.media.length ? movie.media : [{ type: 'video', src: movie.trailer }];
         const ratingConf = AppHelpers.getRatingConfig(movie.rating);
 
+        /* --- ГАЛЕРЕЯ В ВИДЕ ПАНЕЛЬКИ --- */
         let galleryHtml = '';
         if (mediaList.length > 1) {
-            galleryHtml = '<div class="media-gallery" id="mediaGallery">';
+            galleryHtml = `
+            <div class="glass-panel media-gallery-panel">
+                <div class="media-gallery" id="mediaGallery">`;
+            
             mediaList.forEach((item, idx) => {
                 const thumb = getThumbUrl(item);
                 const playOverlay = item.type === 'video' ? '<div class="play-icon-overlay"></div>' : '';
@@ -46,7 +50,7 @@ window.AppComponents.Modal = (function() {
                     </button>
                 `;
             });
-            galleryHtml += '</div>';
+            galleryHtml += `</div></div>`;
         }
 
         const now = new Date();
@@ -116,10 +120,12 @@ window.AppComponents.Modal = (function() {
             </div>
         `;
 
-        let franchiseMobileTitle = '';
+        /* --- ФРАНШИЗА В ВИДЕ ПАНЕЛЬКИ (БЕЗ ЗАГОЛОВКА) --- */
         if (parts.length > 1) {
-            franchiseMobileTitle = '<h3 class="franchise-mobile-title">Части франшизы</h3>';
-            thumbnailsHtml = '<div class="poster-thumbnails">';
+            thumbnailsHtml = `
+            <div class="glass-panel franchise-panel">
+                <div class="poster-thumbnails">
+            `;
             parts.forEach((p, idx) => {
                 const isActive = idx === currentIndex ? 'active' : '';
                 thumbnailsHtml += `
@@ -128,13 +134,10 @@ window.AppComponents.Modal = (function() {
                     </div>
                 `;
             });
-            thumbnailsHtml += '</div>';
+            thumbnailsHtml += `</div></div>`;
         }
 
-        let descHtml = `<div class="description-text desc-clamp" id="modal-desc-text">${movie.description}</div>`;
-        if (movie.description && movie.description.length > 120) {
-            descHtml += `<button class="read-more-btn" onclick="AppComponents.Modal.toggleDesc(this)">Читать далее...</button>`;
-        }
+        let descHtml = `<div class="description-text desc-clamp" id="modal-desc-text">${movie.description || 'Описание отсутствует.'}</div>`;
 
         return `
             <div class="modal-backdrop-blur" style="background-image: url('${movie.poster || ''}')"></div>
@@ -148,7 +151,6 @@ window.AppComponents.Modal = (function() {
                     
                     <div class="info-col-visual">
                         ${stackHtml}
-                        ${franchiseMobileTitle}
                         ${thumbnailsHtml}
                     </div>
 
@@ -334,16 +336,6 @@ window.AppComponents.Modal = (function() {
             if (!currentMovie || !currentMovie.media) return;
             mediaIndex = mediaIndex + 1 >= currentMovie.media.length ? 0 : mediaIndex + 1;
             updateMedia();
-        },
-        toggleDesc(btn) {
-            const textEl = btn.previousElementSibling;
-            if (textEl.classList.contains('expanded')) {
-                textEl.classList.remove('expanded');
-                btn.innerText = 'Читать далее...';
-            } else {
-                textEl.classList.add('expanded');
-                btn.innerText = 'Свернуть';
-            }
         }
     };
 })();

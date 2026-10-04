@@ -1,15 +1,17 @@
 window.AppData = window.AppData || {};
 
 /* ==============================================================================
-   ГЕНЕРАТОР ДЕТЕРМИНИРОВАННОГО РАСПИСАНИЯ
+   РЕАЛИСТИЧНЫЙ ГЕНЕРАТОР РАСПИСАНИЯ (Однозальный кинотеатр)
    ==============================================================================
-   Привязан к movieId и диапазону дат, чтобы deep-links всегда показывали
-   консистентное расписание без прыжков при перезагрузке страницы.
+   - Выбирает строго 4-5 уникальных фильмов на день.
+   - Делает 6-8 сеансов в день.
+   - Блокирует время больше 23:59 (защита от багов с "25:30").
 ============================================================================== */
 
 window.AppData.schedule = (function() {
     const generatedSchedule = [];
-    const movieIds = Object.keys(window.AppData.library || {});
+    const library = window.AppData.library || {};
+    const movieIds = Object.keys(library);
     
     // Генерируем массив дат: от -3 до +3 дней от "сегодня"
     const dates = [];
@@ -22,7 +24,7 @@ window.AppData.schedule = (function() {
 
     const formats = ["2D", "3D", "Atmos"];
     
-    // Хеш-функция для генерации seed из строки
+    // Хеш-функция для генерации seed
     function hashStr(str) {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
@@ -42,58 +44,101 @@ window.AppData.schedule = (function() {
         return Math.floor(seededRandom(seed) * (max - min + 1)) + min;
     }
 
-    // Проходимся по всем фильмам
-    movieIds.forEach((id, arrIndex) => {
-        // Базовый сид для фильма на текущую неделю
-        const seedBase = hashStr(id + dates[0]);
-        
-        // Выбираем даты
-        const movieDates = dates.filter((d, index) => {
-            // Гарантируем, что первые 2 фильма из базы точно будут показаны "Сегодня" (index 3),
-            // чтобы экран расписания никогда не оказался пустым.
-            if (index === 3 && arrIndex < 2) return true;
-            
-            // Снизили плотность: фильм появляется в расписании с вероятностью ~25%
-            return seededRandom(seedBase + index) > 0.75;
-        });
-        
-        // Если для фильма не выпало ни одного дня показа — пропускаем его
-        if (movieDates.length === 0) return;
-        
-        // Генерируем всего 1-2 сеанса в день, чтобы не было "перегруза"
-        const sessionCount = getRandomInt(seedBase, 1, 2);
-        const sessions = [];
-        
-        for (let i = 0; i < sessionCount; i++) {
-            // Растянули временной диапазон сеансов
-            const hour = getRandomInt(seedBase + i * 10, 11, 22);
-            const minutes = ['00', '15', '30', '45'][getRandomInt(seedBase + i * 11, 0, 3)];
-            const time = `${hour}:${minutes}`;
-            
-            // Защита от одинакового времени у двух сеансов одного фильма
-            if (sessions.find(s => s.time === time)) continue;
+    // Временное хранилище: { movieId: { date: [sessions...] } }
+    const tempSchedule = {};
+    movieIds.forEach(id => tempSchedule[id] = {});
 
-            sessions.push({
-                time: time,
-                format: formats[getRandomInt(seedBase + i * 12, 0, formats.length - 1)],
-                price: getRandomInt(seedBase + i * 13, 5, 15) * 50,
-                isSpecial: seededRandom(seedBase + i * 14) > 0.85
+    dates.forEach((date) => {
+        let currentSeed = hashStr(date);
+        
+        // 1. Сколько всего сеансов будет сегодня (от 6 до 8)
+        let sessionsPerDay = getRandomInt(currentSeed++, 6, 8);
+
+        // 2. Сколько УНИКАЛЬНЫХ фильмов мы покажем сегодня (от 4 до 5)
+        const uniqueMoviesCount = getRandomInt(currentSeed++, 4, 5);
+
+        // 3. Выбираем уникальные фильмы из всей базы
+        // Тасуем массив ID фильмов с помощью нашего seed
+        const shuffledIds = [...movieIds];
+        for (let i = shuffledIds.length - 1; i > 0; i--) {
+            const j = getRandomInt(currentSeed++, 0, i);
+            [shuffledIds[i], shuffledIds[j]] = [shuffledIds[j], shuffledIds[i]];
+        }
+        // Берем первые 4-5 фильмов
+        const dailyUniqueMovies = shuffledIds.slice(0, uniqueMoviesCount);
+
+        // 4. Формируем план показов. Даем каждому выбранному фильму минимум 1 сеанс.
+        const dayPlan = [...dailyUniqueMovies];
+        
+        // Оставшиеся сеансы (до sessionsPerDay) раскидываем случайно среди этих же 4-5 фильмов
+        while (dayPlan.length < sessionsPerDay) {
+            const randomMovieFromPool = dailyUniqueMovies[getRandomInt(currentSeed++, 0, dailyUniqueMovies.length - 1)];
+            dayPlan.push(randomMovieFromPool);
+        }
+
+        // 5. Перемешиваем план на день, чтобы фильмы шли вразнобой, а не подряд
+        for (let i = dayPlan.length - 1; i > 0; i--) {
+            const j = getRandomInt(currentSeed++, 0, i);
+            [dayPlan[i], dayPlan[j]] = [dayPlan[j], dayPlan[i]];
+        }
+
+        // 6. Расставляем время (кинотеатр открывается в 09:30 - 10:30)
+        let startMinutes = getRandomInt(currentSeed++, 570, 630);
+
+        for (let i = 0; i < dayPlan.length; i++) {
+            const movieId = dayPlan[i];
+            
+            const hour = Math.floor(startMinutes / 60);
+            
+            // ФИКС: Если время перевалило за полночь (>= 24:00), прекращаем генерировать сеансы на сегодня
+            if (hour >= 24) break;
+
+            const minute = startMinutes % 60;
+            const roundedMinute = Math.floor(minute / 5) * 5;
+            const timeStr = `${hour.toString().padStart(2, '0')}:${roundedMinute.toString().padStart(2, '0')}`;
+
+            const format = formats[getRandomInt(currentSeed++, 0, formats.length - 1)];
+            const price = getRandomInt(currentSeed++, 5, 12) * 50; 
+            const isSpecial = seededRandom(currentSeed++) > 0.85;
+
+            if (!tempSchedule[movieId][date]) {
+                tempSchedule[movieId][date] = [];
+            }
+
+            // Защита от одинакового времени у одного и того же фильма
+            if (!tempSchedule[movieId][date].find(s => s.time === timeStr)) {
+                tempSchedule[movieId][date].push({
+                    time: timeStr,
+                    format: format,
+                    price: price,
+                    isSpecial: isSpecial
+                });
+            }
+
+            // Прибавляем от 2 до 2.5 часов до следующего сеанса (фильм + уборка зала)
+            startMinutes += getRandomInt(currentSeed++, 120, 150);
+        }
+    });
+
+    // Преобразуем во финальный вид
+    movieIds.forEach(id => {
+        const datesObj = tempSchedule[id];
+        const scheduleBlocks = [];
+
+        Object.keys(datesObj).forEach(date => {
+            if (datesObj[date].length > 0) {
+                datesObj[date].sort((a, b) => a.time.localeCompare(b.time));
+                scheduleBlocks.push({ dates: [date], sessions: datesObj[date] });
+            }
+        });
+
+        if (scheduleBlocks.length > 0) {
+            generatedSchedule.push({
+                movieId: id,
+                comment: "Сгенерировано реалистично",
+                schedule: scheduleBlocks
             });
         }
-        
-        // Сортируем сеансы по времени (от утренних к вечерним)
-        sessions.sort((a, b) => a.time.localeCompare(b.time));
-
-        generatedSchedule.push({
-            movieId: id,
-            comment: "Детерминированное авторасписание",
-            schedule: [
-                {
-                    dates: movieDates,
-                    sessions: sessions
-                }
-            ]
-        });
     });
 
     return generatedSchedule;

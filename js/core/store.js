@@ -8,8 +8,8 @@ window.AppStore = (function() {
         scheduleDate: new Date().toISOString().split('T')[0],
         
         searchQuery: '',
-        librarySortBy: 'date',
-        librarySortOrder: 'desc',
+        librarySortBy: 'alpha', // По умолчанию сортировка по алфавиту
+        librarySortOrder: 'desc', // По умолчанию по убыванию
         
         // Хранилище сгенерированных занятых мест (id фильма _ дата _ время)
         occupiedSeats: {} 
