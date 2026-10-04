@@ -1,0 +1,85 @@
+/* =========================================
+   DESIGN TOKENS (Темизация)
+   ========================================= */
+
+:root {
+    /* DEFAULT THEME */
+    --bg-main: #020617;
+    --bg-card: #0f172a;
+    --bg-header: rgba(2, 6, 23, 0.85);
+    --bg-footer: #020617;
+    --bg-glass: rgba(15, 23, 42, 0.55);
+    --bg-glass-hover: rgba(255, 255, 255, 0.06);
+    --bg-overlay: rgba(2, 6, 23, 0.95);
+    --bg-input: rgba(30, 41, 59, 0.6);
+    --border-color: #1e293b;
+    --border-hover: #334155;
+    
+    --accent-primary: #0ea5e9;
+    --accent-dark: #0284c7;
+    --accent-special: #f59e0b;
+    --accent-hover: rgba(14, 165, 233, 0.1);
+    
+    --text-primary: #ffffff;
+    --text-muted: #94a3b8;
+    --text-dark: #475569;
+    --text-accent: #0ea5e9;
+    
+    --shadow-glow: rgba(14, 165, 233, 0.4);
+    --seat-bg: #334155;
+    
+    /* System */
+    --age-green: rgba(34, 197, 94, 0.9);
+    --age-orange: rgba(249, 115, 22, 0.9);
+    --age-red: rgba(239, 68, 68, 0.9);
+    --rating-high: #4ade80;
+    --rating-mid: #facc15;
+    --rating-low: #ef4444;
+    --rating-upcoming: #c084fc; /* Неоново-фиолетовый для анонсов */
+    --promo-badge-red: var(--age-red);
+    --promo-badge-purple: #7c3aed;
+    --social-vk: #0077FF;
+    --social-tg: #229ED9;
+}
+
+/* NEW YEAR THEME */
+[data-theme="newyear"] {
+    --bg-main: #13090a;
+    --bg-card: #1c1315;
+    --bg-header: rgba(19, 9, 10, 0.85);
+    --bg-footer: #13090a;
+    --bg-glass: rgba(28, 19, 21, 0.7);
+    --bg-overlay: rgba(19, 9, 10, 0.95);
+    --bg-input: rgba(42, 19, 21, 0.6);
+    --border-color: #4a1818;
+    --border-hover: #701a2c;
+    
+    --accent-primary: #e11d48;
+    --accent-dark: #be123c;
+    --accent-hover: rgba(225, 29, 72, 0.1);
+    
+    --text-accent: #e11d48;
+    --shadow-glow: rgba(225, 29, 72, 0.4);
+    --seat-bg: #4a1818;
+}
+
+/* HALLOWEEN THEME */
+[data-theme="halloween"] {
+    --bg-main: #110714;
+    --bg-card: #1a0b1e;
+    --bg-header: rgba(17, 7, 20, 0.85);
+    --bg-footer: #110714;
+    --bg-glass: rgba(26, 11, 30, 0.7);
+    --bg-overlay: rgba(17, 7, 20, 0.95);
+    --bg-input: rgba(36, 11, 40, 0.6);
+    --border-color: #4c1d95;
+    --border-hover: #7c2d12;
+    
+    --accent-primary: #f97316;
+    --accent-dark: #c2410c;
+    --accent-hover: rgba(249, 115, 22, 0.1);
+    
+    --text-accent: #f97316;
+    --shadow-glow: rgba(249, 115, 22, 0.4);
+    --seat-bg: #4c1d95;
+}
